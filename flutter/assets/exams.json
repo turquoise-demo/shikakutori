@@ -1,0 +1,712 @@
+{
+  "exams": [
+    {
+      "id": "kankouji1",
+      "name": "1級管工事施工管理技士",
+      "short": "管工事1級",
+      "desc": "空調・給排水・衛生設備の施工管理。第一次検定対応。",
+      "color": "0xFF0F5FA6",
+      "cats": [
+        {
+          "key": "機械工学等",
+          "short": "機械工学",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "施工管理法",
+          "short": "施工管理",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "施工管理法（応用能力）",
+          "short": "応用能力",
+          "color": "0xFFB9750F",
+          "applied": true
+        },
+        {
+          "key": "法規",
+          "short": "法規",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60,
+        "perCatMin": {
+          "施工管理法（応用能力）": 50
+        }
+      }
+    },
+    {
+      "id": "kankouji2",
+      "name": "2級管工事施工管理技士",
+      "short": "管工事2級",
+      "desc": "管工事の施工管理（2級）。第一次検定対応。",
+      "color": "0xFF127C8A",
+      "cats": [
+        {
+          "key": "機械工学等",
+          "short": "機械工学",
+          "color": "0xFF127C8A"
+        },
+        {
+          "key": "施工管理法",
+          "short": "施工管理",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "施工管理法（応用能力）",
+          "short": "応用能力",
+          "color": "0xFFB9750F",
+          "applied": true
+        },
+        {
+          "key": "法規",
+          "short": "法規",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60,
+        "perCatMin": {
+          "施工管理法（応用能力）": 50
+        }
+      }
+    },
+    {
+      "id": "doboku1",
+      "name": "1級土木施工管理技士",
+      "short": "土木1級",
+      "desc": "土木工事の施工管理（1級）。第一次検定対応。",
+      "color": "0xFF795548",
+      "cats": [
+        {
+          "key": "土木工学等",
+          "short": "土木工学",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "施工管理法",
+          "short": "施工管理",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "施工管理法（応用能力）",
+          "short": "応用能力",
+          "color": "0xFFB9750F",
+          "applied": true
+        },
+        {
+          "key": "法規",
+          "short": "法規",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60,
+        "perCatMin": {
+          "施工管理法（応用能力）": 50
+        }
+      }
+    },
+    {
+      "id": "doboku2",
+      "name": "2級土木施工管理技士",
+      "short": "土木2級",
+      "desc": "土木工事の施工管理（2級）。第一次検定対応。",
+      "color": "0xFF8D6E63",
+      "cats": [
+        {
+          "key": "土木工学等",
+          "short": "土木工学",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "施工管理法",
+          "short": "施工管理",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "施工管理法（応用能力）",
+          "short": "応用能力",
+          "color": "0xFFB9750F",
+          "applied": true
+        },
+        {
+          "key": "法規",
+          "short": "法規",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60,
+        "perCatMin": {
+          "施工管理法（応用能力）": 50
+        }
+      }
+    },
+    {
+      "id": "kenchiku1",
+      "name": "1級建築施工管理技士",
+      "short": "建築1級",
+      "desc": "建築工事の施工管理（1級）。第一次検定対応。",
+      "color": "0xFF00838F",
+      "cats": [
+        {
+          "key": "建築学等",
+          "short": "建築学",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "施工管理法",
+          "short": "施工管理",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "施工管理法（応用能力）",
+          "short": "応用能力",
+          "color": "0xFFB9750F",
+          "applied": true
+        },
+        {
+          "key": "法規",
+          "short": "法規",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60,
+        "perCatMin": {
+          "施工管理法（応用能力）": 50
+        }
+      }
+    },
+    {
+      "id": "kenchiku2",
+      "name": "2級建築施工管理技士",
+      "short": "建築2級",
+      "desc": "建築工事の施工管理（2級）。第一次検定対応。",
+      "color": "0xFF0097A7",
+      "cats": [
+        {
+          "key": "建築学等",
+          "short": "建築学",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "施工管理法",
+          "short": "施工管理",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "施工管理法（応用能力）",
+          "short": "応用能力",
+          "color": "0xFFB9750F",
+          "applied": true
+        },
+        {
+          "key": "法規",
+          "short": "法規",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60,
+        "perCatMin": {
+          "施工管理法（応用能力）": 50
+        }
+      }
+    },
+    {
+      "id": "denkikoji1",
+      "name": "1級電気工事施工管理技士",
+      "short": "電気施工1級",
+      "desc": "電気工事の施工管理（1級）。第一次検定対応。",
+      "color": "0xFFEF6C00",
+      "cats": [
+        {
+          "key": "電気工学等",
+          "short": "電気工学",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "施工管理法",
+          "short": "施工管理",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "施工管理法（応用能力）",
+          "short": "応用能力",
+          "color": "0xFFB9750F",
+          "applied": true
+        },
+        {
+          "key": "法規",
+          "short": "法規",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60,
+        "perCatMin": {
+          "施工管理法（応用能力）": 50
+        }
+      }
+    },
+    {
+      "id": "denkikoji2",
+      "name": "2級電気工事施工管理技士",
+      "short": "電気施工2級",
+      "desc": "電気工事の施工管理（2級）。第一次検定対応。",
+      "color": "0xFFF57C00",
+      "cats": [
+        {
+          "key": "電気工学等",
+          "short": "電気工学",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "施工管理法",
+          "short": "施工管理",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "施工管理法（応用能力）",
+          "short": "応用能力",
+          "color": "0xFFB9750F",
+          "applied": true
+        },
+        {
+          "key": "法規",
+          "short": "法規",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60,
+        "perCatMin": {
+          "施工管理法（応用能力）": 50
+        }
+      }
+    },
+    {
+      "id": "denki2",
+      "name": "第二種電気工事士（筆記）",
+      "short": "電工二種",
+      "desc": "一般住宅・小規模施設の電気工事。筆記（学科）試験対応。",
+      "color": "0xFFC9A227",
+      "cats": [
+        {
+          "key": "電気理論・配線設計",
+          "short": "理論・設計",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "配線器具・材料・工具",
+          "short": "器具・材料",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "施工方法・検査",
+          "short": "施工・検査",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "法令・配線図",
+          "short": "法令・図記号",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "kikenbutsu_otsu4",
+      "name": "危険物取扱者 乙種第4類",
+      "short": "危険物乙4",
+      "desc": "ガソリン等の引火性液体を扱う定番資格。3科目それぞれ60%で合格。",
+      "color": "0xFFC0392B",
+      "cats": [
+        {
+          "key": "基礎的な物理学及び化学",
+          "short": "物理・化学",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "危険物の性質・火災予防・消火",
+          "short": "性質・消火",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "危険物に関する法令",
+          "short": "法令",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60,
+        "perCatMin": {
+          "基礎的な物理学及び化学": 60,
+          "危険物の性質・火災予防・消火": 60,
+          "危険物に関する法令": 60
+        }
+      }
+    },
+    {
+      "id": "takken",
+      "name": "宅地建物取引士",
+      "short": "宅建士",
+      "desc": "不動産取引の国家資格。合格目安は50問中35問（約70%）。",
+      "color": "0xFF2E7D5B",
+      "cats": [
+        {
+          "key": "権利関係",
+          "short": "権利関係",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "宅建業法",
+          "short": "宅建業法",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "法令上の制限",
+          "short": "法令制限",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "税・その他",
+          "short": "税その他",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 70
+      }
+    },
+    {
+      "id": "itpassport",
+      "name": "ITパスポート",
+      "short": "ITパスポート",
+      "desc": "ITの基礎を測る国家試験。総合60%かつ各分野30%以上で合格。",
+      "color": "0xFF3949AB",
+      "cats": [
+        {
+          "key": "ストラテジ系",
+          "short": "ストラテジ",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "マネジメント系",
+          "short": "マネジメント",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "テクノロジ系",
+          "short": "テクノロジ",
+          "color": "0xFFB9750F"
+        }
+      ],
+      "pass": {
+        "overall": 60,
+        "perCatMin": {
+          "ストラテジ系": 30,
+          "マネジメント系": 30,
+          "テクノロジ系": 30
+        }
+      }
+    },
+    {
+      "id": "kihonjoho",
+      "name": "基本情報技術者",
+      "short": "基本情報",
+      "desc": "IT技術者の登竜門となる国家試験。科目A相当の知識問題を収録。",
+      "color": "0xFF1E88E5",
+      "cats": [
+        {
+          "key": "テクノロジ系",
+          "short": "テクノロジ",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "マネジメント系",
+          "short": "マネジメント",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "ストラテジ系",
+          "short": "ストラテジ",
+          "color": "0xFFB9750F"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "fp3",
+      "name": "FP技能士3級",
+      "short": "FP3級",
+      "desc": "お金の基礎知識を測る国家技能検定。学科相当を収録。",
+      "color": "0xFF43A047",
+      "cats": [
+        {
+          "key": "ライフプランニングと資金計画",
+          "short": "ライフ",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "リスク管理",
+          "short": "リスク",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "金融資産運用",
+          "short": "金融資産",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "タックスプランニング",
+          "short": "タックス",
+          "color": "0xFF8256C8"
+        },
+        {
+          "key": "不動産",
+          "short": "不動産",
+          "color": "0xFF0097A7"
+        },
+        {
+          "key": "相続・事業承継",
+          "short": "相続",
+          "color": "0xFFC2185B"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "denki1",
+      "name": "第一種電気工事士（筆記）",
+      "short": "電工一種",
+      "desc": "自家用電気工作物も扱える上位資格。筆記（学科）試験対応。",
+      "color": "0xFFB58900",
+      "cats": [
+        {
+          "key": "電気理論・配線設計",
+          "short": "理論・設計",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "機器・材料・工具",
+          "short": "機器・材料",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "施工方法・検査",
+          "short": "施工・検査",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "法令・高圧",
+          "short": "法令・高圧",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "eisei1",
+      "name": "第一種衛生管理者",
+      "short": "衛生管理者",
+      "desc": "労働衛生の国家資格。各科目40%かつ総合60%で合格。",
+      "color": "0xFF00897B",
+      "cats": [
+        {
+          "key": "関係法令",
+          "short": "関係法令",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "労働衛生",
+          "short": "労働衛生",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "労働生理",
+          "short": "労働生理",
+          "color": "0xFFB9750F"
+        }
+      ],
+      "pass": {
+        "overall": 60,
+        "perCatMin": {
+          "関係法令": 40,
+          "労働衛生": 40,
+          "労働生理": 40
+        }
+      }
+    },
+    {
+      "id": "boiler2",
+      "name": "2級ボイラー技士",
+      "short": "ボイラー2級",
+      "desc": "ボイラーの取扱いに必要な国家資格。各科目40%かつ総合60%で合格。",
+      "color": "0xFFE64A19",
+      "cats": [
+        {
+          "key": "ボイラーの構造",
+          "short": "構造",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "ボイラーの取扱い",
+          "short": "取扱い",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "燃料及び燃焼",
+          "short": "燃料・燃焼",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "関係法令",
+          "short": "関係法令",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60,
+        "perCatMin": {
+          "ボイラーの構造": 40,
+          "ボイラーの取扱い": 40,
+          "燃料及び燃焼": 40,
+          "関係法令": 40
+        }
+      }
+    },
+    {
+      "id": "gyousei",
+      "name": "行政書士",
+      "short": "行政書士",
+      "desc": "官公署提出書類等を扱う法律系国家資格。択一の主要科目を収録。",
+      "color": "0xFF5E35B1",
+      "cats": [
+        {
+          "key": "憲法・基礎法学",
+          "short": "憲法",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "民法",
+          "short": "民法",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "行政法",
+          "short": "行政法",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "商法・会社法",
+          "short": "商法",
+          "color": "0xFF8256C8"
+        },
+        {
+          "key": "一般知識等",
+          "short": "一般知識",
+          "color": "0xFF0097A7"
+        }
+      ],
+      "pass": {
+        "overall": 60,
+        "perCatMin": {
+          "一般知識等": 40
+        }
+      }
+    },
+    {
+      "id": "sharoushi",
+      "name": "社会保険労務士",
+      "short": "社労士",
+      "desc": "労務・社会保険の専門国家資格。択一の主要科目を収録。",
+      "color": "0xFF00695C",
+      "cats": [
+        {
+          "key": "労働基準・安全衛生",
+          "short": "労基・安衛",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "労災・雇用保険",
+          "short": "労災・雇用",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "健康保険",
+          "short": "健保",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "国民年金・厚生年金",
+          "short": "年金",
+          "color": "0xFF8256C8"
+        },
+        {
+          "key": "一般常識・徴収",
+          "short": "一般・徴収",
+          "color": "0xFF0097A7"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "tourokuhanbai",
+      "name": "登録販売者",
+      "short": "登録販売者",
+      "desc": "一般用医薬品を販売できる公的資格。総合70%かつ各科目35%以上で合格。",
+      "color": "0xFFAD1457",
+      "cats": [
+        {
+          "key": "医薬品に共通する特性と基本的な知識",
+          "short": "医薬品の基本",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "人体の働きと医薬品",
+          "short": "人体と医薬品",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "主な医薬品とその作用",
+          "short": "主な医薬品",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "薬事関係法規・制度",
+          "short": "法規・制度",
+          "color": "0xFF8256C8"
+        },
+        {
+          "key": "医薬品の適正使用・安全対策",
+          "short": "適正使用",
+          "color": "0xFF0097A7"
+        }
+      ],
+      "pass": {
+        "overall": 70,
+        "perCatMin": {
+          "医薬品に共通する特性と基本的な知識": 35,
+          "人体の働きと医薬品": 35,
+          "主な医薬品とその作用": 35,
+          "薬事関係法規・制度": 35,
+          "医薬品の適正使用・安全対策": 35
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+<svg viewBox="0 0 360 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="しかくとり - 四角い顔の鳥">
+  <defs>
+    <linearGradient id="bodyG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2A7DC4"/>
+      <stop offset="1" stop-color="#0F5FA6"/>
+    </linearGradient>
+    <linearGradient id="headG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2F86CC"/>
+      <stop offset="1" stop-color="#0F5FA6"/>
+    </linearGradient>
+    <linearGradient id="beakG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F6AE45"/>
+      <stop offset="1" stop-color="#E37F16"/>
+    </linearGradient>
+    <linearGradient id="faceG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFBF0"/>
+      <stop offset="1" stop-color="#F3EAD6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ground shadow -->
+  <ellipse cx="180" cy="372" rx="92" ry="16" fill="#0F5FA6" opacity="0.12"/>
+
+  <!-- feet -->
+  <g fill="url(#beakG)">
+    <path d="M150 344 l-14 22 M150 344 l0 24 M150 344 l14 22" stroke="#E37F16" stroke-width="7" stroke-linecap="round" fill="none"/>
+    <path d="M212 344 l-14 22 M212 344 l0 24 M212 344 l14 22" stroke="#E37F16" stroke-width="7" stroke-linecap="round" fill="none"/>
+  </g>
+
+  <!-- body -->
+  <rect x="100" y="208" width="160" height="140" rx="44" fill="url(#bodyG)"/>
+
+  <!-- wings -->
+  <ellipse cx="102" cy="268" rx="24" ry="46" fill="#0C4E8A" transform="rotate(-12 102 268)"/>
+  <ellipse cx="258" cy="268" rx="24" ry="46" fill="#0C4E8A" transform="rotate(12 258 268)"/>
+
+  <!-- crest feathers -->
+  <g fill="#2F86CC">
+    <path d="M155 46 q-8 -30 8 -34 q16 4 8 34 z"/>
+    <path d="M180 40 q-8 -34 8 -38 q16 4 8 38 z"/>
+    <path d="M205 46 q-8 -30 8 -34 q16 4 8 34 z"/>
+  </g>
+
+  <!-- head: the square face -->
+  <rect x="70" y="44" width="220" height="196" rx="50" fill="url(#headG)"/>
+
+  <!-- face patch -->
+  <rect x="100" y="92" width="160" height="112" rx="36" fill="url(#faceG)"/>
+
+  <!-- cheeks -->
+  <ellipse cx="126" cy="170" rx="17" ry="11" fill="#F28C82" opacity="0.55"/>
+  <ellipse cx="234" cy="170" rx="17" ry="11" fill="#F28C82" opacity="0.55"/>
+
+  <!-- eyes -->
+  <g>
+    <ellipse cx="150" cy="142" rx="15" ry="19" fill="#26333F"/>
+    <ellipse cx="210" cy="142" rx="15" ry="19" fill="#26333F"/>
+    <circle cx="145" cy="135" r="5" fill="#FFFFFF"/>
+    <circle cx="205" cy="135" r="5" fill="#FFFFFF"/>
+  </g>
+
+  <!-- beak -->
+  <path d="M162 152 h36 l-18 26 z" fill="url(#beakG)" stroke="#D9740F" stroke-width="1.5" stroke-linejoin="round"/>
+</svg>

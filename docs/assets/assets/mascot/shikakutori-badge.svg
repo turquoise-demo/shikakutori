@@ -1,0 +1,68 @@
+<svg viewBox="0 0 380 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="しかくとり 合格ハチマキ">
+  <defs>
+    <linearGradient id="bodyG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2A7DC4"/><stop offset="1" stop-color="#0F5FA6"/>
+    </linearGradient>
+    <linearGradient id="headG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2F86CC"/><stop offset="1" stop-color="#0F5FA6"/>
+    </linearGradient>
+    <linearGradient id="beakG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F6AE45"/><stop offset="1" stop-color="#E37F16"/>
+    </linearGradient>
+    <linearGradient id="faceG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFBF0"/><stop offset="1" stop-color="#F3EAD6"/>
+    </linearGradient>
+  </defs>
+
+  <ellipse cx="190" cy="414" rx="96" ry="15" fill="#0F5FA6" opacity="0.12"/>
+
+  <!-- feet -->
+  <g stroke="#E37F16" stroke-width="7" stroke-linecap="round" fill="none">
+    <path d="M160 388 l-13 20 M160 388 l0 22 M160 388 l13 20"/>
+    <path d="M220 388 l-13 20 M220 388 l0 22 M220 388 l13 20"/>
+  </g>
+
+  <!-- body & wings -->
+  <rect x="104" y="252" width="172" height="138" rx="46" fill="url(#bodyG)"/>
+  <ellipse cx="106" cy="312" rx="25" ry="47" fill="#0C4E8A" transform="rotate(-12 106 312)"/>
+  <ellipse cx="274" cy="312" rx="25" ry="47" fill="#0C4E8A" transform="rotate(12 274 312)"/>
+
+  <!-- crest -->
+  <g fill="#2F86CC">
+    <path d="M165 84 q-8 -30 8 -34 q16 4 8 34 z"/>
+    <path d="M190 78 q-8 -34 8 -38 q16 4 8 38 z"/>
+    <path d="M215 84 q-8 -30 8 -34 q16 4 8 34 z"/>
+  </g>
+
+  <!-- head -->
+  <rect x="68" y="80" width="244" height="214" rx="54" fill="url(#headG)"/>
+
+  <!-- HACHIMAKI headband -->
+  <g>
+    <path d="M60 116 q130 -22 260 0 l0 42 q-130 -22 -260 0 z" fill="#FFFFFF"/>
+    <path d="M60 116 q130 -22 260 0" fill="none" stroke="#D23B3B" stroke-width="4"/>
+    <path d="M60 158 q130 -22 260 0" fill="none" stroke="#D23B3B" stroke-width="4"/>
+    <!-- knot on right -->
+    <circle cx="316" cy="138" r="12" fill="#D23B3B"/>
+    <path d="M322 132 q34 -14 44 -2 q-26 2 -40 16 z" fill="#E24747"/>
+    <path d="M322 146 q34 14 42 30 q-28 -6 -42 -18 z" fill="#C22F2F"/>
+    <!-- 合格 -->
+    <text x="190" y="137" text-anchor="middle" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-weight="900" font-size="30" fill="#D23B3B" letter-spacing="4">合格</text>
+  </g>
+
+  <!-- face patch -->
+  <rect x="100" y="166" width="180" height="112" rx="38" fill="url(#faceG)"/>
+
+  <!-- cheeks -->
+  <ellipse cx="128" cy="242" rx="17" ry="11" fill="#F28C82" opacity="0.55"/>
+  <ellipse cx="252" cy="242" rx="17" ry="11" fill="#F28C82" opacity="0.55"/>
+
+  <!-- eyes (confident) -->
+  <ellipse cx="152" cy="212" rx="15" ry="19" fill="#26333F"/>
+  <ellipse cx="228" cy="212" rx="15" ry="19" fill="#26333F"/>
+  <circle cx="147" cy="205" r="5" fill="#fff"/>
+  <circle cx="223" cy="205" r="5" fill="#fff"/>
+
+  <!-- beak -->
+  <path d="M172 224 h36 l-18 26 z" fill="url(#beakG)" stroke="#D9740F" stroke-width="1.5" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>しかくとり — 国家資格 一問一答</title>
+<style>
+  :root{
+    --bg:#EEF1F4; --surface:#fff; --surface2:#f4f6f8; --line:#e2e7ec;
+    --text:#0C141C; --muted:#6b7a89; --primary:#0F5FA6; --ok:#1F9D5A; --ng:#D23B3B;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#0C141C; --surface:#141d27; --surface2:#1b2733; --line:#26313d;
+      --text:#eaf0f6; --muted:#8ba0b3; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:'Hiragino Sans','Yu Gothic UI','Yu Gothic',-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.6}
+  .wrap{max-width:640px;margin:0 auto;padding:14px 16px 60px;min-height:100vh}
+  .hidden{display:none!important}
+  .row{display:flex;align-items:center;gap:10px}
+  .grow{flex:1}
+  .muted{color:var(--muted)}
+  .lbl{font-size:12px;font-weight:800;color:var(--muted);margin:20px 2px 10px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:15px;cursor:pointer;
+    transition:transform .08s ease,border-color .15s}
+  .card:active{transform:scale(.99)}
+  .card.flat{cursor:default}
+  .brandmark{width:40px;height:40px;border-radius:11px;background:var(--primary);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}
+  h1{font-size:18px;margin:0;font-weight:800}
+  h2{font-size:16px;margin:0 0 2px;font-weight:800}
+  .sub{font-size:11.5px;color:var(--muted);margin:0}
+  .hero{border-radius:16px;padding:18px;color:#fff}
+  .hero h2{color:#fff;font-size:18px}
+  .hero .desc{color:rgba(255,255,255,.82);font-size:12px;margin:2px 0 12px}
+  .stats{display:flex;gap:22px}
+  .stat b{font-size:22px;font-weight:800;display:block}
+  .stat span{font-size:11px;color:rgba(255,255,255,.8)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .mode .ico{font-size:20px}
+  .badge{background:var(--ng);color:#fff;font-size:11px;font-weight:800;border-radius:20px;padding:1px 8px}
+  .bar{height:6px;border-radius:6px;background:var(--surface2);overflow:hidden;margin-top:6px}
+  .bar>i{display:block;height:100%;border-radius:6px}
+  .catbar{width:6px;height:40px;border-radius:6px;flex:none}
+  .pill{font-size:9.5px;font-weight:800;border:1px solid #B9750F;color:#B9750F;border-radius:5px;padding:0 4px}
+  .mogi{background:var(--primary);color:#fff}
+  .choice{background:var(--surface);border:1.5px solid var(--line);border-radius:13px;padding:13px;margin-bottom:9px;
+    display:flex;gap:11px;align-items:flex-start;cursor:pointer}
+  .choice .k{width:24px;height:24px;border-radius:7px;background:var(--surface2);flex:none;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--muted)}
+  .choice.correct{background:rgba(31,157,90,.14);border-color:var(--ok)}
+  .choice.correct .k{background:var(--ok);color:#fff}
+  .choice.wrong{background:rgba(210,59,59,.14);border-color:var(--ng)}
+  .choice.wrong .k{background:var(--ng);color:#fff}
+  .exp{background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:15px;margin-top:6px}
+  .tag{font-size:12px;padding:2px 10px;border-radius:20px;color:#fff;font-weight:800}
+  .btn{display:block;width:100%;border:none;border-radius:13px;padding:15px;font-size:15px;font-weight:800;
+    cursor:pointer;background:var(--primary);color:#fff;font-family:inherit}
+  .btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--text)}
+  .top{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .iconbtn{background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;padding:4px 8px 4px 0;font-family:inherit}
+  .progress{height:4px;background:var(--surface2);border-radius:4px;overflow:hidden;margin:8px 0 4px}
+  .progress>i{display:block;height:100%;background:var(--primary)}
+  .ring{position:relative;width:140px;height:140px;margin:0 auto}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ring .c b{font-size:32px;font-weight:800}
+  .reaction{display:flex;align-items:center;gap:12px;margin-top:12px}
+  .reaction svg{width:104px;height:120px;flex:none}
+  .halo{position:relative;width:120px;height:120px;flex:none;display:flex;align-items:center;justify-content:center}
+  .halo::before{content:"";position:absolute;width:112px;height:112px;border-radius:50%;background:rgba(255,255,255,.14)}
+  .halo svg{position:relative;width:120px;height:auto}
+  .bubble{display:inline-block;background:#fff;color:#0B3F74;font-weight:800;font-size:13.5px;padding:8px 13px;border-radius:14px;line-height:1.35}
+  .mascot-sm{flex:none}
+  .mascot-sm svg{width:70px;height:auto;display:block}
+  .tophero{display:flex;align-items:center;gap:6px;border-radius:18px;padding:16px 16px 16px 12px;
+    background:linear-gradient(135deg,#2A7DC4,#0B3F74);margin-bottom:4px}
+  .critbox{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:13px;margin-top:10px}
+  .note{font-size:11px;color:var(--muted);line-height:1.7;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+const DATA = /*__EXAMS__*/;
+const QUESTIONS = /*__QUESTIONS__*/;
+const SVG_CORRECT = "__SVG_CORRECT__";
+const SVG_WRONG = "__SVG_WRONG__";
+const SVG_BADGE = "__SVG_BADGE__";
+const EXAMS = DATA.exams;
+
+const hex = c => '#' + String(c).slice(-6);
+const lighten = () => {};
+function darken(c, amt){
+  const n = parseInt(String(c).slice(-6),16);
+  let r=(n>>16)&255,g=(n>>8)&255,b=n&255;
+  r=Math.round(r*(1-amt));g=Math.round(g*(1-amt));b=Math.round(b*(1-amt));
+  return '#'+[r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+const yearLabel = y => '令和' + y.slice(1) + '年度';
+
+/* ---- 進捗ストア（localStorage） ---- */
+const LS = {
+  stats: JSON.parse(localStorage.getItem('sk_stats')||'{}'),   // qid -> [seen,correct]
+  wrong: JSON.parse(localStorage.getItem('sk_wrong')||'[]'),
+  best: JSON.parse(localStorage.getItem('sk_best')||'{}'),      // examId -> pct
+  save(){
+    localStorage.setItem('sk_stats',JSON.stringify(this.stats));
+    localStorage.setItem('sk_wrong',JSON.stringify(this.wrong));
+    localStorage.setItem('sk_best',JSON.stringify(this.best));
+  },
+  record(q, ok){
+    const s = this.stats[q.id] || [0,0]; s[0]++; if(ok)s[1]++; this.stats[q.id]=s;
+    if(ok){ this.wrong = this.wrong.filter(x=>x!==q.id); }
+    else if(!this.wrong.includes(q.id)){ this.wrong.push(q.id); }
+    this.save();
+  },
+  seen(id){ return (this.stats[id]||[0,0])[0]; },
+  setBest(ex,pct){ if(pct>(this.best[ex]||0)){ this.best[ex]=pct; this.save(); } },
+};
+
+const poolOf = ex => QUESTIONS[ex.id] || [];
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+const esc = s => String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+const app = document.getElementById('app');
+let state = {};
+
+/* ================= 試験選択 ================= */
+function screenExams(){
+  let h = `<div class="tophero">
+      <div class="halo">${SVG_BADGE}</div>
+      <div style="flex:1">
+        <span class="bubble">いっしょに合格、めざそう！</span>
+        <h1 style="color:#fff;font-size:24px;margin:11px 0 2px">しかくとり</h1>
+        <p class="sub" style="color:rgba(255,255,255,.82)">国家資格 一問一答</p>
+      </div>
+    </div>
+    <div class="lbl">試験を選ぶ</div>`;
+  EXAMS.forEach(ex=>{
+    const pool = poolOf(ex);
+    const done = pool.filter(q=>LS.seen(q.id)>0).length;
+    const pct = pool.length? Math.round(done/pool.length*100):0;
+    const ready = pool.length>0;
+    h += `<div class="card row" style="margin-bottom:10px;${ready?'':'opacity:.55;cursor:default'}" ${ready?`onclick="goHome('${ex.id}')"`:''}>
+      <div class="brandmark" style="width:46px;height:46px;background:${hex(ex.color)}">${esc(ex.short.slice(0,2))}</div>
+      <div class="grow"><h2>${esc(ex.name)}</h2>
+        <p class="sub">${ready?`${pool.length}問 ・ 学習 ${done}/${pool.length}（${pct}%）`:'準備中'}</p></div>
+      <div style="font-size:22px;color:var(--muted)">${ready?'›':'🔒'}</div>
+    </div>`;
+  });
+  h += `<p class="note">※ 全問オリジナル作問です（実際の過去問文は転載していません）。法規は改正で正答が変わることがあるため、受験前に公式・最新情報をご確認ください。</p>`;
+  app.innerHTML = h; window.scrollTo(0,0);
+}
+
+/* ================= ホーム ================= */
+function goHome(examId){ state.exam = EXAMS.find(e=>e.id===examId); screenHome(); }
+function screenHome(){
+  const ex = state.exam, pool = poolOf(ex);
+  const catMap = Object.fromEntries(ex.cats.map(c=>[c.key,c]));
+  const wrongN = pool.filter(q=>LS.wrong.includes(q.id)).length;
+  const seenN = pool.filter(q=>LS.seen(q.id)>0).length;
+  const tS = pool.reduce((a,q)=>a+LS.seen(q.id),0);
+  const tC = pool.reduce((a,q)=>a+((LS.stats[q.id]||[0,0])[1]),0);
+  const acc = tS>0? Math.round(tC/tS*100)+'%':'—';
+  const years = [...new Set(pool.map(q=>q.year).filter(Boolean))].sort().reverse();
+  const mogiN = Math.min(60,pool.length);
+
+  let h = `<div class="top"><button class="iconbtn" onclick="screenExams()">‹</button>
+    <h1>${esc(ex.short)}</h1></div>
+    <div class="hero" style="background:linear-gradient(135deg,${hex(ex.color)},${darken(ex.color,.35)});display:flex;gap:8px;align-items:flex-start">
+      <div style="flex:1">
+        <h2>${esc(ex.name)} 対策</h2><p class="desc">${esc(ex.desc)}</p>
+        <div class="stats">
+          <div class="stat"><b>${acc}</b><span>累計 正答率</span></div>
+          <div class="stat"><b>${seenN}</b><span>解いた問題</span></div>
+          <div class="stat"><b>${wrongN}</b><span>復習リスト</span></div>
+        </div>
+      </div>
+      <div class="mascot-sm">${SVG_BADGE}</div>
+    </div>
+    <div class="lbl">学習モード</div>
+    <div class="grid2">
+      <div class="card mode" onclick="start('ランダム',false,()=>shuffle(P()).slice(0,10))">
+        <div class="ico">🎲</div><h2 style="margin-top:6px">ランダム</h2><p class="sub">全分野からシャッフル</p></div>
+      <div class="card mode" onclick="start('弱点復習',false,()=>shuffle(P().filter(q=>LS.wrong.includes(q.id))))">
+        <div class="row"><div class="ico">🔁</div><div class="grow"></div>${wrongN?`<span class="badge">${wrongN}</span>`:''}</div>
+        <h2 style="margin-top:6px">弱点復習</h2><p class="sub">間違えた問題だけ</p></div>
+    </div>
+    <div class="card mogi" style="margin-top:10px" onclick="start('模試',true,()=>shuffle(P()).slice(0,${mogiN}))">
+      <div class="row"><div class="ico" style="font-size:20px">📝</div>
+        <div class="grow" style="margin-left:8px"><h2 style="color:#fff">模試（本番判定・${mogiN}問）</h2>
+        <p class="sub" style="color:rgba(255,255,255,.85)">${esc(passSummary(ex))}</p></div>
+        <div style="color:rgba(255,255,255,.8)">›</div></div></div>`;
+
+  if(years.length){
+    h += `<div class="lbl">年度別に解く</div><div class="grid2">`;
+    years.forEach(y=>{
+      const qs = pool.filter(q=>q.year===y); const done=qs.filter(q=>LS.seen(q.id)>0).length;
+      h += `<div class="card" onclick="start('${yearLabel(y)}',false,()=>shuffle(P().filter(q=>q.year==='${y}')))">
+        <div class="row"><h2>${yearLabel(y)}</h2><div class="grow"></div><span class="sub">${qs.length}問</span></div>
+        <div class="bar"><i style="width:${qs.length?done/qs.length*100:0}%;background:var(--primary)"></i></div>
+        <p class="sub" style="margin-top:4px">学習 ${done}/${qs.length}</p></div>`;
+    });
+    h += `</div>`;
+  }
+
+  h += `<div class="lbl">分野別に解く</div>`;
+  ex.cats.forEach(c=>{
+    const qs = pool.filter(q=>q.cat===c.key); const done=qs.filter(q=>LS.seen(q.id)>0).length;
+    const pct = qs.length?Math.round(done/qs.length*100):0;
+    h += `<div class="card row" style="margin-bottom:8px" onclick="start('${esc(c.short)}',false,()=>shuffle(P().filter(q=>q.cat==='${cssq(c.key)}')))">
+      <div class="catbar" style="background:${hex(c.color)}"></div>
+      <div class="grow"><div class="row"><h2 style="font-size:14.5px">${esc(c.key)}</h2>${c.applied?'<span class="pill" style="margin-left:6px">応用</span>':''}</div>
+        <p class="sub">${qs.length}問 ・ 学習 ${done}/${qs.length}</p>
+        <div class="bar"><i style="width:${qs.length?done/qs.length*100:0}%;background:${hex(c.color)}"></i></div></div>
+      <b class="muted">${pct}%</b></div>`;
+  });
+  app.innerHTML = h; window.scrollTo(0,0);
+}
+const cssq = s => s.replace(/'/g,"\\'");
+function P(){ return poolOf(state.exam); }
+function passSummary(ex){
+  const pk = Object.keys(ex.pass.perCatMin||{});
+  if(!pk.length) return '合格基準 全体'+ex.pass.overall+'%';
+  if(pk.length===1){ const k=pk[0]; const s=(ex.cats.find(c=>c.key===k)||{}).short||k; return '合格基準 全体'+ex.pass.overall+'% / '+s+ex.pass.perCatMin[k]+'%'; }
+  return '合格基準 各科目'+ex.pass.perCatMin[pk[0]]+'%';
+}
+
+/* ================= 出題 ================= */
+function start(title,isMogi,builder){
+  const list = builder();
+  if(!list.length){ alert('この条件の問題がありません。'); return; }
+  state.session = {title,isMogi,builder,list,idx:0,answers:[],selected:null};
+  screenQuiz();
+}
+function screenQuiz(){
+  const ex = state.exam, s = state.session, q = s.list[s.idx];
+  const catMap = Object.fromEntries(ex.cats.map(c=>[c.key,c]));
+  const cc = hex((catMap[q.cat]||{}).color||ex.color);
+  const revealed = s.selected!==null;
+  const keys=['A','B','C','D'];
+  let h = `<div class="top"><button class="iconbtn" onclick="screenHome()">‹</button>
+     <div class="grow"><b>${esc(s.title)}</b> <span class="muted">${s.idx+1} / ${s.list.length}</span>
+     <div class="progress"><i style="width:${(s.idx+(revealed?1:0))/s.list.length*100}%"></i></div></div></div>
+    <p style="margin:6px 0"><span style="color:${cc};font-weight:800;font-size:10.5px">● ${esc(q.cat)}</span>
+      ${q.year?` <span style="color:var(--primary);font-weight:800;font-size:10.5px">${q.year}</span>`:''}</p>
+    <p style="font-size:17px;font-weight:700;line-height:1.6">${esc(q.q)}</p>`;
+  q.choices.forEach((c,i)=>{
+    let cls='choice';
+    if(revealed){ if(i===q.correct)cls+=' correct'; else if(i===s.selected)cls+=' wrong'; }
+    h += `<div class="${cls}" ${revealed?'':`onclick="answer(${i})"`}>
+      <div class="k">${keys[i]}</div><div>${esc(c)}</div></div>`;
+  });
+  if(revealed){
+    const ok = s.selected===q.correct;
+    if(ok){
+      h += `<div class="reaction" style="margin-top:14px;align-items:center">
+        <div style="width:88px;flex:none">${SVG_CORRECT}</div>
+        <b style="color:var(--ok);font-size:16px">せいかい！ 次の問題へ…</b></div>`;
+    } else {
+      h += `<div class="exp" style="border-color:var(--ng)">
+        <div class="row"><span class="tag" style="background:var(--ng)">不正解</span>
+          <b style="color:var(--ng)">正解は ${keys[q.correct]}</b></div>
+        <div class="reaction">${SVG_WRONG}
+          <div><div class="lbl" style="margin:0 0 3px">解説</div><div style="font-size:13.5px;line-height:1.7">${esc(q.exp)}</div></div>
+        </div></div>
+        <button class="btn" style="margin-top:16px" onclick="next()">${s.idx===s.list.length-1?'結果を見る':'次の問題'}</button>`;
+    }
+  }
+  app.innerHTML = h; window.scrollTo(0,0);
+}
+function answer(i){
+  const s = state.session, q = s.list[s.idx];
+  if(s.selected!==null) return;
+  const ok = i===q.correct;
+  LS.record(q,ok);
+  s.answers.push({cat:q.cat,ok});
+  s.selected=i; screenQuiz();
+  if(ok){ const at=s.idx; setTimeout(()=>{ if(state.session===s && s.selected!==null && s.idx===at) next(); }, 850); }
+}
+function next(){
+  const s = state.session;
+  if(s.idx < s.list.length-1){ s.idx++; s.selected=null; screenQuiz(); }
+  else screenResult();
+}
+
+/* ================= 結果 ================= */
+function screenResult(){
+  const ex = state.exam, s = state.session;
+  const total = s.answers.length, correct = s.answers.filter(a=>a.ok).length;
+  const pct = total?Math.round(correct/total*100):0;
+  const pctFor = cat => { const l=s.answers.filter(a=>a.cat===cat); return l.length?Math.round(l.filter(a=>a.ok).length/l.length*100):0; };
+  const passOverall = pct>=ex.pass.overall;
+  const perCat = Object.entries(ex.pass.perCatMin||{}).filter(([c])=>s.answers.some(a=>a.cat===c));
+  const pass = passOverall && perCat.every(([c,m])=>pctFor(c)>=m);
+  if(s.isMogi) LS.setBest(ex.id,pct);
+  const ring = pct>=80?'var(--ok)':(pct>=ex.pass.overall?'var(--primary)':'var(--ng)');
+  const circ = 2*Math.PI*64;
+
+  let h = `<div class="top"><h1>${s.isMogi?'模試 結果':'結果'}</h1></div>
+    <div class="card flat" style="text-align:center;padding:22px">
+      <div class="ring"><svg width="140" height="140">
+        <circle cx="70" cy="70" r="64" stroke="var(--surface2)" stroke-width="12" fill="none"/>
+        <circle cx="70" cy="70" r="64" stroke="${ring}" stroke-width="12" fill="none"
+          stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${circ*(1-pct/100)}"/></svg>
+        <div class="c"><b>${pct}%</b><span class="sub">正答率</span></div></div>
+      <p class="muted" style="margin-top:12px">${total}問中 ${correct}問正解</p>`;
+  if(s.isMogi){
+    h += `<div style="display:inline-block;margin-top:6px;padding:8px 18px;border-radius:30px;
+      border:1px solid ${pass?'var(--ok)':'var(--ng)'};background:${pass?'rgba(31,157,90,.15)':'rgba(210,59,59,.15)'};
+      color:${pass?'var(--ok)':'var(--ng)'};font-weight:800">${pass?'✔ 合格ライン':'✕ 合格基準に未達'}</div>`;
+    h += crit('全体の正答率','合格基準 '+ex.pass.overall+'% 以上',pct,ex.pass.overall,passOverall,null);
+    perCat.forEach(([c,m])=>{ const s2=(ex.cats.find(x=>x.key===c)||{}).short||c; const n=state.session.answers.filter(a=>a.cat===c).length;
+      h += crit(s2,'合格基準 '+m+'% 以上',pctFor(c),m,pctFor(c)>=m,n); });
+    h += `<div class="lbl" style="text-align:left">分野別 正答率</div>`;
+    ex.cats.forEach(c=>{ const l=s.answers.filter(a=>a.cat===c.key); if(!l.length)return;
+      const cp=Math.round(l.filter(a=>a.ok).length/l.length*100);
+      h += `<div class="row" style="margin-bottom:6px"><span class="sub" style="width:84px;text-align:left">${esc(c.short)}</span>
+        <div class="bar grow"><i style="width:${cp}%;background:${hex(c.color)}"></i></div>
+        <b style="width:40px;text-align:right">${cp}%</b></div>`; });
+  }
+  h += `</div>
+    <button class="btn" style="margin-top:16px" onclick="start(state.session.title,state.session.isMogi,state.session.builder)">もう一度</button>
+    <button class="btn ghost" style="margin-top:10px" onclick="screenHome()">ホームへ</button>`;
+  app.innerHTML = h; window.scrollTo(0,0);
+}
+function crit(title,cap,val,thr,ok,denom){
+  const col = ok?'var(--ok)':'var(--ng)';
+  return `<div class="critbox" style="text-align:left">
+    <div class="row"><div class="grow"><b style="font-size:13px">${esc(title)}${denom!=null?'（'+denom+'問）':''}</b></div>
+      <b style="color:${col}">${val}% ${ok?'✔':'✕'}</b></div>
+    <div class="bar" style="height:9px;position:relative;margin-top:7px">
+      <i style="width:${val}%;background:${col}"></i>
+      <span style="position:absolute;left:${thr}%;top:0;width:2px;height:9px;background:var(--text);opacity:.55"></span></div>
+    <p class="sub" style="margin-top:5px">${esc(cap)}（縦線＝基準）</p></div>`;
+}
+
+screenExams();
+</script>
+</body>
+</html>

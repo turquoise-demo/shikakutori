@@ -1,0 +1,862 @@
+<title>管工事 一問一答 — 1級管工事施工管理技士</title>
+<style>
+  :root{
+    --bg:#eef1f4; --grid:#e2e7ec;
+    --surface:#ffffff; --surface-2:#f5f8fa;
+    --ink:#15202b; --ink-2:#54636f; --ink-3:#8695a1;
+    --line:#dde4ea;
+    --accent:#0f5fa6; --accent-ink:#ffffff; --accent-soft:#e4eef7;
+    --good:#1f9d5a; --good-bg:#e7f6ee; --good-line:#b7e3cb;
+    --bad:#d23b3b; --bad-bg:#fbe9e9; --bad-line:#f0c4c4;
+    --warn:#b9750f;
+    --radius:16px; --shadow:0 1px 2px rgba(20,40,60,.06),0 8px 24px rgba(20,40,60,.06);
+    --maxw:480px;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#0c141c; --grid:#12202c;
+      --surface:#16212c; --surface-2:#1c2937;
+      --ink:#e9eef3; --ink-2:#a2b2bf; --ink-3:#6c7d8a;
+      --line:#26343f;
+      --accent:#4aa3e8; --accent-ink:#06121d; --accent-soft:#152736;
+      --good:#43c07f; --good-bg:#12301f; --good-line:#1f5738;
+      --bad:#f0605f; --bad-bg:#301617; --bad-line:#5a2626;
+      --warn:#e0a54a;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#eef1f4; --grid:#e2e7ec; --surface:#ffffff; --surface-2:#f5f8fa;
+    --ink:#15202b; --ink-2:#54636f; --ink-3:#8695a1; --line:#dde4ea;
+    --accent:#0f5fa6; --accent-ink:#fff; --accent-soft:#e4eef7;
+    --good:#1f9d5a; --good-bg:#e7f6ee; --good-line:#b7e3cb;
+    --bad:#d23b3b; --bad-bg:#fbe9e9; --bad-line:#f0c4c4; --warn:#b9750f;
+    --shadow:0 1px 2px rgba(20,40,60,.06),0 8px 24px rgba(20,40,60,.06);
+  }
+  :root[data-theme="dark"]{
+    --bg:#0c141c; --grid:#12202c; --surface:#16212c; --surface-2:#1c2937;
+    --ink:#e9eef3; --ink-2:#a2b2bf; --ink-3:#6c7d8a; --line:#26343f;
+    --accent:#4aa3e8; --accent-ink:#06121d; --accent-soft:#152736;
+    --good:#43c07f; --good-bg:#12301f; --good-line:#1f5738;
+    --bad:#f0605f; --bad-bg:#301617; --bad-line:#5a2626; --warn:#e0a54a;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic","Yu Gothic UI",Meiryo,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.6;
+    font-feature-settings:"palt" 1;
+  }
+  .app{max-width:var(--maxw);margin:0 auto;min-height:100vh;position:relative}
+  .tnum{font-variant-numeric:tabular-nums}
+
+  /* ---- Header ---- */
+  .top{
+    position:sticky;top:0;z-index:20;
+    background:linear-gradient(180deg,var(--surface) 60%,transparent);
+    padding:14px 18px 10px;
+    display:flex;align-items:center;gap:12px;
+    border-bottom:1px solid var(--line);
+  }
+  .top.plain{background:var(--surface)}
+  .mark{
+    width:34px;height:34px;flex:none;border-radius:9px;
+    background:var(--accent);color:var(--accent-ink);
+    display:grid;place-items:center;font-weight:800;font-size:15px;letter-spacing:.5px;
+  }
+  .top h1{font-size:16px;margin:0;font-weight:800;letter-spacing:.02em}
+  .top .sub{font-size:11px;color:var(--ink-2);font-weight:600;letter-spacing:.06em}
+  .top .spacer{flex:1}
+  .iconbtn{
+    appearance:none;border:1px solid var(--line);background:var(--surface-2);
+    color:var(--ink-2);width:36px;height:36px;border-radius:10px;cursor:pointer;
+    font-size:16px;display:grid;place-items:center;
+  }
+  .iconbtn:hover{color:var(--ink)}
+  .backbtn{
+    appearance:none;border:none;background:none;color:var(--accent);
+    font-weight:700;font-size:14px;cursor:pointer;padding:6px 2px;
+    display:inline-flex;align-items:center;gap:4px;
+  }
+
+  main{padding:18px 18px 40px}
+  .view{display:none;animation:fade .28s ease both}
+  .view.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.view,.exp{animation:none!important}}
+
+  /* ---- Home hero ---- */
+  .hero{
+    border-radius:var(--radius);padding:20px 18px;margin-bottom:16px;color:#fff;
+    background:
+      linear-gradient(135deg,#0f5fa6,#0b3f74);
+    position:relative;overflow:hidden;box-shadow:var(--shadow);
+  }
+  .hero::before{
+    content:"";position:absolute;inset:0;opacity:.28;
+    background-image:linear-gradient(#ffffff33 1px,transparent 1px),linear-gradient(90deg,#ffffff33 1px,transparent 1px);
+    background-size:22px 22px;
+  }
+  .hero-in{position:relative}
+  .hero .exam{font-size:11px;font-weight:700;letter-spacing:.14em;opacity:.85}
+  .hero h2{margin:.35em 0 .5em;font-size:22px;font-weight:800;line-height:1.35;text-wrap:balance}
+  .hero .stats{display:flex;gap:18px;margin-top:6px}
+  .hero .stat b{font-size:22px;font-weight:800;display:block;line-height:1.1}
+  .hero .stat span{font-size:11px;opacity:.8;font-weight:600}
+
+  .section-label{
+    font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--ink-3);
+    text-transform:uppercase;margin:22px 4px 10px;
+  }
+
+  /* ---- Mode cards ---- */
+  .modes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .mode{
+    text-align:left;appearance:none;cursor:pointer;
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:14px;box-shadow:var(--shadow);color:var(--ink);
+    display:flex;flex-direction:column;gap:2px;transition:transform .08s,border-color .15s;
+  }
+  .mode:hover{border-color:var(--accent)}
+  .mode:active{transform:scale(.98)}
+  .mode .m-ico{font-size:20px;margin-bottom:6px}
+  .mode .m-t{font-weight:800;font-size:15px}
+  .mode .m-d{font-size:11.5px;color:var(--ink-2);line-height:1.45}
+  .mode.wide{grid-column:1/-1;flex-direction:row;align-items:center;gap:14px}
+  .mode.wide .m-ico{margin:0}
+  .mode.wide .m-body{flex:1}
+  .mode.accent{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+  .mode.accent .m-d{color:rgba(255,255,255,.82)}
+  .mode .pill{margin-left:auto;background:var(--bad);color:#fff;font-size:11px;font-weight:800;
+    border-radius:20px;padding:2px 9px;min-width:24px;text-align:center}
+
+  /* ---- Year chips ---- */
+  .years{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .ychip{
+    appearance:none;cursor:pointer;text-align:left;color:var(--ink);
+    background:var(--surface);border:1px solid var(--line);border-radius:13px;
+    padding:12px 13px;box-shadow:var(--shadow);transition:border-color .15s;
+    display:flex;flex-direction:column;gap:6px;
+  }
+  .ychip:hover{border-color:var(--accent)}
+  .ychip .yh{display:flex;align-items:baseline;justify-content:space-between}
+  .ychip .yr{font-weight:800;font-size:15px}
+  .ychip .yn{font-size:11px;color:var(--ink-2);font-weight:700}
+  .ychip .yd{font-size:11px;color:var(--ink-3);font-weight:700}
+
+  /* ---- Category list ---- */
+  .cats{display:flex;flex-direction:column;gap:8px}
+  .cat{
+    appearance:none;cursor:pointer;text-align:left;width:100%;
+    background:var(--surface);border:1px solid var(--line);border-radius:13px;
+    padding:13px 14px;display:flex;align-items:center;gap:13px;color:var(--ink);
+    box-shadow:var(--shadow);transition:border-color .15s;
+  }
+  .cat:hover{border-color:var(--accent)}
+  .cat .swatch{width:6px;align-self:stretch;border-radius:6px;flex:none}
+  .cat .c-main{flex:1;min-width:0}
+  .cat .c-t{font-weight:800;font-size:14.5px;display:flex;align-items:center;gap:6px}
+  .cat .tag-ap{font-size:9.5px;font-weight:800;color:var(--warn);border:1px solid var(--warn);
+    border-radius:5px;padding:0 4px;letter-spacing:.02em}
+  .cat .c-sub{font-size:11.5px;color:var(--ink-2)}
+  .bar{height:6px;background:var(--surface-2);border-radius:6px;overflow:hidden;margin-top:7px}
+  .bar>i{display:block;height:100%;background:var(--accent);border-radius:6px;transition:width .4s}
+  .cat .c-pct{font-size:13px;font-weight:800;color:var(--ink-2);min-width:38px;text-align:right}
+  .arrow{color:var(--ink-3);font-size:18px}
+
+  .note{font-size:11px;color:var(--ink-3);line-height:1.6;margin-top:24px;
+    border-top:1px dashed var(--line);padding-top:14px}
+
+  /* ---- Quiz ---- */
+  .qbar-wrap{padding:0 18px 6px;background:var(--surface);border-bottom:1px solid var(--line);
+    position:sticky;top:59px;z-index:15}
+  .qmeta{display:flex;justify-content:space-between;align-items:center;font-size:12px;
+    color:var(--ink-2);font-weight:700;padding:2px 0 8px}
+  .qmeta .catlbl{color:var(--accent)}
+  .pbar{height:6px;background:var(--surface-2);border-radius:6px;overflow:hidden}
+  .pbar>i{display:block;height:100%;background:var(--accent);transition:width .3s}
+
+  .qcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 17px;box-shadow:var(--shadow);margin-bottom:14px}
+  .qtag{font-size:10.5px;font-weight:800;letter-spacing:.06em;color:var(--ink-3);
+    display:flex;gap:7px;align-items:center;margin-bottom:9px}
+  .qtag .ap{color:var(--warn);border:1px solid var(--warn);border-radius:5px;padding:0 4px}
+  .qtext{font-size:17px;font-weight:700;line-height:1.65;text-wrap:pretty}
+
+  .choices{display:flex;flex-direction:column;gap:9px;margin-top:4px}
+  .choice{
+    appearance:none;cursor:pointer;text-align:left;width:100%;color:var(--ink);
+    background:var(--surface);border:1.5px solid var(--line);border-radius:13px;
+    padding:13px 14px;display:flex;gap:11px;align-items:flex-start;font-size:14.5px;line-height:1.55;
+    box-shadow:var(--shadow);transition:border-color .12s,background .12s;
+  }
+  .choice:hover:not(:disabled){border-color:var(--accent)}
+  .choice:disabled{cursor:default}
+  .choice .key{flex:none;width:24px;height:24px;border-radius:7px;background:var(--surface-2);
+    color:var(--ink-2);font-weight:800;font-size:13px;display:grid;place-items:center;margin-top:1px}
+  .choice.correct{background:var(--good-bg);border-color:var(--good-line)}
+  .choice.correct .key{background:var(--good);color:#fff}
+  .choice.wrong{background:var(--bad-bg);border-color:var(--bad-line)}
+  .choice.wrong .key{background:var(--bad);color:#fff}
+  .choice.dim{opacity:.5}
+  .choice .mk{margin-left:auto;font-weight:800;font-size:15px}
+  .choice.correct .mk{color:var(--good)}
+  .choice.wrong .mk{color:var(--bad)}
+
+  .exp{margin-top:14px;border-radius:var(--radius);padding:15px 16px;
+    border:1px solid var(--line);background:var(--surface-2);animation:slideup .3s ease both}
+  @keyframes slideup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .verdict{display:flex;align-items:center;gap:9px;font-weight:800;font-size:15px;margin-bottom:8px}
+  .verdict.ok{color:var(--good)} .verdict.ng{color:var(--bad)}
+  .verdict .b{font-size:12px;border-radius:20px;padding:2px 10px;color:#fff}
+  .verdict.ok .b{background:var(--good)} .verdict.ng .b{background:var(--bad)}
+  .exp .lbl{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--ink-3);margin-bottom:3px}
+  .exp p{margin:0;font-size:13.5px;color:var(--ink);line-height:1.7}
+
+  .footbar{position:sticky;bottom:0;background:linear-gradient(0deg,var(--bg) 70%,transparent);
+    padding:12px 0 16px;margin-top:6px}
+  .btn{appearance:none;cursor:pointer;width:100%;border:none;border-radius:13px;
+    padding:15px;font-size:15px;font-weight:800;background:var(--accent);color:var(--accent-ink);
+    box-shadow:var(--shadow)}
+  .btn:active{transform:scale(.99)}
+  .btn.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+
+  /* ---- Result ---- */
+  .rcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:24px 20px;box-shadow:var(--shadow);text-align:center;margin-bottom:14px}
+  .score-ring{width:150px;height:150px;margin:6px auto 10px;position:relative}
+  .score-ring svg{transform:rotate(-90deg)}
+  .score-ring .mid{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+  .score-ring .mid b{font-size:34px;font-weight:800;line-height:1}
+  .score-ring .mid span{font-size:11px;color:var(--ink-2);font-weight:700}
+  .rtitle{font-size:20px;font-weight:800;margin:4px 0}
+  .rsub{font-size:13px;color:var(--ink-2)}
+  .judge{display:inline-flex;align-items:center;gap:7px;font-weight:800;font-size:15px;
+    border-radius:30px;padding:7px 18px;margin:12px 0 2px}
+  .judge.pass{background:var(--good-bg);color:var(--good);border:1px solid var(--good-line)}
+  .judge.fail{background:var(--bad-bg);color:var(--bad);border:1px solid var(--bad-line)}
+
+  .crit{display:flex;flex-direction:column;gap:10px;margin-top:16px;text-align:left}
+  .crit-row{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:12px 13px}
+  .crit-row .h{display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:7px}
+  .crit-row .h .st{font-weight:800}
+  .crit-row .h .ok{color:var(--good)} .crit-row .h .ng{color:var(--bad)}
+  .thbar{height:9px;background:var(--surface);border-radius:6px;position:relative;overflow:hidden;border:1px solid var(--line)}
+  .thbar>i{display:block;height:100%;border-radius:6px}
+  .thbar .thr{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.55}
+  .crit-row .cap{font-size:10.5px;color:var(--ink-3);margin-top:5px}
+
+  .rbreak{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+  .rbreak .row{display:flex;align-items:center;gap:10px;font-size:12.5px}
+  .rbreak .row .nm{flex:1;color:var(--ink-2);font-weight:600}
+  .rbreak .row .bar{flex:1.4;margin:0}
+  .rbreak .row .vv{font-weight:800;min-width:34px;text-align:right}
+</style>
+
+<div class="app">
+  <header class="top" id="topbar">
+    <button class="backbtn" id="backBtn" style="display:none" aria-label="戻る">‹ 戻る</button>
+    <div class="mark" id="markLogo">管</div>
+    <div id="titleWrap">
+      <h1>管工事 一問一答</h1>
+      <div class="sub">1級管工事施工管理技士・第一次検定</div>
+    </div>
+    <div class="spacer"></div>
+    <button class="iconbtn" id="themeBtn" title="表示切替" aria-label="ライト/ダーク切替">◐</button>
+  </header>
+
+  <!-- QUIZ progress (shown only in quiz) -->
+  <div class="qbar-wrap" id="qbarWrap" style="display:none">
+    <div class="qmeta">
+      <span class="catlbl" id="qModeLbl">分野別</span>
+      <span class="tnum" id="qCount">1 / 10</span>
+    </div>
+    <div class="pbar"><i id="qProg" style="width:0%"></i></div>
+  </div>
+
+  <main>
+    <!-- ========== HOME ========== -->
+    <section class="view active" id="home">
+      <div class="hero">
+        <div class="hero-in">
+          <div class="exam">NATIONAL LICENSE · PIPING</div>
+          <h2>1級管工事施工管理技士<br>第一次検定 対策</h2>
+          <div class="stats">
+            <div class="stat"><b class="tnum" id="hAcc">—</b><span>累計 正答率</span></div>
+            <div class="stat"><b class="tnum" id="hSeen">0</b><span>解いた問題</span></div>
+            <div class="stat"><b class="tnum" id="hWrong">0</b><span>復習リスト</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">学習モード</div>
+      <div class="modes">
+        <button class="mode" data-mode="random">
+          <div class="m-ico">🎲</div>
+          <div class="m-t">ランダム</div>
+          <div class="m-d">全分野からシャッフル出題</div>
+        </button>
+        <button class="mode" id="reviewMode" data-mode="review">
+          <div class="m-ico">🔁</div>
+          <div class="m-t">弱点復習</div>
+          <div class="m-d">間違えた問題だけ再挑戦</div>
+        </button>
+        <button class="mode accent wide" data-mode="mogi">
+          <div class="m-ico">📝</div>
+          <div class="m-body">
+            <div class="m-t">模試（本番判定）</div>
+            <div class="m-d">全分野+応用能力。合格基準60% / 応用50%で合否判定</div>
+          </div>
+          <span class="arrow" style="color:rgba(255,255,255,.7)">›</span>
+        </button>
+      </div>
+
+      <div class="section-label">年度別に解く<span style="text-transform:none;letter-spacing:0;color:var(--ink-3);font-weight:600"> ・ 直近5年の頻出論点</span></div>
+      <div class="years" id="yearList"></div>
+
+      <div class="section-label">分野別に解く</div>
+      <div class="cats" id="catList"></div>
+
+      <p class="note">
+        ※ 全問オリジナル作問です。実際の過去問の文章は転載していません。<br>
+        ※ 年度タグ（R2〜R6）は「その年代に問われた頻出・代表論点」をもとにした自作問題を示すもので、実際の出題順・文面とは異なります。<br>
+        ※ 問題数・合格基準は令和6年度時点の構成に基づく試作です。法規は改正で正答が変わることがあるため、受験前に全国建設研修センターの最新情報をご確認ください。
+      </p>
+    </section>
+
+    <!-- ========== QUIZ ========== -->
+    <section class="view" id="quiz">
+      <div class="qcard">
+        <div class="qtag" id="qTag"></div>
+        <div class="qtext" id="qText"></div>
+      </div>
+      <div class="choices" id="choices"></div>
+      <div id="expWrap"></div>
+      <div class="footbar" id="nextWrap" style="display:none">
+        <button class="btn" id="nextBtn">次の問題 ›</button>
+      </div>
+    </section>
+
+    <!-- ========== RESULT ========== -->
+    <section class="view" id="result">
+      <div class="rcard">
+        <div class="score-ring">
+          <svg width="150" height="150" viewBox="0 0 150 150">
+            <circle cx="75" cy="75" r="66" fill="none" stroke="var(--line)" stroke-width="12"/>
+            <circle id="ring" cx="75" cy="75" r="66" fill="none" stroke="var(--accent)"
+              stroke-width="12" stroke-linecap="round" stroke-dasharray="414.7" stroke-dashoffset="414.7"/>
+          </svg>
+          <div class="mid"><b class="tnum" id="rPct">0%</b><span>正答率</span></div>
+        </div>
+        <div class="rtitle" id="rTitle">おつかれさまでした</div>
+        <div class="rsub tnum" id="rSub">10問中 7問正解</div>
+        <div id="judgeWrap"></div>
+        <div class="crit" id="critWrap"></div>
+        <div class="rbreak" id="rBreak"></div>
+      </div>
+      <div class="footbar">
+        <button class="btn" id="againBtn" style="margin-bottom:10px">もう一度</button>
+        <button class="btn ghost" id="homeBtn">ホームへ</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+/* ============ 問題データ（オリジナル作問サンプル） ============ */
+const KIKAI="機械工学等", SEKAN="施工管理法", OUYOU="施工管理法（応用能力）", HOUKI="法規";
+const CAT_META={
+  [KIKAI]:{color:"#0f5fa6", short:"機械工学"},
+  [SEKAN]:{color:"#1f9d5a", short:"施工管理"},
+  [OUYOU]:{color:"#b9750f", short:"応用能力"},
+  [HOUKI]:{color:"#8256c8", short:"法規"},
+};
+const CAT_ORDER=[KIKAI,SEKAN,OUYOU,HOUKI];
+const YEARS=[
+  {key:"R6",label:"令和6年度"},
+  {key:"R5",label:"令和5年度"},
+  {key:"R4",label:"令和4年度"},
+  {key:"R3",label:"令和3年度"},
+  {key:"R2",label:"令和2年度"},
+];
+
+const QUESTIONS=[
+  {"id":"k01","cat":"機械工学等","q":"満水で流れる円管路において、管の断面積が途中で 1/2 になった。連続の式より、その部分の平均流速はおよそ何倍になるか。","choices":["1/2 倍","変わらない","2 倍","4 倍"],"correct":2,"exp":"連続の式 Q=A×v より、流量Qが一定なら断面積Aと流速vは反比例する。断面積が1/2になれば流速は2倍になる。"},
+  {"id":"k02","cat":"機械工学等","q":"湿り空気を冷却していったとき、含まれる水蒸気が飽和して結露し始める温度を何というか。","choices":["乾球温度","湿球温度","露点温度","有効温度"],"correct":2,"exp":"露点温度は、その空気を冷やしていって相対湿度が100%（飽和）に達し結露が始まる温度。冷水配管の結露判定などで用いる。"},
+  {"id":"k03","cat":"機械工学等","q":"物質の温度を変えずに、状態変化（蒸発・凝縮など）のために出入りする熱を何というか。","choices":["顕熱","潜熱","比熱","輻射熱"],"correct":1,"exp":"温度変化を伴わず状態変化に使われる熱が潜熱。温度変化を伴う熱は顕熱。加湿・除湿の負荷は潜熱として扱う。"},
+  {"id":"k04","cat":"機械工学等","q":"遠心ポンプで回転速度を 2 倍にしたとき、ポンプの相似則により全揚程はおよそ何倍になるか。","choices":["2 倍","4 倍","6 倍","8 倍"],"correct":1,"exp":"相似則では 吐出量∝回転速度、全揚程∝回転速度の2乗、軸動力∝回転速度の3乗。よって全揚程は2²=4倍。"},
+  {"id":"k05","cat":"機械工学等","q":"排水トラップに求められる封水深さの一般的な範囲として、最も適当なものはどれか。","choices":["10mm 以上 30mm 以下","50mm 以上 100mm 以下","150mm 以上 200mm 以下","200mm 以上 300mm 以下"],"correct":1,"exp":"封水深さは一般に50mm以上100mm以下とする。浅すぎると破封しやすく、深すぎると自浄作用が損なわれる。"},
+  {"id":"k06","cat":"機械工学等","q":"三相誘導電動機の回転方向を逆にする方法として正しいものはどれか。","choices":["電源電圧を下げる","3本の結線のうち、いずれか2本を入れ替える","周波数を上げる","3本すべてを入れ替える"],"correct":1,"exp":"三相のうち任意の2本の相順を入れ替えると回転磁界の向きが逆転し、電動機は逆回転する。3本全部入れ替えても元と同じ。"},
+  {"id":"k07","cat":"機械工学等","q":"通気管を設ける主たる目的として、最も適当なものはどれか。","choices":["排水の流量を増やす","排水トラップの封水を保護（破封防止）する","排水の臭気を強める","給水圧力を高める"],"correct":1,"exp":"通気管は排水時の管内圧力変動をやわらげ、サイホン作用・はね出しによるトラップの破封を防いで封水を保護する。"},
+  {"id":"s01","cat":"施工管理法","q":"ネットワーク工程表において、作業の開始から完了までで所要日数が最長となる経路を何というか。","choices":["フリーフロート","トータルフロート","クリティカルパス","ダミー"],"correct":2,"exp":"クリティカルパスは最長経路で、この経路上の作業が遅れると全体工期が延びる。重点管理の対象となる。"},
+  {"id":"s02","cat":"施工管理法","q":"品質管理の PDCA サイクルにおいて、C（Check：確認）の次に行う段階はどれか。","choices":["Plan（計画）","Do（実施）","Act（処置・改善）","Check（再確認）"],"correct":2,"exp":"P→D→C→A の順。Check で評価した結果を受けて Act で是正・改善し、次の Plan につなげる。"},
+  {"id":"s03","cat":"施工管理法","q":"バーチャート工程表（横線式）の特徴として、最も適当なものはどれか。","choices":["作業の相互関係（前後関係）が把握しにくい","クリティカルパスが一目で分かる","各作業の余裕日数が数値で明確","大規模で複雑な工事に最も適する"],"correct":0,"exp":"バーチャートは作成が容易で進捗把握に優れるが、作業間の関連や余裕が表現しにくい。関連把握はネットワーク工程表が優れる。"},
+  {"id":"s04","cat":"施工管理法","q":"抜取検査を採用することが適切な場合として、最も適当なものはどれか。","choices":["不良品が1つでも混入すると重大事故になる場合","検査項目が破壊検査となる場合","検査費用をいくらかけてもよい場合","ロットが極端に小さい場合"],"correct":1,"exp":"破壊検査で全数検査ができない場合や、検査に多大な手間・費用がかかる場合は抜取検査が適する。重大な不良が許されない場合は全数検査。"},
+  {"id":"s05","cat":"施工管理法","q":"労働安全衛生に関し、高さが 2m 以上の作業床の端や開口部で原則として必要となる墜落防止措置はどれか。","choices":["特に措置は不要","手すり・囲い等の設置、または安全帯（墜落制止用器具）の使用","照明の増設のみ","標識の掲示のみ"],"correct":1,"exp":"高さ2m以上の箇所では、囲い・手すり等を設けるか、困難な場合は墜落制止用器具を使用させるなどの措置が必要。"},
+  {"id":"s06","cat":"施工管理法","q":"工程・原価・品質の一般的な関係として、最も適当なものはどれか。","choices":["施工速度を上げるほど原価は下がり続ける","品質を上げれば必ず原価は下がる","施工を極端に速めると品質低下や原価増を招きやすい","工程と原価は無関係である"],"correct":2,"exp":"施工速度・原価・品質は相互に関係する。急ぎすぎると品質低下や手戻り・残業で原価が増える。最適な施工速度（経済速度）の管理が重要。"},
+  {"id":"o01","cat":"施工管理法（応用能力）","q":"冷水配管の保温施工で、保温材の外側に防湿層を設ける主たる目的はどれか。","choices":["保温材内部への湿気侵入・結露を防ぐ","保温材を厚く見せる","配管の摩擦損失を減らす","流速を上げる"],"correct":0,"exp":"冷水管では管表面温度が露点以下になりやすい。防湿層で外気の湿気の侵入を防ぎ、保温材内部の結露・性能低下を防止する。"},
+  {"id":"o02","cat":"施工管理法（応用能力）","q":"長方形ダクトの施工で、アスペクト比（長辺／短辺）はできるだけ小さく(1に近く)する方がよい。その理由として最も適当なものはどれか。","choices":["見た目を整えるため","摩擦抵抗・材料量を抑え、搬送動力を小さくできるため","風量を強制的に増やすため","消音効果を高めるため"],"correct":1,"exp":"アスペクト比が大きいほど同じ断面積でも周長が増え、摩擦抵抗と使用鋼板量が増える。1に近いほど効率がよい。"},
+  {"id":"o03","cat":"施工管理法（応用能力）","q":"排水横管の勾配に関する一般的な考え方として、最も適当なものはどれか。","choices":["管径が大きいほど勾配は緩く(小さく)できる","管径が大きいほど勾配を急にする必要がある","管径に関係なく勾配は一定","勾配は不要である"],"correct":0,"exp":"必要な流速を確保するための勾配は、管径が大きいほど緩くできる（例:小口径ほど急勾配）。緩すぎると自浄流速不足、急すぎると水だけ先行し固形物が残る。"},
+  {"id":"o04","cat":"施工管理法（応用能力）","q":"給水・空調配管の施工で、保温を行う前の段階で実施しておくべき試験として最も適当なものはどれか。","choices":["満水試験の代わりの目視のみ","水圧試験（耐圧・気密の確認）","保温後の外観検査のみ","通水後の水質試験のみ"],"correct":1,"exp":"漏れは保温で隠れると発見・補修が困難になる。保温前に水圧試験等で耐圧・気密を確認してから保温する。"},
+  {"id":"o05","cat":"施工管理法（応用能力）","q":"横走り給水管の施工で、管内にたまる空気を抜くために配慮すべき事項として最も適当なものはどれか。","choices":["上り勾配の頂部に空気抜き弁を設ける","管を全て水平にする","下り勾配の最下部に空気抜きを設ける","勾配を設けない"],"correct":0,"exp":"管内の空気は高いところにたまるため、上り勾配とし頂部（高所）に空気抜き弁を設けて排出する。エア溜まりは流量低下や騒音の原因。"},
+  {"id":"h01","cat":"法規","q":"建設業法上、元請の特定建設業者が下請に出す金額が政令で定める額以上となる工事現場に置かなければならない技術者はどれか。","choices":["主任技術者","監理技術者","作業主任者","現場代理人"],"correct":1,"exp":"発注者から直接請け負った特定建設業者が、一定額以上を下請契約する場合は監理技術者を置く。それ以外は主任技術者を置く。"},
+  {"id":"h02","cat":"法規","q":"建設業の許可の有効期間として、正しいものはどれか。","choices":["3年（更新が必要）","5年（更新が必要）","10年（更新が必要）","期限はなく更新不要"],"correct":1,"exp":"建設業の許可の有効期間は5年で、引き続き営業するには期間満了前に更新の手続きが必要。"},
+  {"id":"h03","cat":"法規","q":"労働基準法上、原則としての法定労働時間の組合せとして正しいものはどれか。","choices":["1日7時間・1週35時間","1日8時間・1週40時間","1日8時間・1週44時間","1日10時間・1週50時間"],"correct":1,"exp":"法定労働時間は原則1日8時間・1週40時間。これを超えて労働させるには36協定の締結・届出と割増賃金が必要。"},
+  {"id":"h04","cat":"法規","q":"労働安全衛生法上、酸素欠乏のおそれがある場所での作業に際して選任しなければならない者はどれか。","choices":["安全管理者","酸素欠乏危険作業主任者","衛生推進者","産業医"],"correct":1,"exp":"酸素欠乏危険場所での作業では、技能講習を修了した酸素欠乏（・硫化水素）危険作業主任者を選任し、作業を指揮させる。"},
+  {"id":"h05","cat":"法規","q":"労働安全衛生法上、事業者が労働者を新たに雇い入れたときに行わなければならないものはどれか。","choices":["定期健康診断のみ","安全衛生教育","作業主任者の選任","36協定の締結"],"correct":1,"exp":"事業者は労働者を雇い入れたとき、および作業内容を変更したときに、その業務に関する安全衛生教育を行わなければならない。"},
+  {"id":"h06","cat":"法規","q":"消防法に関する記述として、最も適当なものはどれか。","choices":["屋内消火栓設備は消火活動に用いる設備ではない","スプリンクラー設備は消火設備の一種である","自動火災報知設備は消火設備である","消火器の設置は消防法と無関係"],"correct":1,"exp":"スプリンクラー設備・屋内消火栓設備・消火器などは「消火設備」。自動火災報知設備は「警報設備」に分類される。"},
+  {"id":"k08","cat":"機械工学等","q":"ベルヌーイの定理によれば、水平な管路で流速が速くなった部分の静圧はどうなるか。","choices":["高くなる","低くなる","変わらない","流速の2乗に比例して高くなる"],"correct":1,"exp":"ベルヌーイの定理では、位置・圧力・速度のエネルギーの和が一定。流速（速度エネルギー）が増えれば静圧は低くなる。"},
+  {"id":"k09","cat":"機械工学等","q":"流れが層流か乱流かを判別する目安として用いられる無次元数はどれか。","choices":["マッハ数","レイノルズ数","フルード数","プラントル数"],"correct":1,"exp":"レイノルズ数は慣性力と粘性力の比を表す無次元数で、値が小さいと層流、大きいと乱流になりやすい。"},
+  {"id":"k10","cat":"機械工学等","q":"圧力を表す SI 単位「Pa（パスカル）」を基本単位で表したものはどれか。","choices":["N・m","N/m²","kg・m/s²","J/s"],"correct":1,"exp":"圧力は単位面積あたりの力で、1Pa = 1N/m²。なお N・m はエネルギー（J）、J/s は仕事率（W）。"},
+  {"id":"k11","cat":"機械工学等","q":"水の比熱に最も近い値はどれか。","choices":["約0.5 kJ/(kg・K)","約1.0 kJ/(kg・K)","約2.1 kJ/(kg・K)","約4.2 kJ/(kg・K)"],"correct":3,"exp":"水の比熱は約4.2kJ/(kg・K)。1kgの水を1K上げるのに約4.2kJ必要。熱容量が大きく蓄熱・搬送媒体に適する。"},
+  {"id":"k12","cat":"機械工学等","q":"熱の伝わり方のうち、真空中でも伝わるものはどれか。","choices":["熱伝導","対流（熱伝達）","放射（ふく射）","いずれも伝わらない"],"correct":2,"exp":"放射は電磁波による熱移動で媒体を必要とせず真空中でも伝わる。熱伝導・対流は物質（媒体）を介する。"},
+  {"id":"k13","cat":"機械工学等","q":"機械換気方式のうち、給気を機械（送風機）で行い排気を自然排気とし、室内を正圧に保つ方式はどれか。","choices":["第1種換気","第2種換気","第3種換気","自然換気"],"correct":1,"exp":"第2種換気は給気のみ機械で室内正圧。清浄室など汚染空気の侵入を防ぎたい室に用いる。第1種は給排気とも機械、第3種は排気のみ機械（負圧）。"},
+  {"id":"k14","cat":"機械工学等","q":"便所や厨房などの換気で一般に採用され、室内を負圧に保って臭気の拡散を防ぐ方式はどれか。","choices":["第1種換気","第2種換気","第3種換気","無換気"],"correct":2,"exp":"第3種換気は排気のみ機械・給気は自然で室内負圧。臭気や湿気を他室へ広げたくない便所・厨房・浴室に適する。"},
+  {"id":"k15","cat":"機械工学等","q":"室内空気環境の基準で、必要換気量の算定によく用いられる二酸化炭素（CO₂）濃度の許容値に最も近いものはどれか。","choices":["0.01%（100ppm）","0.1%（1000ppm）","1%（10000ppm）","5%（50000ppm）"],"correct":1,"exp":"室内CO₂濃度の許容値はおおむね0.1%（1000ppm）。これを超えないよう在室人数から必要換気量を求める。"},
+  {"id":"k16","cat":"機械工学等","q":"ポンプの吸込み側で圧力が液体の飽和蒸気圧以下になり、気泡の発生・崩壊で振動・騒音・壊食を生じる現象はどれか。","choices":["ウォーターハンマー","キャビテーション","サージング","スケーリング"],"correct":1,"exp":"キャビテーションは吸込側の圧力低下で気泡が生じ、圧力回復時に崩壊して壊食・騒音・性能低下を招く。有効吸込みヘッド（NPSH）の確保が重要。"},
+  {"id":"k17","cat":"機械工学等","q":"同一のポンプ2台を並列運転したとき、単独運転と比べて主に増加するのはどれか（管路抵抗一定の理想時）。","choices":["全揚程","吐出量（流量）","回転速度","キャビテーション余裕"],"correct":1,"exp":"並列運転は流量を増やす目的で用いる。揚程を増やしたい場合は直列運転。実際は管路抵抗の影響で単純な倍にはならない。"},
+  {"id":"k18","cat":"機械工学等","q":"弁を急激に閉じたときに、管内の流速の急変により圧力が急上昇する現象はどれか。","choices":["キャビテーション","ウォーターハンマー（水撃）","サイホン現象","毛細管現象"],"correct":1,"exp":"ウォーターハンマーは弁の急閉などで運動エネルギーが圧力に変換され管内圧力が急上昇する現象。弁をゆっくり閉じる・エアチャンバー設置などで防ぐ。"},
+  {"id":"k19","cat":"機械工学等","q":"給水管と衛生器具などが直接つながり、断水などで給水管内が負圧になったとき汚染水が逆流するおそれのある現象はどれか。","choices":["逆サイホン作用","毛細管現象","サージング","キャビテーション"],"correct":0,"exp":"逆サイホン作用は給水管内の負圧により、器具側の汚水が給水系統へ逆流する現象。吐水口空間の確保やバキュームブレーカで防止する。"},
+  {"id":"k20","cat":"機械工学等","q":"直流回路でオームの法則により、電圧V・電流I・抵抗Rの関係を表す式はどれか。","choices":["V = I / R","V = I × R","V = R / I","V = I + R"],"correct":1,"exp":"オームの法則は V = I × R。電圧は電流と抵抗の積で表される。"},
+  {"id":"k21","cat":"機械工学等","q":"交流回路の力率を表すものとして、最も適当なものはどれか。","choices":["有効電力 ÷ 皮相電力","皮相電力 ÷ 有効電力","電圧 ÷ 電流","電流 × 電圧"],"correct":0,"exp":"力率＝有効電力／皮相電力。力率が低いと同じ仕事に大きな電流が必要になり、損失や設備容量の増大を招く。"},
+  {"id":"k22","cat":"機械工学等","q":"高置（高架）水槽方式の給水に関する記述として、最も適当なものはどれか。","choices":["水道本管の圧力を直接利用し受水槽を持たない","受水槽の水をポンプで屋上水槽に揚水し、重力で給水する","常にポンプで加圧しながら各階へ直送する","給水圧力は上階ほど高くなる"],"correct":1,"exp":"高置水槽方式は受水槽→揚水ポンプ→屋上高置水槽→重力給水。停電時も高置水槽の分は給水できるが、上階では圧力が低くなりやすい。"},
+  {"id":"s07","cat":"施工管理法","q":"ネットワーク工程表で用いる「ダミー」に関する記述として、最も適当なものはどれか。","choices":["所要時間を持つ実作業である","所要時間0で作業の前後関係（順序）のみを表す","最も日数のかかる経路を示す","余裕日数を表す"],"correct":1,"exp":"ダミー（破線矢印）は所要時間0で、作業間の先行・後続の関係だけを示す仮想の結び。実際の作業ではない。"},
+  {"id":"s08","cat":"施工管理法","q":"労務や資材の投入量の偏りをならし、平準化するために行う工程調整を何というか。","choices":["山積み・山崩し","歩掛り","出来高払い","仮設計画"],"correct":0,"exp":"山積みで日々の資源必要量を積み上げ、余裕（フロート）を使って山崩しを行い、資源の投入を平準化する。"},
+  {"id":"s09","cat":"施工管理法","q":"品質管理で用いる「パレート図」の主な用途として、最も適当なものはどれか。","choices":["原因と結果の関係を整理する","不良や欠点を項目別に大きい順に並べ、重点管理項目を見つける","データのばらつき（分布）を見る","2つの特性の相関を見る"],"correct":1,"exp":"パレート図は項目別の件数を大きい順に並べ累積曲線を描く図。上位の重点項目に対策を絞る（重点指向）ために使う。"},
+  {"id":"s10","cat":"施工管理法","q":"不良の原因を大骨・中骨・小骨に分けて整理し、原因と結果の関係を体系的に表す図はどれか。","choices":["ヒストグラム","特性要因図","管理図","散布図"],"correct":1,"exp":"特性要因図（魚の骨図）は、結果（特性）に影響する要因を枝分かれで整理する。原因追究やブレーンストーミングに用いる。"},
+  {"id":"s11","cat":"施工管理法","q":"データの分布・ばらつきの形を柱状に表し、規格値との関係などを把握するのに用いる図はどれか。","choices":["管理図","パレート図","ヒストグラム","特性要因図"],"correct":2,"exp":"ヒストグラムは測定値を区間に分け度数を柱で表す図。分布の中心・ばらつき・規格外れの有無を把握できる。"},
+  {"id":"s12","cat":"施工管理法","q":"工程が安定した状態（管理状態）にあるかどうかを、時系列と管理限界線により判定する図はどれか。","choices":["管理図","散布図","パレート図","ヒストグラム"],"correct":0,"exp":"管理図は測定値の時間変化を打点し、上下の管理限界線に対する点の動きから工程の異常を早期に検知する。"},
+  {"id":"s13","cat":"施工管理法","q":"作業開始前に短時間で当日の作業の危険を予知し、対策を話し合う活動を何というか。","choices":["KY活動（危険予知活動）","OJT","PDCA","VE（バリューエンジニアリング）"],"correct":0,"exp":"KY活動は作業前にその日の作業に潜む危険を全員で予知し、指差呼称などで対策を共有する安全活動。TBM（ツールボックスミーティング）と併せて行われる。"},
+  {"id":"s14","cat":"施工管理法","q":"労働災害に関する「ハインリッヒの法則」が示す比率として、最も適当なものはどれか。","choices":["1：10：100","1：29：300","1：5：50","1：100：1000"],"correct":1,"exp":"ハインリッヒの法則は、1件の重大災害の背後に29件の軽傷、300件のヒヤリ・ハットがあるとする経験則。ヒヤリ・ハットの段階での対策が重要。"},
+  {"id":"s15","cat":"施工管理法","q":"施工計画の立案にあたり、事前調査として行うことが適当でないものはどれか。","choices":["近隣・道路など現場周辺の状況調査","地中埋設物・地盤の調査","設計図書・現場条件の確認","竣工後の維持管理費の実費精算"],"correct":3,"exp":"事前調査は現場条件・周辺状況・設計図書・法規制などを対象とする。竣工後の維持管理費の実費精算は施工計画の事前調査には含まれない。"},
+  {"id":"s16","cat":"施工管理法","q":"総合工程表の役割として、最も適当なものはどれか。","choices":["1日ごとの作業員の氏名を管理する","工事全体の主要な工程・節目を示し全体の流れを把握する","材料の単価を決定する","竣工検査の合否だけを記録する"],"correct":1,"exp":"総合工程表は着工から竣工までの主要工程・マイルストーンを示し全体像を把握するためのもの。詳細は部分（月間・週間）工程表で管理する。"},
+  {"id":"o06","cat":"施工管理法（応用能力）","q":"配管をコンクリート壁・床を貫通させる際、あらかじめ打設前に入れておく管（貫通口確保のための管）を何というか。","choices":["スリーブ","エルボ","ブッシング","ユニオン"],"correct":0,"exp":"スリーブは貫通部の穴を確保するためコンクリート打設前に取り付ける管。配管の伸縮・防火区画処理・地震時の変位を考慮して設ける。"},
+  {"id":"o07","cat":"施工管理法（応用能力）","q":"温度変化による配管の伸び縮みを吸収するために設けるものはどれか。","choices":["伸縮継手（エキスパンションジョイント）","逆止弁","ストレーナ","フート弁"],"correct":0,"exp":"長い直管や高温流体の配管では熱伸縮が大きい。伸縮継手やベンド（曲がり）で伸縮を吸収し、配管や支持部の破損を防ぐ。"},
+  {"id":"o08","cat":"施工管理法（応用能力）","q":"ポンプの振動が配管系に伝わるのを軽減する目的で、ポンプの吐出・吸込口近くに設けるものはどれか。","choices":["防振継手（フレキシブルジョイント）","仕切弁","水抜き弁","伸縮管"],"correct":0,"exp":"防振継手はゴムや金属ベローズ製で、ポンプ等の振動・変位を吸収し配管への伝達を抑える。防振基礎と併用される。"},
+  {"id":"o09","cat":"施工管理法（応用能力）","q":"横走り配管の支持（吊り）に関する記述として、最も適当なものはどれか。","choices":["支持間隔は自由でよい","管径が細いほど支持間隔を広くできる","たわみや振動を防ぐため管径・材質に応じた間隔で支持する","支持は継手部にだけ設ければよい"],"correct":2,"exp":"横走り管は自重や流体重量でたわむため、管径・材質に応じた適切な間隔で支持する。細い管ほど間隔は狭くする必要がある。"},
+  {"id":"o10","cat":"施工管理法（応用能力）","q":"排水横主管などに設ける掃除口（そうじぐち）の主な目的はどれか。","choices":["通気を良くする","詰まり時の点検・清掃を行う","流速を上げる","封水を深くする"],"correct":1,"exp":"掃除口は管内が詰まったときの点検・清掃のために、方向転換部や一定間隔ごとに設ける。作業しやすい位置・向きに配置する。"},
+  {"id":"o11","cat":"施工管理法（応用能力）","q":"蒸気配管の施工でドレン（凝縮水）を適切に排出するための配慮として、最も適当なものはどれか。","choices":["勾配を設けず水平にする","流れ方向へ先下がり勾配とし、末端・低所にトラップを設ける","上り勾配だけにする","ドレンは配管内に溜めておく"],"correct":1,"exp":"蒸気配管は流れ方向に先下がり勾配とし、ドレンを低い位置に集めてスチームトラップで排出する。ドレン滞留はウォーターハンマーの原因になる。"},
+  {"id":"o12","cat":"施工管理法（応用能力）","q":"保温施工の一般的な順序として、最も適当なものはどれか。","choices":["外装 → 保温材 → 防湿層","保温材 → 防湿層（必要時） → 外装（仕上げ）","防湿層 → 外装 → 保温材","外装 → 防湿層 → 保温材"],"correct":1,"exp":"配管に保温材を巻き、冷水管などでは防湿層を設け、最後に外装（金属板・テープ等）で仕上げる。順序を誤ると結露・剥離の原因になる。"},
+  {"id":"o13","cat":"施工管理法（応用能力）","q":"ポンプの据付け・基礎に関する記述として、最も適当なものはどれか。","choices":["基礎は不要で床に直置きでよい","水平を確認し、アンカーボルトで基礎に固定する","配管の重量をポンプ本体で支持させる","防振材は必ず使用してはならない"],"correct":1,"exp":"ポンプは水平を出してアンカーボルトで基礎に固定する。配管重量はポンプに掛けず別に支持し、必要に応じて防振基礎とする。"},
+  {"id":"o14","cat":"施工管理法（応用能力）","q":"給水管の水圧試験に関する記述として、最も適当なものはどれか。","choices":["保温・被覆をすべて終えてから行う","規定の試験圧力を一定時間保持し、圧力降下や漏れの有無を確認する","通水しながら目視するだけでよい","試験圧力は使用圧力より低くする"],"correct":1,"exp":"水圧試験は所定の試験圧力（通常は使用圧力より高い）を規定時間保持し、圧力降下・漏水がないか確認する。継手が見える保温前に行う。"},
+  {"id":"o15","cat":"施工管理法（応用能力）","q":"排水通気設備で、各器具のトラップごとに通気管を設ける方式を何というか。","choices":["各個通気方式","伸頂通気方式","結合通気方式","逃し通気方式"],"correct":0,"exp":"各個通気方式は器具ごとに通気管を設けるためトラップの封水保護に最も確実。ループ通気・伸頂通気に比べ配管は多くなる。"},
+  {"id":"h07","cat":"法規","q":"建設業法上、工事現場に置く主任技術者・監理技術者の職務として、適当でないものはどれか。","choices":["施工計画の作成","工程管理・品質管理","技術上の指導監督","下請代金の支払を自ら現金で行う義務"],"correct":3,"exp":"主任技術者・監理技術者の職務は施工計画の作成、工程・品質・安全などの技術上の管理と、施工に従事する者の技術上の指導監督。下請代金の現金支払は職務ではない。"},
+  {"id":"h08","cat":"法規","q":"建設業法における一括下請負（いわゆる丸投げ）についての記述として、最も適当なものはどれか。","choices":["自由に行ってよい","原則として禁止されている","元請の判断のみで常に認められる","下請金額が小さければ常に認められる"],"correct":1,"exp":"請け負った工事を一括して他人に請け負わせる一括下請負は原則禁止。特に公共工事では全面的に禁止されている。"},
+  {"id":"h09","cat":"法規","q":"労働基準法上、労働時間が8時間を超える場合に少なくとも与えなければならない休憩時間はどれか。","choices":["少なくとも30分","少なくとも45分","少なくとも1時間","休憩は不要"],"correct":2,"exp":"休憩は労働時間が6時間を超え8時間以下で少なくとも45分、8時間を超える場合は少なくとも1時間を、労働時間の途中に与える。"},
+  {"id":"h10","cat":"法規","q":"労働基準法上、満18歳未満の年少者について正しいものはどれか。","choices":["深夜業や危険有害業務に制限がある","労働時間の上限は成人と全く同じ","坑内労働に制限はない","深夜業は自由にさせてよい"],"correct":0,"exp":"満18歳未満の年少者は、原則として深夜業・危険有害業務・坑内労働などが制限される。労働時間についても保護規定がある。"},
+  {"id":"h11","cat":"法規","q":"労働安全衛生法上、常時使用する労働者が原則50人以上の事業場で選任が義務づけられるものはどれか。","choices":["安全衛生推進者","衛生管理者・産業医","作業主任者","現場代理人"],"correct":1,"exp":"常時50人以上の事業場では衛生管理者・産業医の選任義務がある（業種により総括安全衛生管理者・安全管理者も）。小規模事業場では安全衛生推進者等。"},
+  {"id":"h12","cat":"法規","q":"労働安全衛生法上、作業主任者を選任しなければならない作業として、最も適当なものはどれか。","choices":["一般的な事務作業","酸素欠乏危険場所での作業","打合せ会議","清掃作業一般"],"correct":1,"exp":"政令で定める危険・有害な作業（酸素欠乏危険作業、一定の足場の組立て等、ガス溶接など）では、資格を有する作業主任者を選任し作業を指揮させる。"},
+  {"id":"h13","cat":"法規","q":"労働安全衛生法上、足場の組立て等作業主任者の選任が必要となる足場の高さの目安はどれか。","choices":["高さ2m以上","高さ3m以上","高さ5m以上","高さ10m以上"],"correct":2,"exp":"つり足場・張出し足場、または高さ5m以上の構造の足場の組立て・解体・変更の作業では、足場の組立て等作業主任者を選任する。"},
+  {"id":"h14","cat":"法規","q":"建築基準法において「建築設備」に含まれないものはどれか。","choices":["給水・排水設備","換気・空調設備","電気・昇降機設備","現場に仮置きした資材"],"correct":3,"exp":"建築設備は建築物に設ける電気・ガス・給排水・換気・冷暖房・昇降機・避雷針などの設備。仮置き資材は建築設備ではない。"},
+  {"id":"h15","cat":"法規","q":"消防法における消防用設備等の分類で、屋内消火栓設備・スプリンクラー設備が属するものはどれか。","choices":["警報設備","避難設備","消火設備","消防用水"],"correct":2,"exp":"消火設備には消火器・屋内消火栓設備・スプリンクラー設備・不活性ガス消火設備などが含まれる。自動火災報知設備は警報設備、誘導灯は避難設備。"},
+  {"id":"h16","cat":"法規","q":"産業廃棄物を委託処理する際、排出事業者が交付し適正処理を確認するための書類はどれか。","choices":["確認申請書","産業廃棄物管理票（マニフェスト）","施工体制台帳","労働者名簿"],"correct":1,"exp":"排出事業者は産業廃棄物の処理を委託する際にマニフェスト（管理票）を交付し、収集運搬・処分が適正に行われたことを確認・保存する義務がある。"},
+  {"id":"h17","cat":"法規","q":"建設業の許可における「特定建設業」と「一般建設業」の区分に関する記述として、最も適当なものはどれか。","choices":["下請に出す金額の規模により区分される","工事の場所（都道府県）で区分される","会社の設立年数で区分される","従業員数だけで区分される"],"correct":0,"exp":"元請として下請に出す代金の総額が政令で定める額以上となる場合は特定建設業の許可が必要。それ以外は一般建設業の許可でよい。"},
+  {"id":"p01","cat":"機械工学等","year":"R2","q":"蒸気圧縮冷凍サイクルにおける冷媒の流れる順序として、正しいものはどれか。","choices":["圧縮機 → 蒸発器 → 膨張弁 → 凝縮器","圧縮機 → 凝縮器 → 膨張弁 → 蒸発器","蒸発器 → 膨張弁 → 凝縮器 → 圧縮機","凝縮器 → 圧縮機 → 蒸発器 → 膨張弁"],"correct":1,"exp":"冷媒は 圧縮機（高温高圧化）→凝縮器（放熱・液化）→膨張弁（減圧）→蒸発器（周囲から吸熱・気化）の順に循環する。蒸発器で室内を冷やす。"},
+  {"id":"p02","cat":"機械工学等","year":"R2","q":"送風機の相似則により、回転速度を1.2倍にしたとき風量（風量）はおよそ何倍になるか。","choices":["1.2倍","1.44倍","1.73倍","2.0倍"],"correct":0,"exp":"送風機の相似則では 風量∝回転速度、静圧∝回転速度の2乗、軸動力∝回転速度の3乗。風量は回転速度に比例するので1.2倍。"},
+  {"id":"p03","cat":"機械工学等","year":"R2","q":"コンクリートの水セメント比を小さくした場合の一般的な傾向として、最も適当なものはどれか。","choices":["圧縮強度・耐久性が高くなる傾向","必ず施工しやすくなる","強度が低下する","中性化が進みやすくなる"],"correct":0,"exp":"水セメント比が小さいほど一般に圧縮強度・耐久性は高まる。ただし流動性（ワーカビリティー）は低下しやすい。"},
+  {"id":"p04","cat":"施工管理法","year":"R2","q":"工程管理で用いる工程管理曲線（Sカーブ・バナナ曲線）の主な目的はどれか。","choices":["各作業の前後関係を示す","出来高の累計を管理し、予定に対する進捗の上下限を管理する","労務単価を算出する","品質のばらつきを見る"],"correct":1,"exp":"工程管理曲線は工事出来高の累計を時系列で表し、予定に対する進み・遅れを上方・下方の許容限界（バナナ曲線）で管理する。"},
+  {"id":"p05","cat":"施工管理法","year":"R2","q":"施工体制台帳・施工体系図に関する記述として、最も適当なものはどれか。","choices":["下請業者の構成や施工分担を明らかにするために作成する","竣工後に発注者が作成する","労働者の給与明細である","設計図書の一部で施工者は関与しない"],"correct":0,"exp":"施工体制台帳・施工体系図は、工事に関わる下請負人の名称や施工の分担を明らかにする書類。一定の要件で元請の特定建設業者が作成する。"},
+  {"id":"p06","cat":"施工管理法（応用能力）","year":"R2","q":"硬質塩化ビニル管（VP）の施工上の特徴として、最も適当なものはどれか。","choices":["鋼管に比べ線膨張が小さい","接着接合（TS接合）ができ、温度変化による伸縮が大きい","溶接で接合する","電気を通しやすい"],"correct":1,"exp":"硬質塩ビ管は接着（TS）接合ができ軽量で耐食性に優れるが、線膨張係数が鋼管より大きく（約7倍）、温度変化による伸縮対策が必要。"},
+  {"id":"p07","cat":"施工管理法（応用能力）","year":"R2","q":"送風機とダクトの接続部に「たわみ継手（キャンバス継手）」を設ける主目的はどれか。","choices":["風量を増やす","送風機の振動がダクトへ伝わるのを防ぐ","消音のため","結露を防ぐ"],"correct":1,"exp":"たわみ継手は送風機の振動・変位がダクト系へ伝わるのを絶縁するために接続部に設ける。防振対策の一つ。"},
+  {"id":"p08","cat":"法規","year":"R2","q":"建設業法上、建設工事の請負契約について正しいものはどれか。","choices":["口頭の合意のみで足りる","契約の内容を書面（電子契約含む）に記載し相互に交付する","元請の一存で内容を変更できる","契約書は発注者だけが保管する"],"correct":1,"exp":"建設業法では、請負契約の当事者は工事内容・請負代金・工期などを書面（または電子的方法）に記載し、署名・記名押印して相互に交付しなければならない。"},
+  {"id":"p09","cat":"法規","year":"R2","q":"労働安全衛生法上、元方事業者が統括安全衛生責任者を選任したとき、下請（関係請負人）側で選任されるのはどれか。","choices":["安全衛生責任者","産業医","作業主任者","衛生管理者"],"correct":0,"exp":"特定元方事業者が統括安全衛生責任者を選任した場合、各関係請負人は安全衛生責任者を選任し、統括側との連絡・調整を行う。"},
+  {"id":"p10","cat":"機械工学等","year":"R3","q":"三相誘導電動機の「スターデルタ始動」を用いる主な目的はどれか。","choices":["回転方向を変える","始動時の電流を抑える","回転速度を無段階に変える","力率を1にする"],"correct":1,"exp":"スターデルタ始動は始動時にY結線として電圧・電流を抑え（全電圧始動の約1/3）、加速後にΔ結線へ切り替える。大容量電動機の始動電流低減に用いる。"},
+  {"id":"p11","cat":"機械工学等","year":"R3","q":"電気設備における接地（アース）の主な目的として、最も適当なものはどれか。","choices":["電力を増やす","漏電時の感電や機器の損傷を防ぐ","力率を改善する","電圧を昇圧する"],"correct":1,"exp":"接地は漏電が生じた際に電流を大地へ逃がし、人体への感電や機器・火災の危険を防ぐために行う。"},
+  {"id":"p11b","cat":"機械工学等","year":"R3","q":"厨房などの排水に含まれる油脂分やごみを分離・捕集するために設ける阻集器はどれか。","choices":["オイル阻集器","グリース阻集器","砂阻集器","毛髪阻集器"],"correct":1,"exp":"グリース阻集器（グリーストラップ）は厨房排水中の油脂分・残さを分離捕集し、配管の閉塞や下水への油脂流出を防ぐ。"},
+  {"id":"p12","cat":"施工管理法","year":"R3","q":"ネットワーク工程表における「フリーフロート」の説明として、最も適当なものはどれか。","choices":["後続作業に影響を与えずに使える余裕時間","全体工期に影響しない最大の余裕時間","作業の所要時間そのもの","クリティカルパスの長さ"],"correct":0,"exp":"フリーフロートは、後続作業の最早開始を遅らせずに使える余裕時間。トータルフロート（全体工期に影響しない余裕）とは区別される。"},
+  {"id":"p13","cat":"施工管理法","year":"R3","q":"工事現場に搬入された材料・機器の「受入検査」に関する記述として、最も適当なものはどれか。","choices":["搬入後の使用実績で判断する","規格・数量・損傷の有無などを搬入時に確認する","竣工検査で初めて行う","検査は不要である"],"correct":1,"exp":"受入検査は、材料・機器の搬入時に規格・仕様・数量・外観（損傷）などが要求に適合しているかを確認する検査。不適合品の使用を未然に防ぐ。"},
+  {"id":"p14","cat":"施工管理法（応用能力）","year":"R3","q":"ポンプの吸込管下端に「フート弁」を設ける主な目的はどれか。","choices":["流量を計測する","呼び水を保持し、停止時の水の逆流（落水）を防ぐ","圧力を上げる","振動を吸収する"],"correct":1,"exp":"フート弁は吸込管の下端に付ける逆止弁付きの弁で、ポンプ停止時に管内の水（呼び水）が落ちないよう保持し、再起動を確実にする。"},
+  {"id":"p15","cat":"施工管理法（応用能力）","year":"R3","q":"冷媒配管の気密試験に使用するガスとして、最も適当なものはどれか。","choices":["酸素","窒素","アセチレン","都市ガス"],"correct":1,"exp":"冷媒配管の気密試験には乾燥窒素を用いる。酸素や可燃性ガスは油分との反応・爆発の危険があるため使用してはならない。"},
+  {"id":"p16","cat":"法規","year":"R3","q":"労働基準法上、法定労働時間を超えて時間外・休日労働をさせる場合に必要な手続きはどれか。","choices":["就業規則の掲示のみ","労使協定（36協定）の締結と労働基準監督署への届出","口頭の同意のみ","特に手続きは不要"],"correct":1,"exp":"法定労働時間を超える時間外・休日労働には、いわゆる36協定（労使協定）を締結し労働基準監督署長へ届け出る必要があり、割増賃金の支払いも要する。"},
+  {"id":"p17","cat":"法規","year":"R3","q":"建築基準法のいわゆるシックハウス対策に関する記述として、最も適当なものはどれか。","choices":["換気設備は不要である","居室には原則として常時換気（機械換気等）が求められる","内装材の制限はない","対象は工場のみである"],"correct":1,"exp":"シックハウス対策として、ホルムアルデヒドを発散する建材の使用制限とともに、住宅等の居室には原則として常時換気できる機械換気設備（いわゆる24時間換気）等が求められる。"},
+  {"id":"p18","cat":"機械工学等","year":"R4","q":"空気調和における顕熱比（SHF）を表すものとして、最も適当なものはどれか。","choices":["潜熱 ÷ 全熱","顕熱 ÷ 全熱（顕熱＋潜熱）","顕熱 ÷ 潜熱","全熱 ÷ 顕熱"],"correct":1,"exp":"顕熱比SHFは 顕熱／全熱（顕熱＋潜熱）。空調負荷のうち温度変化に関わる顕熱の割合を示し、吹出し状態の設計に用いる。"},
+  {"id":"p19","cat":"機械工学等","year":"R4","q":"遠心送風機に分類されるものとして、最も適当なものはどれか。","choices":["軸流送風機","シロッコファン（多翼送風機）","プロペラファン","斜流送風機"],"correct":1,"exp":"シロッコファン（多翼送風機）は遠心送風機の一種で、比較的低速・低騒音で空調用に広く使われる。軸流・プロペラは軸流系。"},
+  {"id":"p20","cat":"機械工学等","year":"R4","q":"鉄筋コンクリートで鉄筋の「かぶり厚さ」を確保する主な目的として、適当でないものはどれか。","choices":["鉄筋の腐食（発錆）防止","耐火性の確保","コンクリートと鉄筋の付着の確保","室内の断熱性能の向上"],"correct":3,"exp":"かぶり厚さは鉄筋の防錆・耐火・付着の確保のために必要。室内の断熱性能とは直接関係しない。"},
+  {"id":"p21","cat":"施工管理法","year":"R4","q":"移動式クレーンを用いる作業に関する記述として、最も適当なものはどれか。","choices":["定格荷重を超えて使用してよい","作業内容に応じた作業計画を定め、定格荷重を守って作業する","アウトリガーは使用しない","合図者は不要である"],"correct":1,"exp":"移動式クレーン作業は作業計画を定め、定格荷重を超える使用をしてはならない。アウトリガーの設置や合図者の配置など安全措置が必要。"},
+  {"id":"p22","cat":"施工管理法（応用能力）","year":"R4","q":"鋼管の突合せ溶接で「開先（かいさき）」を設ける主な目的はどれか。","choices":["外観をよくする","溶接部の根元まで確実に溶け込ませる","管の内径を大きくする","流速を上げる"],"correct":1,"exp":"開先は溶接する管端に設ける溝で、溶着金属を根元まで十分に溶け込ませ、健全な溶接部を得るために設ける。"},
+  {"id":"p23","cat":"施工管理法（応用能力）","year":"R4","q":"保温材に関する記述として、最も適当なものはどれか。","choices":["ロックウール・グラスウールは繊維系の保温材である","保温材の熱伝導率は大きいほどよい","保温厚さは薄いほど熱損失が小さい","保温材は湿気を含んでも性能は変わらない"],"correct":0,"exp":"ロックウール・グラスウールは代表的な繊維系保温材。熱伝導率は小さいほど断熱に有利で、吸湿すると性能が低下するため防湿への配慮が必要。"},
+  {"id":"p24","cat":"法規","year":"R4","q":"消防法上、一定量以上の危険物を貯蔵・取り扱う際の基準となる量を何というか。","choices":["定格数量","指定数量","許容数量","基準数量"],"correct":1,"exp":"危険物は「指定数量」を基準に規制され、指定数量以上を貯蔵・取り扱う施設は許可や技術基準の対象となる。"},
+  {"id":"p25","cat":"法規","year":"R4","q":"フロン排出抑制法に基づき、業務用エアコン等（第一種特定製品）の管理者に義務づけられていることはどれか。","choices":["定期的な点検（簡易点検・定期点検）とフロンの適正管理","フロンの大気放出","点検記録の即時廃棄","一切の管理義務なし"],"correct":0,"exp":"業務用冷凍空調機器（第一種特定製品）の管理者は、簡易点検・定期点検の実施やフロン漏えい防止・記録の保存など適正管理が義務づけられている。"},
+  {"id":"p26","cat":"機械工学等","year":"R5","q":"貯湯式給湯設備で、加熱による水の膨張に対応するために設けるものとして、最も適当なものはどれか。","choices":["逃し弁や膨張タンク","減圧弁のみ","バキュームブレーカのみ","消音器"],"correct":0,"exp":"水は加熱により膨張し圧力が上昇する。逃し弁（逃し管）や膨張タンクを設けて過大な圧力上昇を防ぐ。"},
+  {"id":"p27","cat":"機械工学等","year":"R5","q":"受水槽の給水で、逆流を防止するために給水栓の吐水口とあふれ縁の間に確保するものはどれか。","choices":["吐水口空間","封水深さ","有効容量","余裕高さ"],"correct":0,"exp":"吐水口空間は給水栓の吐水口端とあふれ縁との垂直距離。これを確保することで、断水・負圧時でも汚水の逆流（クロスコネクション）を防ぐ。"},
+  {"id":"p28","cat":"機械工学等","year":"R5","q":"三相誘導電動機の同期速度は極数が多いほどどうなるか（電源周波数一定）。","choices":["速くなる","遅くなる","変わらない","無限大になる"],"correct":1,"exp":"同期速度 Ns=120f/p（f:周波数、p:極数）。極数pが多いほど同期速度は遅くなる。"},
+  {"id":"p29","cat":"施工管理法","year":"R5","q":"抜取検査の特性を表す「OC曲線（検査特性曲線）」に関する記述として、最も適当なものはどれか。","choices":["ロットの不良率と合格確率の関係を表す","作業員数と工期の関係を表す","温度と圧力の関係を表す","原価と品質の関係を表す"],"correct":0,"exp":"OC曲線はロットの不良率に対する合格の確率を表す曲線。良品ロットが不合格になる生産者危険、不良ロットが合格する消費者危険を評価できる。"},
+  {"id":"p30","cat":"施工管理法（応用能力）","year":"R5","q":"空調・給排水設備の試運転調整で行う「風量・水量のバランス調整」の目的として、最も適当なものはどれか。","choices":["各系統・各室に設計どおりの風量・水量を配分する","配管を洗浄する","機器の重量を測る","騒音を増やす"],"correct":0,"exp":"試運転調整では、ダンパや弁の開度を調整して各系統・各室へ設計どおりの風量・水量を配分し、性能を確保する（TAB：試験・調整・バランス）。"},
+  {"id":"p31","cat":"施工管理法（応用能力）","year":"R5","q":"配管用炭素鋼鋼管（白管）のねじ接合に関する記述として、最も適当なものはどれか。","choices":["シール材（ねじ込み用）を用いて漏れを防ぐ","接着剤で接合する","溶かして融着する","ボルトだけで締める"],"correct":0,"exp":"鋼管のねじ接合では、ねじ部にシール材（ペースト・テープ等）を用いて気密・水密を確保する。白管は亜鉛めっきを施した鋼管。"},
+  {"id":"p32","cat":"法規","year":"R5","q":"水道法における「給水装置」の説明として、最も適当なものはどれか。","choices":["配水管から分岐して設けられた給水管および直結する給水用具","下水を集める管きょ","河川からの取水施設","建物内の電気配線"],"correct":0,"exp":"給水装置とは、配水管から分岐して設けられた給水管と、これに直結する給水用具（給水栓等）をいう。"},
+  {"id":"p33","cat":"法規","year":"R5","q":"労働安全衛生法上、特定元方事業者が労働災害防止のために設けるものとして、最も適当なものはどれか。","choices":["協議組織の設置・運営や作業間の連絡調整","下請への一切の関与禁止","安全管理の全面下請け任せ","作業の無計画な同時進行"],"correct":0,"exp":"特定元方事業者は、関係請負人を含む協議組織の設置・運営、作業間の連絡調整、作業場所の巡視などにより現場全体の労働災害を防止する。"},
+  {"id":"p34","cat":"機械工学等","year":"R6","q":"両端支持の単純梁の中央に集中荷重が作用するとき、曲げモーメントが最大となる位置はどこか。","choices":["支点","梁の中央（荷重点）","支点と中央の中間","梁の外側"],"correct":1,"exp":"単純梁の中央集中荷重では、曲げモーメントは中央（荷重点）で最大（PL/4）となり、支点でゼロになる。"},
+  {"id":"p35","cat":"機械工学等","year":"R6","q":"弁の用途に関する組合せとして、最も適当なものはどれか。","choices":["仕切弁 ― 流量の微調整","玉形弁（グローブ弁） ― 流量調整","逆止弁 ― 流量計測","減圧弁 ― 逆流防止"],"correct":1,"exp":"玉形弁は流路が絞られ流量調整に適する。仕切弁は全開・全閉用で調整には不向き、逆止弁は逆流防止、減圧弁は圧力を下げる弁。"},
+  {"id":"p36","cat":"機械工学等","year":"R6","q":"渦巻ポンプ（遠心ポンプ）に関する記述として、最も適当なものはどれか。","choices":["容積形ポンプである","羽根車の回転で水に運動エネルギーを与え揚水する","脈動が大きく定量供給用である","空気は自吸できるので呼び水は不要"],"correct":1,"exp":"渦巻ポンプは羽根車の回転で水に速度エネルギーを与え、これを圧力に変えて揚水する非容積形（ターボ形）ポンプ。一般に呼び水が必要。"},
+  {"id":"p37","cat":"施工管理法","year":"R6","q":"石綿（アスベスト）を含む建材の除去作業などで、粉じんの吸入を防ぐために作業員が使用するものはどれか。","choices":["保護帽のみ","呼吸用保護具（防じんマスク等）","安全帯のみ","絶縁手袋のみ"],"correct":1,"exp":"石綿等の粉じん作業では、飛散防止措置に加え、作業員は適切な呼吸用保護具（防じんマスク等）を使用し、ばく露を防ぐ必要がある。"},
+  {"id":"p38","cat":"施工管理法（応用能力）","year":"R6","q":"受水槽や高置水槽を設置する際に確保すべき「六面点検スペース」の考え方として、最も適当なものはどれか。","choices":["槽の上面のみ点検できればよい","周囲・上部・下部の各面に点検・保守のための空間を設ける","壁に密着させて設置する","点検スペースは不要"],"correct":1,"exp":"飲料水用水槽は内部・外部の清掃点検ができるよう、周囲・上部・下部（底面下）に点検スペースを確保して設置する（いわゆる六面点検）。"},
+  {"id":"p39","cat":"施工管理法（応用能力）","year":"R6","q":"長方形ダクトの板面に「リブ（補強ビード）」やダイヤモンドブレーキを施す主目的はどれか。","choices":["風量を増やす","板面の振動・変形（ばたつき）を防ぎ剛性を高める","消音する","結露を防ぐ"],"correct":1,"exp":"大きな板面はたわみや振動（ばたつき）を生じやすいため、リブやダイヤモンドブレーキで剛性を高め変形・騒音を防ぐ。"},
+  {"id":"p40","cat":"法規","year":"R6","q":"廃棄物処理法に関する記述として、最も適当なものはどれか。","choices":["産業廃棄物の処理責任は最終的に処理業者のみが負う","産業廃棄物の適正処理の責任は排出事業者にある","建設廃棄物はすべて一般廃棄物である","委託すれば排出事業者の責任はなくなる"],"correct":1,"exp":"産業廃棄物は排出事業者が適正処理の責任を負う（排出事業者責任）。委託しても管理票（マニフェスト）等で適正処理を確認する義務がある。"},
+  {"id":"p41","cat":"法規","year":"R6","q":"建設リサイクル法で分別解体・再資源化が義務づけられる「特定建設資材」に該当しないものはどれか。","choices":["コンクリート","木材","アスファルト・コンクリート","ガラス"],"correct":3,"exp":"特定建設資材はコンクリート、コンクリート及び鉄からなる建設資材、木材、アスファルト・コンクリートの4品目。ガラスは含まれない。"},
+  {"id":"p42","cat":"機械工学等","year":"R2","q":"直管路の摩擦による圧力損失に関する記述として、最も適当なものはどれか。","choices":["流速に反比例する","流速の2乗に比例する","管長に反比例する","管径に比例する"],"correct":1,"exp":"直管の摩擦損失は、流速の2乗に比例し、管長に比例、管径に反比例する（ダルシー・ワイスバッハの式）。流速を抑えると損失を大幅に減らせる。"},
+  {"id":"p43","cat":"機械工学等","year":"R2","q":"冷凍機の成績係数（COP）に関する記述として、最も適当なものはどれか。","choices":["消費動力 ÷ 冷凍能力で表す","冷凍能力 ÷ 消費動力で表し、大きいほど効率がよい","値が小さいほど省エネである","単位はkgである"],"correct":1,"exp":"COP＝冷凍（加熱）能力／消費動力。値が大きいほど少ない動力で多くの熱を移動でき、効率がよい。"},
+  {"id":"p44","cat":"機械工学等","year":"R2","q":"全熱交換器（換気用）の主な目的として、最も適当なものはどれか。","choices":["室内の照度を上げる","換気による排気の熱・湿気を回収し、給気に移して省エネを図る","排水の熱だけを回収する","騒音を下げる"],"correct":1,"exp":"全熱交換器は給気と排気の間で顕熱・潜熱（温度と湿度）を交換し、換気に伴う熱損失を減らして空調負荷を軽減する。"},
+  {"id":"p45","cat":"機械工学等","year":"R2","q":"単相3線式の低圧配電に関する記述として、最も適当なものはどれか。","choices":["100Vしか取り出せない","100Vと200Vの両方を取り出せる","三相動力専用である","中性線は不要である"],"correct":1,"exp":"単相3線式は中性線と2本の電圧線により、線間で200V、中性線との間で100Vを取り出せる。一般建物の電灯・コンセント幹線に広く用いる。"},
+  {"id":"p46","cat":"機械工学等","year":"R2","q":"コンクリート打設後に練混ぜ水の一部が上面へ浮き上がる現象を何というか。","choices":["ブリーディング","クリープ","エフロレッセンス","スランプロス"],"correct":0,"exp":"ブリーディングは打設後に水が浮上する現象で、上面に脆弱なレイタンスを生じる。過度なブリーディングは打継ぎ部の弱点となる。"},
+  {"id":"p47","cat":"施工管理法","year":"R2","q":"施工速度と原価の関係で、総原価が最も小さくなる施工速度を何というか。","choices":["突貫速度","経済速度（採算速度）","最遅速度","限界速度"],"correct":1,"exp":"施工を速めると間接費は減るが直接費は増える。両者の和（総原価）が最小となる施工速度が経済速度。突貫工事は原価が急増する。"},
+  {"id":"p48","cat":"施工管理法","year":"R2","q":"労働安全衛生法令上、足場の作業床に関する基準として、最も適当なものはどれか。","choices":["幅は特に定めがない","幅40cm以上とし、床材間のすき間は極力小さくする","手すりは不要である","すき間は自由でよい"],"correct":1,"exp":"作業床は幅40cm以上、床材間のすき間3cm以下などが定められ、墜落・転落や物の落下を防ぐ。手すり・中桟等の設置も必要。"},
+  {"id":"p49","cat":"施工管理法（応用能力）","year":"R2","q":"長方形ダクトの使用鋼板の板厚を決める基準として、最も適当なものはどれか。","choices":["ダクトの長辺の寸法","ダクトの長さ","風速のみ","設置場所の温度"],"correct":0,"exp":"長方形ダクトの板厚は長辺の寸法に応じて規定される。大きい面ほど剛性が必要になるため、長辺を基準に板厚・補強を決める。"},
+  {"id":"p50","cat":"施工管理法（応用能力）","year":"R2","q":"保温施工における外装（ラッキング）の主な目的として、最も適当なものはどれか。","choices":["保温材の保護・防水と美観の確保","流量の増加","電気絶縁","消音"],"correct":0,"exp":"外装（金属板・ビニル等）は保温材を機械的損傷や水濡れから保護し、耐候性・美観を確保する。屋外や水のかかる箇所で特に重要。"},
+  {"id":"p51","cat":"法規","year":"R2","q":"労働基準法上、年次有給休暇に関する記述として、最も適当なものはどれか。","choices":["雇入れ直後から20日付与される","雇入れの日から6か月継続勤務し全労働日の8割以上出勤すると付与される","勤続年数にかかわらず一律である","有給休暇の制度はない"],"correct":1,"exp":"年次有給休暇は、雇入れの日から6か月継続勤務し全労働日の8割以上出勤した労働者に、まず10日が付与される（以後、勤続に応じ増加）。"},
+  {"id":"p52","cat":"法規","year":"R2","q":"消防法上「消火活動上必要な施設」に該当するものはどれか。","choices":["自動火災報知設備","連結送水管","消火器","誘導灯"],"correct":1,"exp":"連結送水管・非常コンセント設備・排煙設備などは消火活動上必要な施設。自動火災報知設備は警報設備、消火器は消火設備、誘導灯は避難設備。"},
+  {"id":"p53","cat":"機械工学等","year":"R3","q":"外壁などの熱通過率（熱貫流率）に関する記述として、最も適当なものはどれか。","choices":["値が大きいほど熱を通しにくい","値が大きいほど熱を通しやすい","断熱性能とは無関係","面積の単位である"],"correct":1,"exp":"熱通過率〔W/(m²・K)〕は値が大きいほど熱を通しやすい（断熱性能が低い）。断熱材を厚くすると熱通過率は小さくなる。"},
+  {"id":"p54","cat":"機械工学等","year":"R3","q":"変風量（VAV）方式の空気調和に関する記述として、最も適当なものはどれか。","choices":["常に一定風量を送る","負荷に応じて風量を変え、搬送動力の削減が図れる","風量を変えられない","加湿専用の方式である"],"correct":1,"exp":"VAV方式は室負荷に応じて給気風量を変化させる。部分負荷時に送風動力を減らせ省エネになるが、最小風量時の換気量確保に配慮が要る。"},
+  {"id":"p55","cat":"機械工学等","year":"R3","q":"中央式給湯設備で、レジオネラ属菌の繁殖抑制の観点から望ましい貯湯温度として、最も適当なものはどれか。","choices":["20℃程度","40℃程度","60℃以上","10℃以下"],"correct":2,"exp":"レジオネラ属菌は比較的高温で死滅するため、貯湯温度は60℃以上（給湯末端でも55℃以上）に保つことが望ましい。"},
+  {"id":"p56","cat":"機械工学等","year":"R3","q":"電気設備の力率を改善するために一般に用いられるものはどれか。","choices":["進相コンデンサ","抵抗器","変圧器のみ","漏電遮断器"],"correct":0,"exp":"誘導性負荷による遅れ力率は、進相（力率改善）コンデンサを負荷と並列に接続して改善する。力率改善で電流・損失・設備容量を抑えられる。"},
+  {"id":"p57","cat":"機械工学等","year":"R3","q":"鉄筋コンクリート梁に配管用の貫通孔を設ける位置として、最も適当なものはどれか。","choices":["せん断力の大きい梁端部","曲げ・せん断への影響が小さい梁せいの中央付近","梁の上端筋の位置","位置はどこでもよい"],"correct":1,"exp":"梁貫通孔はせん断力の大きい端部を避け、梁せいの中央付近に設ける。孔径は梁せいに対して制限があり、必要に応じ補強を行う。"},
+  {"id":"p58","cat":"施工管理法","year":"R3","q":"配管・機器の施工品質を確認する試験の組合せとして、最も適当なものはどれか。","choices":["給水管 ― 水圧試験","排水管 ― 絶縁抵抗試験","ダクト ― 水質試験","電線 ― 満水試験"],"correct":0,"exp":"給水・空調配管は水圧試験、排水管は満水（通水）試験、ダクトは風量測定・漏れ確認などで品質を確認する。試験対象に応じた方法を選ぶ。"},
+  {"id":"p59","cat":"施工管理法","year":"R3","q":"労働安全衛生法上、危険・有害な一定の業務に労働者を就かせる際に必要となる教育はどれか。","choices":["特別教育","一般教養教育","接遇教育","語学教育"],"correct":0,"exp":"アーク溶接、研削といしの取替え、低圧電気取扱いなど法令で定める危険・有害業務では、就業前に特別教育を行わなければならない。"},
+  {"id":"p60","cat":"施工管理法（応用能力）","year":"R3","q":"一般空調用の防火ダンパーに用いる温度ヒューズの作動温度として、最も適当なものはどれか。","choices":["約72℃","約120℃","約280℃","約350℃"],"correct":0,"exp":"一般換気・空調用の防火ダンパーの温度ヒューズは約72℃で作動する。厨房排気は約120℃、排煙系統は約280℃のものを用いる。"},
+  {"id":"p61","cat":"施工管理法（応用能力）","year":"R3","q":"長方形ダクトの直角エルボ部に案内羽根（ガイドベーン）を設ける主目的はどれか。","choices":["風量を増やす","気流の偏りと圧力損失を抑える","消音する","結露を防ぐ"],"correct":1,"exp":"直角の曲がり部は気流が偏り圧力損失が大きい。案内羽根を設けて気流を整え、偏流と圧力損失を軽減する。"},
+  {"id":"p62","cat":"法規","year":"R3","q":"労働基準法における賃金支払いの原則に含まれないものはどれか。","choices":["通貨で支払う","直接労働者に支払う","毎月1回以上、一定期日に支払う","年1回まとめて支払う"],"correct":3,"exp":"賃金支払いの5原則は、通貨・直接・全額・毎月1回以上・一定期日払い。年1回まとめ払いは原則に反する。"},
+  {"id":"p63","cat":"法規","year":"R3","q":"騒音規制法に基づく特定建設作業に関する記述として、最も適当なものはどれか。","choices":["届出は不要である","原則として作業開始の7日前までに市町村長へ届け出る","作業後に報告すればよい","時間帯の規制はない"],"correct":1,"exp":"指定地域内で特定建設作業を行う者は、原則として作業開始の7日前までに市町村長へ届け出る。作業時間・日数・騒音の大きさに規制がある。"},
+  {"id":"p64","cat":"機械工学等","year":"R4","q":"開放式冷却塔が冷却水を冷やす主な原理はどれか。","choices":["冷媒の圧縮","冷却水の一部を蒸発させ、その蒸発潜熱で残りの水を冷やす","電気ヒーターで加熱","外気を圧縮する"],"correct":1,"exp":"開放式冷却塔は、散布した冷却水の一部を外気に接触させて蒸発させ、その蒸発潜熱で残りの水温を下げる。外気湿球温度が性能に影響する。"},
+  {"id":"p65","cat":"機械工学等","year":"R4","q":"機器の排水を一度大気中に開放し、排水口空間を設けて一般排水系統へ排水する方式を何というか。","choices":["直接排水","間接排水","強制排水","真空排水"],"correct":1,"exp":"間接排水は、飲料水系機器などの排水を一度大気に開放し排水口空間を介して排水する方法。汚水の逆流による汚染を防ぐ。"},
+  {"id":"p66","cat":"機械工学等","year":"R4","q":"排水設備における「二重トラップ」に関する記述として、最も適当なものはどれか。","choices":["排水を促進するので推奨される","1つの排水経路に直列に2つのトラップを設けることで、禁止されている","封水を深くできる","通気を良くする"],"correct":1,"exp":"二重トラップは1系統に2つのトラップが直列となり、間の空気が排水の流れを妨げる。排水不良の原因となるため設けてはならない。"},
+  {"id":"p67","cat":"機械工学等","year":"R4","q":"液化石油ガス（LPG）に関する記述として、最も適当なものはどれか。","choices":["空気より軽く、ガス漏れ警報器は天井付近に設ける","空気より重く、ガス漏れ警報器は床面付近に設ける","無臭で検知しやすい","水より軽い液体で漏れても危険はない"],"correct":1,"exp":"LPG（プロパン主体）は空気より重く、漏れると低い所にたまる。ガス漏れ警報器は床面付近に設置する。都市ガス（軽い）は天井付近。"},
+  {"id":"p68","cat":"機械工学等","year":"R4","q":"鉄骨の接合に用いる高力ボルト接合の力の伝達方法として、最も適当なものはどれか。","choices":["ボルトのせん断のみで伝える","部材間の摩擦力で伝える","溶接で一体化する","接着剤で伝える"],"correct":1,"exp":"高力ボルト摩擦接合は、ボルトの締付けで生じる部材間の摩擦力によって応力を伝える。所定の締付け（軸力）管理が重要。"},
+  {"id":"p69","cat":"施工管理法","year":"R4","q":"つり上げ荷重1t以上の移動式クレーン等で玉掛け作業を行う者に必要なものはどれか。","choices":["特に資格は不要","玉掛け技能講習の修了","運転免許のみ","健康診断のみ"],"correct":1,"exp":"つり上げ荷重1t以上の揚重機での玉掛け作業は、玉掛け技能講習を修了した者でなければ従事できない。"},
+  {"id":"p70","cat":"施工管理法","year":"R4","q":"仮設計画に関する記述として、最も適当なものはどれか。","choices":["本設工事にのみ関係し施工計画に含めない","仮設材・足場・仮設電気・揚重などを計画し、安全・効率・経済性を考慮する","竣工後に計画する","発注者が作成する"],"correct":1,"exp":"仮設計画は足場・仮囲い・仮設電気/給排水・揚重設備・資材置場などを対象とし、安全性・作業効率・経済性を考慮して施工計画に含める。"},
+  {"id":"p71","cat":"施工管理法（応用能力）","year":"R4","q":"硬質塩化ビニル管のTS接合（接着接合）に関する記述として、最も適当なものはどれか。","choices":["接着剤を塗らずに差し込む","受口の奥（標線）まで確実に差し込み、所定の時間保持する","低温でも硬化時間は変わらない","差込み代は不要"],"correct":1,"exp":"TS接合は接着剤を塗布し受口の奥（差込み標線）まで確実に差し込み、所定時間保持する。低温時は接着剤の硬化に時間がかかるため養生に注意する。"},
+  {"id":"p72","cat":"施工管理法（応用能力）","year":"R4","q":"ポンプと電動機を直結する際の「芯出し（心出し）」に関する記述として、最も適当なものはどれか。","choices":["軸心のずれは大きくても問題ない","カップリングの偏心・面間差を許容値内に調整する","据付後は確認不要","羽根車を外して行う"],"correct":1,"exp":"芯出しは原動機とポンプの軸心を合わせる作業で、カップリングの偏心・面間の差を許容値内に調整する。ずれは振動・軸受損傷の原因になる。"},
+  {"id":"p73","cat":"法規","year":"R4","q":"労働安全衛生法上、原則として常時50人以上の労働者を使用する事業場に設置が義務づけられるものはどれか。","choices":["安全委員会・衛生委員会（該当業種等）","現場代理人","監理技術者","主任技術者"],"correct":0,"exp":"一定規模（原則50人以上）の事業場では、安全委員会・衛生委員会（または安全衛生委員会）を設け、労働災害防止等について調査審議する。"},
+  {"id":"p74","cat":"法規","year":"R4","q":"建築基準法上の「建築確認」に関する記述として、最も適当なものはどれか。","choices":["工事完了後に受ける手続きである","一定の建築物等は着工前に確認を受け、確認済証の交付を要する","任意の手続きで受けなくてよい","電気工事にのみ必要"],"correct":1,"exp":"一定規模・用途の建築物や建築設備は、着工前に建築主事等の建築確認を受け確認済証の交付を受ける必要がある。完了時には完了検査を受ける。"},
+  {"id":"p75","cat":"法規","year":"R4","q":"浄化槽法に基づき、浄化槽の管理者に義務づけられているものとして、適当でないものはどれか。","choices":["保守点検","清掃","定期的な法定検査の受検","浄化槽の自由な無届け撤去"],"correct":3,"exp":"浄化槽の管理者には保守点検・清掃・定期の法定検査の受検が義務づけられている。設置や廃止には所定の手続きが必要で、無届けでの扱いは不適当。"},
+  {"id":"p76","cat":"機械工学等","year":"R5","q":"貫流ボイラーの特徴として、最も適当なものはどれか。","choices":["保有水量が多く起動に時間がかかる","保有水量が少なく起動が速い","低圧専用である","ドレンを出さない"],"correct":1,"exp":"貫流ボイラーは水管内を水が通過しながら蒸発する方式で、保有水量が少なく起動が速い。高圧・小型化に適するが水質管理が重要。"},
+  {"id":"p77","cat":"機械工学等","year":"R5","q":"受水槽の有効容量の目安として、最も適当なものはどれか。","choices":["1日予想給水量の10倍程度","1日予想給水量の4/10〜6/10程度","1時間分程度","容量は任意でよい"],"correct":1,"exp":"受水槽の有効容量は一般に1日予想給水量の4/10〜6/10程度とする。大きすぎると滞留による水質悪化、小さすぎると断水リスクがある。"},
+  {"id":"p78","cat":"機械工学等","year":"R5","q":"給水設備で、各衛生器具を正常に使用するために確保すべきものはどれか。","choices":["器具ごとの最低必要給水圧力","排水の封水","ダクトの風量","電気の力率"],"correct":0,"exp":"大便器洗浄弁やシャワー等は器具ごとに最低必要給水圧力があり、これを下回ると正常に機能しない。最上階・末端でも確保できるよう設計する。"},
+  {"id":"p79","cat":"機械工学等","year":"R5","q":"ファンコイルユニット方式の空気調和に関する記述として、最も適当なものはどれか。","choices":["各室ごとに個別の温度制御がしやすい","全館一括制御しかできない","送風のみで冷温水を使わない","ダクトが大規模になる"],"correct":0,"exp":"ファンコイルユニット方式は各室・各ゾーンに小型ユニットを置き、個別の温度制御がしやすい。外気処理は別系統（外調機等）と組み合わせることが多い。"},
+  {"id":"p80","cat":"機械工学等","year":"R5","q":"電線の許容電流に関する記述として、最も適当なものはどれか。","choices":["導体の断面積が大きいほど許容電流は小さい","導体の断面積が大きいほど許容電流は大きい","周囲温度は無関係","許容電流を超えても発熱しない"],"correct":1,"exp":"許容電流は導体断面積が大きいほど大きくなる。周囲温度や施設条件で低減され、超過すると発熱・絶縁劣化の原因になる。"},
+  {"id":"p81","cat":"施工管理法","year":"R5","q":"工程能力指数（Cp）に関する記述として、最も適当なものはどれか。","choices":["値が小さいほど規格に対する余裕が大きい","値が大きいほど規格に対する余裕が大きい","不良の累積を表す","工期の長さを表す"],"correct":1,"exp":"工程能力指数Cpは規格幅に対するばらつきの小ささを表し、値が大きいほど規格に対して余裕があり品質が安定している。"},
+  {"id":"p82","cat":"施工管理法","year":"R5","q":"労働安全衛生法上、掘削面の高さが2m以上となる地山の掘削作業で選任するものはどれか。","choices":["地山の掘削作業主任者","衛生管理者","安全衛生推進者","産業医"],"correct":0,"exp":"掘削面の高さが2m以上となる地山の掘削作業では、技能講習を修了した地山の掘削作業主任者を選任し、作業方法の決定や安全を指揮させる。"},
+  {"id":"p83","cat":"施工管理法（応用能力）","year":"R5","q":"配管の支持で「振れ止め支持」を設ける主な目的はどれか。","choices":["流量を増やす","地震や流体力による配管の横揺れ・振れを抑える","保温を厚くする","電食を防ぐ"],"correct":1,"exp":"振れ止め支持は、地震時や運転時の横方向の揺れ・振れを抑えて配管や接続部の損傷を防ぐ。耐震支持として重要。"},
+  {"id":"p84","cat":"施工管理法（応用能力）","year":"R5","q":"ボイラーや冷凍機など機器の据付けに関する記述として、最も適当なものはどれか。","choices":["点検・保守や伝熱管の引抜きに必要な離隔スペースを確保する","壁に密着させて設置する","基礎は不要である","点検スペースは考慮しない"],"correct":0,"exp":"ボイラー・冷凍機は運転・点検・保守や管の引抜き・整備に必要な離隔（スペース）を周囲に確保して据え付ける。関係法令の距離規定にも従う。"},
+  {"id":"p85","cat":"法規","year":"R5","q":"労働安全衛生法上の「就業制限」に関する記述として、最も適当なものはどれか。","choices":["誰でも自由に就業できる","一定の危険業務は免許・技能講習修了者等でなければ就かせてはならない","資格は作業後に取得すればよい","口頭の許可で足りる"],"correct":1,"exp":"クレーン運転や玉掛け等の危険業務は、免許取得者や技能講習修了者など資格を有する者でなければ就かせてはならない（就業制限）。"},
+  {"id":"p86","cat":"法規","year":"R5","q":"消防法上の危険物取扱者に関する記述として、最も適当なものはどれか。","choices":["危険物取扱者でなくても指定数量以上を自由に扱える","甲種・乙種・丙種の区分があり、扱える危険物が定められている","資格の種類は1つだけである","建築物には関係しない"],"correct":1,"exp":"危険物取扱者には甲種・乙種（第1〜6類）・丙種の区分があり、取り扱える危険物の種類が定められている。指定数量以上の取扱いには有資格者が必要。"},
+  {"id":"p87","cat":"法規","year":"R5","q":"高圧ガス保安法に関する記述として、最も適当なものはどれか。","choices":["冷凍空調機器は一切対象外である","一定の冷凍能力（法定冷凍トン）以上の冷凍設備は許可・届出等の対象となる","家庭用に限り規制される","圧力の大小は関係ない"],"correct":1,"exp":"高圧ガス保安法では、一定の法定冷凍トン以上の冷凍設備の製造（設置）などが許可・届出の対象となり、保安上の基準が定められている。"},
+  {"id":"p88","cat":"機械工学等","year":"R6","q":"一酸化炭素（CO）に関する記述として、最も適当なものはどれか。","choices":["無害な気体である","燃焼器具の不完全燃焼で発生し、少量でも人体に有害である","水に溶けやすく検知が容易である","空気より非常に重い"],"correct":1,"exp":"一酸化炭素は不完全燃焼で発生する無色無臭の有毒ガスで、微量でも血液の酸素運搬を阻害し危険。燃焼器具には十分な給排気が必要。"},
+  {"id":"p89","cat":"機械工学等","year":"R6","q":"単一ダクト定風量（CAV）方式の特徴として、最も適当なものはどれか。","choices":["風量を一定とし、給気温度を変えて負荷に対応する","室ごとに風量を細かく変える","冷温水を使わない","個別制御性が最も高い"],"correct":0,"exp":"単一ダクト定風量方式は送風量を一定とし、給気温度を変えて負荷に対応する。構造は単純だが、室ごとの個別制御性は変風量方式に劣る。"},
+  {"id":"p90","cat":"機械工学等","year":"R6","q":"アネモ型（コーン形）吹出口の特徴として、最も適当なものはどれか。","choices":["誘引比が大きく、室内空気とよく混合し温度分布を均一にしやすい","気流を一方向にだけ強く吹き出す","天井には設置できない","風量調整ができない"],"correct":0,"exp":"アネモ型吹出口は誘引比が大きく、室内空気を巻き込んで混合するため温度分布を均一にしやすい。天井設置の空調に広く用いられる。"},
+  {"id":"p91","cat":"機械工学等","year":"R6","q":"屋内消火栓設備の1号消火栓と2号消火栓に関する記述として、最も適当なものはどれか。","choices":["2号消火栓は1人でも操作できるよう配慮されている","1号消火栓は放水量が少ない","2号消火栓は必ず2人以上必要","両者に違いはない"],"correct":0,"exp":"2号消火栓（易操作性も含む）は1人でも操作しやすいよう設計され、放水量は1号より小さい。1号消火栓は放水量が大きく、標準的に2人操作を想定する。"},
+  {"id":"p92","cat":"機械工学等","year":"R6","q":"コンクリートの養生に関する記述として、最も適当なものはどれか。","choices":["打設後すぐ乾燥させるとよい","打設後は適切な温度・湿潤状態を保ち、急激な乾燥や低温を避ける","養生は不要である","散水は禁止されている"],"correct":1,"exp":"コンクリートは打設後、一定期間の湿潤養生と適切な温度管理が必要。急激な乾燥・低温・振動を避けることで所要の強度・耐久性が得られる。"},
+  {"id":"p93","cat":"施工管理法","year":"R6","q":"いわゆる突貫工事に関する記述として、最も適当なものはどれか。","choices":["原価が最も安くなる","施工速度を過度に上げるため、一般に原価が割高になる","品質が必ず向上する","工程管理は不要になる"],"correct":1,"exp":"突貫工事は工期を無理に短縮するため、残業・応援・段取り替えなどで原価が割高になりやすい。経済速度から外れるほど不経済になる。"},
+  {"id":"p94","cat":"施工管理法","year":"R6","q":"高さのある箇所で作業床を設けることが困難な場合に使用する墜落防止用の器具はどれか。","choices":["保護帽","フルハーネス型墜落制止用器具","防じんマスク","絶縁手袋"],"correct":1,"exp":"作業床の設置が困難な高所作業では、原則としてフルハーネス型の墜落制止用器具を使用する（高さ等の条件により特別教育も必要）。"},
+  {"id":"p95","cat":"施工管理法（応用能力）","year":"R6","q":"銅管（給水・給湯用）の接合方法として、一般的なものはどれか。","choices":["ねじ接合","ろう付・はんだ付（差込み接合）","接着（TS）接合","溶接（アーク）"],"correct":1,"exp":"銅管は差込み継手にろう付け・はんだ付けで接合するのが一般的。給湯など高温部ではろう付けを用いる。"},
+  {"id":"p96","cat":"施工管理法（応用能力）","year":"R6","q":"大便器の洗浄弁（フラッシュバルブ）方式に関する記述として、最も適当なものはどれか。","choices":["給水圧力に関係なく使用できる","連続使用に適するが、一定以上の給水圧力・流量が必要である","ロータンク方式より瞬間流量が小さい","給水管径は極細でよい"],"correct":1,"exp":"洗浄弁方式は連続使用に適するが、瞬間的に大きな流量が流れるため一定以上の給水圧力と管径が必要。圧力不足では十分に洗浄できない。"},
+  {"id":"p97","cat":"法規","year":"R6","q":"建設業法上、主任技術者・監理技術者の「専任」に関する記述として、最も適当なものはどれか。","choices":["どの工事でも専任は不要","公共性のある施設等に関する重要な建設工事で一定金額以上の場合、現場ごとに専任が必要","専任は発注者が決める","専任は資格と無関係"],"correct":1,"exp":"公共性のある施設・工作物に関する重要な建設工事で請負金額が一定以上のものは、主任技術者・監理技術者を工事現場ごとに専任で置く必要がある。"},
+  {"id":"p98","cat":"法規","year":"R6","q":"労働者派遣法に関する記述として、最も適当なものはどれか。","choices":["建設業務への労働者派遣は認められている","建設業務（現場での施工作業）への労働者派遣は禁止されている","派遣期間の制限はない","どの業務でも自由に派遣できる"],"correct":1,"exp":"労働者派遣法では、建設業務（工事現場での作業）への労働者派遣は禁止されている。人材の確保は請負や直接雇用等によることになる。"},
+  {"id":"p99","cat":"法規","year":"R6","q":"建設リサイクル法に基づく対象建設工事の届出に関する記述として、最も適当なものはどれか。","choices":["届出は不要である","発注者等が、工事着手前に分別解体等の計画を都道府県知事へ届け出る","工事完了後に施工者が届け出る","口頭で足りる"],"correct":1,"exp":"一定規模以上の対象建設工事では、発注者（または自主施工者）が着手前に分別解体等の計画等を都道府県知事へ届け出る必要がある。"},
+  {"id":"e01","cat":"機械工学等","q":"壁体の遮音（透過損失）に関する「質量則」の説明として、最も適当なものはどれか。","choices":["面密度が大きいほど、また周波数が高いほど透過損失が大きい","面密度が小さいほど遮音性能が高い","周波数に関係なく一定である","色によって決まる"],"correct":0,"exp":"質量則では、壁の面密度（単位面積当たり質量）が大きいほど、また音の周波数が高いほど透過損失が大きく（遮音性能が高く）なる。"},
+  {"id":"e02","cat":"機械工学等","q":"室の吸音率に関する記述として、最も適当なものはどれか。","choices":["入射音に対して反射せず吸収される割合を表す","値が小さいほど吸音性能が高い","1を超える値をとる","遮音性能と同じ意味である"],"correct":0,"exp":"吸音率は入射した音のうち反射されず吸収（透過含む）される割合。1に近いほど吸音性能が高い。遮音（透過を防ぐ）とは別の概念。"},
+  {"id":"e03","cat":"機械工学等","q":"上水（飲料水）系統と他の系統を直接接続することを禁止する考え方を何というか。","choices":["クロスコネクションの禁止","バキュームブレーク","エアギャップ","サイホン"],"correct":0,"exp":"クロスコネクション（上水と井水・雑用水等の直接連結）は、汚染水の混入を招くため禁止されている。"},
+  {"id":"e04","cat":"機械工学等","q":"給水管のウォーターハンマーを緩和するために用いられるものはどれか。","choices":["エアチャンバー（水撃防止器）","逆止弁のみ","ストレーナ","伸縮継手"],"correct":0,"exp":"エアチャンバーや水撃防止器を弁の近くに設け、急閉時の圧力上昇を空気のクッションで吸収してウォーターハンマーを緩和する。"},
+  {"id":"e05","cat":"機械工学等","q":"中央式給湯で返湯管（循環管）を設ける主な目的はどれか。","choices":["給湯温度を下げる","湯待ち時間を短縮し、末端でも所定温度を保つ","排水を促す","給水圧を上げる"],"correct":1,"exp":"返湯管と循環ポンプで湯を循環させ、配管内の湯温低下を防ぐ。蛇口を開けてから湯が出るまでの湯待ち時間を短縮できる。"},
+  {"id":"e06","cat":"機械工学等","q":"燃焼器具の給排気方式のうち、燃焼用空気を屋外から取り入れ、排ガスも屋外へ出す密閉式はどれか。","choices":["開放式","半密閉式（自然排気CF）","半密閉式（強制排気FE）","密閉式（強制給排気FF）"],"correct":3,"exp":"FF方式（強制給排気式）は給気・排気とも屋外と行う密閉式で、室内空気を汚染しにくい。CF・FEは半密閉式、開放式は室内空気で燃焼する。"},
+  {"id":"e07","cat":"機械工学等","q":"駐車場や危険物施設に適した消火設備として、最も適当なものはどれか。","choices":["泡消火設備","屋内消火栓のみ","散水栓","警報設備"],"correct":0,"exp":"泡消火設備は油火災に有効で、駐車場や危険物施設に適する。電気室・通信機室は水損を避けるため不活性ガス消火設備等が用いられる。"},
+  {"id":"e08","cat":"機械工学等","q":"電算室・通信機室など、水損を避けたい室の消火に適した設備はどれか。","choices":["水噴霧消火設備","不活性ガス消火設備","泡消火設備","屋外消火栓"],"correct":1,"exp":"不活性ガス（や既定の消火ガス）消火設備は電気・電子機器のある室で水損を避けたい場合に用いる。放出時の人体安全（退避・警報）に配慮する。"},
+  {"id":"e09","cat":"機械工学等","q":"低圧屋内配線の接地工事で、300V以下の低圧機器の外箱等に一般に施す接地の種別はどれか。","choices":["A種接地","B種接地","C種接地","D種接地"],"correct":3,"exp":"接地はA種（高圧・特別高圧機器）、B種（変圧器の低圧側中性点等）、C種（300V超の低圧）、D種（300V以下の低圧）に区分される。"},
+  {"id":"e10","cat":"機械工学等","q":"往復動・スクロール・スクリュー・遠心（ターボ）に分類されるものはどれか。","choices":["冷凍機の圧縮機","ボイラーの安全弁","ダクトの継手","排水トラップ"],"correct":0,"exp":"冷凍機の圧縮機は、往復動式・スクロール式・スクリュー式・遠心（ターボ）式などに分類される。容量や用途で使い分ける。"},
+  {"id":"e11","cat":"機械工学等","q":"湿り空気を露点温度以下まで冷却したときに生じる現象はどれか。","choices":["加湿される","除湿（減湿）される","絶対湿度が増える","乾球温度が上がる"],"correct":1,"exp":"空気を露点温度以下まで冷やすと水蒸気が凝縮し、絶対湿度が下がる（冷却減湿）。空調の冷房・除湿はこの原理を利用する。"},
+  {"id":"e12","cat":"機械工学等","q":"ポンプの全揚程に関する記述として、最も適当なものはどれか。","choices":["実揚程だけで表す","実揚程に管路の摩擦損失等を加えたもの","流量と同じ意味である","常に一定で流量に依存しない"],"correct":1,"exp":"ポンプの全揚程は、実揚程（吸込〜吐出の高低差）に管路や機器の摩擦損失・速度水頭を加えたもの。流量が増えるほど損失は大きくなる。"},
+  {"id":"e13","cat":"機械工学等","q":"鉄筋コンクリートの鉄筋の継手として、一般に用いられないものはどれか。","choices":["重ね継手","ガス圧接継手","機械式継手","接着継手"],"correct":3,"exp":"鉄筋の継手は重ね継手・ガス圧接継手・機械式継手などが用いられる。接着による継手は一般的でない。"},
+  {"id":"e14","cat":"機械工学等","q":"型枠のせき板（せきいた）の存置期間の考え方として、最も適当なものはどれか。","choices":["常に24時間で外してよい","コンクリートの強度発現（材齢・気温等）に応じて定める","強度に関係なく決めてよい","存置は不要である"],"correct":1,"exp":"せき板の存置期間はコンクリートの強度発現に応じて定め、気温・材齢・部位により異なる。早期の取り外しは品質低下を招く。"},
+  {"id":"e15","cat":"機械工学等","q":"排水管の管径を決める際に用いられる指標はどれか。","choices":["器具排水負荷単位","力率","比熱","レイノルズ数"],"correct":0,"exp":"排水管径は各器具の器具排水負荷単位を積算し、許容流量に基づいて決定する。給水管では給水負荷単位を用いる。"},
+  {"id":"e16","cat":"機械工学等","q":"通気管の末端（大気開口部）の位置に関する配慮として、最も適当なものはどれか。","choices":["窓・出入口・給気口の近くに開口してよい","窓・出入口・給気口の付近を避け、一定の距離を確保する","室内に開口する","封水中に開口する"],"correct":1,"exp":"通気管の大気開口は臭気の室内侵入を防ぐため、窓・出入口・外気取入口の付近を避け、所定の距離・高さを確保して設ける。"},
+  {"id":"e17","cat":"施工管理法","q":"複数の作業を重ね合わせて並行的に進め、工期短縮を図る手法を何というか。","choices":["ファストトラッキング","クラッシング","山崩し","フォローアップ"],"correct":0,"exp":"ファストトラッキングは本来順に行う作業を部分的に並行させて工期を短縮する手法。手戻りリスクに注意が要る。クラッシングは資源追加で作業日数を短縮する手法。"},
+  {"id":"e18","cat":"施工管理法","q":"品質データのうち「計量値」に該当するものはどれか。","choices":["不良品の個数","配管の寸法・水温などの連続量","欠点の数","合格・不合格の判定"],"correct":1,"exp":"計量値は寸法・温度・圧力など連続的に測れる量。個数や不良数など数えられる値は計数値。両者で用いる管理図・手法が異なる。"},
+  {"id":"e19","cat":"施工管理法","q":"新たに職長となる者に対して、労働安全衛生法に基づき行うものはどれか。","choices":["職長教育","新規入場者教育","特殊健康診断","技能講習"],"correct":0,"exp":"作業中の労働者を直接指導・監督する職長には、作業方法の決定や労働者の配置、安全衛生に関する職長教育を行う必要がある。"},
+  {"id":"e20","cat":"施工管理法","q":"工事現場に新しく入場する作業員に対して行う教育はどれか。","choices":["新規入場者教育","職長教育","特別教育","技能講習"],"correct":0,"exp":"新規入場者教育は、現場に初めて入る作業員へ現場のルール・危険箇所・緊急時対応などを周知する教育。安全確保のため入場前に行う。"},
+  {"id":"e21","cat":"施工管理法","q":"型枠支保工の組立て・解体作業で選任が必要となるものはどれか。","choices":["型枠支保工の組立て等作業主任者","衛生管理者","産業医","安全衛生推進者"],"correct":0,"exp":"型枠支保工の組立て・解体等の作業では、技能講習を修了した作業主任者を選任し、作業方法や安全を指揮させる。"},
+  {"id":"e22","cat":"施工管理法","q":"車両系建設機械を用いる作業の安全に関する記述として、最も適当なものはどれか。","choices":["用途外使用を積極的に行う","接触のおそれのある箇所への立入禁止や誘導者の配置を行う","制限速度は不要","合図は定めない"],"correct":1,"exp":"車両系建設機械では、接触のおそれのある範囲への立入禁止、誘導者の配置と合図の統一、制限速度の設定、用途外使用の禁止などを行う。"},
+  {"id":"e23","cat":"施工管理法","q":"品質管理における「管理項目」の考え方として、最も適当なものはどれか。","choices":["結果だけを検査すればよい","品質に影響する要因（4M等）を管理し、工程で品質をつくり込む","記録は残さない","検査は抜き取らない"],"correct":1,"exp":"品質は検査で選別するより工程でつくり込むことが基本。人・機械・材料・方法（4M）等の要因を管理項目として管理し、安定した品質を得る。"},
+  {"id":"e24","cat":"施工管理法","q":"施工の記録として工事写真を撮影する主な目的はどれか。","choices":["完成後には見えなくなる部分等の施工状況・品質を記録する","作業員の勤怠管理","原価の値引き交渉","広告宣伝のみ"],"correct":0,"exp":"工事写真は、埋設・隠ぺいされて完成後に確認できない部分の施工状況・寸法・品質を記録し、施工の適正を証明するために撮影する。"},
+  {"id":"e25","cat":"施工管理法","q":"実行予算に関する記述として、最も適当なものはどれか。","choices":["発注者が作成する見積書である","施工者が工事を実施するための原価管理上の予算である","竣工後に作成する","労働者名簿の一種である"],"correct":1,"exp":"実行予算は施工者が工事を実施するにあたり、原価を管理するために作成する社内予算。出来高と対比して原価管理を行う。"},
+  {"id":"e26","cat":"施工管理法","q":"「新QC七つ道具」に含まれるものはどれか。","choices":["特性要因図","パレート図","PDPC法","ヒストグラム"],"correct":2,"exp":"PDPC法（過程決定計画図）は新QC七つ道具の一つ。特性要因図・パレート図・ヒストグラムは（旧）QC七つ道具に分類される。"},
+  {"id":"e27","cat":"施工管理法（応用能力）","q":"異種金属を接触させて配管したときに生じる腐食（電食）の対策として、最も適当なものはどれか。","choices":["絶縁継手（絶縁フランジ等）で金属を縁切りする","接触面を増やす","塗装を剥がす","接地を外す"],"correct":0,"exp":"異種金属の接触部は電位差により局部腐食（電食）を生じやすい。絶縁継手・絶縁フランジで電気的に縁切りして防ぐ。"},
+  {"id":"e28","cat":"施工管理法（応用能力）","q":"蒸気配管に設けるスチームトラップの役割として、最も適当なものはどれか。","choices":["蒸気を積極的に排出する","ドレン（凝縮水）だけを排出し、蒸気の流出を防ぐ","空気を送り込む","流量を計測する"],"correct":1,"exp":"スチームトラップはドレンや空気を排出し、蒸気は逃がさない自動弁。ドレン滞留によるウォーターハンマーや熱効率低下を防ぐ。"},
+  {"id":"e29","cat":"施工管理法（応用能力）","q":"減圧弁を設ける配管系で、一般に併せて設けるものはどれか。","choices":["安全弁（逃し弁）","流量計のみ","消音器","伸縮継手のみ"],"correct":0,"exp":"減圧弁の二次側は、弁の故障時などの過圧に備えて安全弁（逃し弁）を設ける。二次側圧力を一定に保ちつつ安全を確保する。"},
+  {"id":"e30","cat":"施工管理法（応用能力）","q":"長方形ダクトの「共板フランジ工法」の特徴として、最も適当なものはどれか。","choices":["ダクトの板自体を折り曲げてフランジを形成し、比較的軽量・省力化できる","アングル鋼でフランジを製作する","フランジを設けない","円形ダクト専用である"],"correct":0,"exp":"共板フランジ工法はダクト端部の板を折り曲げてフランジとする工法で、アングルフランジ工法より軽量で施工の省力化が図れる。"},
+  {"id":"e31","cat":"施工管理法（応用能力）","q":"冷風（低温）ダクトを保温する主な目的はどれか。","choices":["風量を増やす","熱損失の防止とダクト表面の結露防止","消音","電気絶縁"],"correct":1,"exp":"冷風ダクトは表面温度が露点以下になりやすく結露する。保温により熱損失を抑えるとともに表面結露を防ぐ。防湿層の併用も重要。"},
+  {"id":"e32","cat":"施工管理法（応用能力）","q":"冷却塔の据付けで配慮すべき事項として、適当でないものはどれか。","choices":["騒音・振動への配慮","補給水・ブローダウン（排水）の確保","周囲の通風（外気の流れ）の確保","吸込み空気を建物の排気で満たす"],"correct":3,"exp":"冷却塔は騒音・振動対策、補給水とブローダウン、十分な通風の確保が必要。排気（湿った暖かい空気）を再び吸い込むショートサーキットは避ける。"},
+  {"id":"e33","cat":"施工管理法（応用能力）","q":"ポンプの「締切運転（吐出弁を閉じたままの運転）」に関する記述として、最も適当なものはどれか。","choices":["長時間続けても問題ない","長時間続けると過熱・損傷のおそれがあり避ける","流量が最大になる","呼び水の代わりになる"],"correct":1,"exp":"締切運転を長く続けると、ポンプ内の水温上昇（過熱）でキャビテーションや損傷を招く。長時間の締切運転は避ける。"},
+  {"id":"e34","cat":"施工管理法（応用能力）","q":"溶接部の内部欠陥を確認できる非破壊検査はどれか。","choices":["外観検査","放射線透過試験（RT）・超音波探傷試験（UT）","寸法測定のみ","目視のみ"],"correct":1,"exp":"放射線透過試験や超音波探傷試験は溶接部の内部欠陥（ブローホール・溶込み不良等）を検出できる。浸透・磁粉探傷は主に表面欠陥用。"},
+  {"id":"e35","cat":"施工管理法（応用能力）","q":"弁や継手（フランジ）部の保温施工に関する記述として、最も適当なものはどれか。","choices":["点検・分解のため取り外し可能な保温とする","溶接して密閉する","保温してはならない","本体と一体で固定する"],"correct":0,"exp":"弁・フランジ部は点検・増し締め・分解の必要があるため、取り外し可能な保温（保温筒・脱着カバー等）とする。"},
+  {"id":"e36","cat":"施工管理法（応用能力）","q":"配管の分岐を空調用冷温水管などで上部から取り出す（上取出し）主な理由はどれか。","choices":["管内の空気・気泡を分岐先に持ち込みにくくするため","流量を増やすため","保温を省くため","電食を防ぐため"],"correct":0,"exp":"上取出しは本管上部にたまりやすい空気・気泡を分岐管へ引き込みにくく、また沈殿物の流入も避けやすい。系統に応じて取出し位置を選ぶ。"},
+  {"id":"e37","cat":"法規","q":"建設業の許可に関する記述として、最も適当なものはどれか。","choices":["建設業は1種類の許可で全工事を行える","工事の種類ごとに業種別（管工事業等）の許可が定められている","許可は不要である","許可に業種の区分はない"],"correct":1,"exp":"建設業の許可は工事の種類ごとに業種（管工事業など）別に定められている。営もうとする業種の許可を受ける必要がある。"},
+  {"id":"e38","cat":"法規","q":"労働基準法上、労働者を解雇しようとする場合の原則として正しいものはどれか。","choices":["予告なく即時に解雇できる","少なくとも30日前に予告するか、30日分以上の平均賃金（解雇予告手当）を支払う","理由を問わず自由に解雇できる","口頭の通知は一切不要"],"correct":1,"exp":"使用者が労働者を解雇するには、少なくとも30日前の予告、または30日分以上の平均賃金（解雇予告手当）の支払いが原則として必要。"},
+  {"id":"e39","cat":"法規","q":"労働基準法上、就業規則の作成・届出が義務づけられる事業場の規模はどれか。","choices":["常時10人以上の労働者を使用する事業場","常時3人以上","常時50人以上","規模にかかわらず不要"],"correct":0,"exp":"常時10人以上の労働者を使用する使用者は、就業規則を作成し労働基準監督署長へ届け出なければならない（変更時も同様）。"},
+  {"id":"e40","cat":"法規","q":"労働安全衛生法上、常時50人以上の労働者を使用する事業場に義務づけられるものはどれか。","choices":["ストレスチェックの実施","一括下請負","現場代理人の選任","経営事項審査"],"correct":0,"exp":"常時50人以上の事業場では、労働者の心理的負担の程度を把握するストレスチェックを定期に実施する義務がある。"},
+  {"id":"e41","cat":"法規","q":"建築基準法に基づく特定建築物等の「定期報告（いわゆる12条点検）」の対象として、最も適当なものはどれか。","choices":["一定の特定建築物・建築設備等の調査・検査結果","労働者の健康診断結果","工事の出来高","下請の構成"],"correct":0,"exp":"建築基準法第12条により、一定の特定建築物や建築設備・防火設備等は、定期に調査・検査を行い特定行政庁へ報告する（定期報告）。"},
+  {"id":"e42","cat":"法規","q":"防火区画を配管が貫通する部分の処理に関する記述として、最も適当なものはどれか。","choices":["すき間はそのままでよい","貫通部のすき間を不燃材等で埋め、区画の耐火性能を保持する","可燃材で仕上げる","貫通は自由に行える"],"correct":1,"exp":"防火区画を貫通する配管・ダクト部は、火災の延焼を防ぐため貫通部のすき間をモルタル等の不燃材で埋め、必要な性能（防火ダンパー等）を確保する。"},
+  {"id":"e43","cat":"法規","q":"建築基準法令に基づく飲料水用給水タンクの構造に関する記述として、適当でないものはどれか。","choices":["六面点検ができるよう周囲に空間を設ける","タンク内部に飲料水以外の配管を通さない","オーバーフロー管・通気を設ける","タンク上部を天井スラブと兼用する"],"correct":3,"exp":"飲料水用受水タンクは六面点検が可能なこと、内部に飲料水以外の配管を通さないこと、オーバーフロー・水抜き・通気を設けること等が求められる。上部を建築躯体と兼用しない。"},
+  {"id":"e44","cat":"法規","q":"産業廃棄物の管理票（マニフェスト）に関する記述として、最も適当なものはどれか。","choices":["紙のみで電子化はできない","電子マニフェストの利用が認められている","委託後は保存不要","運搬業者が発行する"],"correct":1,"exp":"マニフェストは紙のほか電子マニフェストの利用が認められている。排出事業者が交付・確認し、所定期間の保存が必要。"},
+  {"id":"e45","cat":"法規","q":"公共工事を発注者から直接請け負おうとする建設業者が受ける、経営規模等の客観的評価を何というか。","choices":["経営事項審査","建築確認","中間検査","技能検定"],"correct":0,"exp":"経営事項審査は、公共工事を発注者から直接請け負う建設業者が受けなければならない、経営規模・経営状況等の客観的な審査。"}
+];
+
+/* ============ 状態・永続化 ============ */
+const LS="kankouji_v1";
+let store=load();
+function load(){try{return JSON.parse(localStorage.getItem(LS))||fresh()}catch(e){return fresh()}}
+function fresh(){return{stats:{},wrong:[],mogiBest:0}}
+function save(){try{localStorage.setItem(LS,JSON.stringify(store))}catch(e){}}
+
+let session=null; // {list,idx,mode,answers:[]}
+
+/* ============ ホーム描画 ============ */
+function renderHome(){
+  const ids=Object.keys(store.stats);
+  let seen=0,corr=0;
+  ids.forEach(id=>{const s=store.stats[id];seen+=s.seen;corr+=s.correct});
+  document.getElementById("hSeen").textContent=Object.values(store.stats).filter(s=>s.seen>0).length;
+  document.getElementById("hAcc").textContent=seen? Math.round(corr/seen*100)+"%":"—";
+  document.getElementById("hWrong").textContent=store.wrong.length;
+
+  const rev=document.getElementById("reviewMode");
+  const pill=rev.querySelector(".pill");
+  if(store.wrong.length){ if(!pill){const p=document.createElement("span");p.className="pill";rev.appendChild(p);} rev.querySelector(".pill").textContent=store.wrong.length; rev.style.opacity=1;}
+  else{ if(pill)pill.remove(); rev.style.opacity=.55;}
+
+  renderYears();
+
+  const list=document.getElementById("catList");
+  list.innerHTML="";
+  CAT_ORDER.forEach(cat=>{
+    const qs=QUESTIONS.filter(q=>q.cat===cat);
+    const done=qs.filter(q=>store.stats[q.id]&&store.stats[q.id].seen>0).length;
+    const pct=qs.length?Math.round(done/qs.length*100):0;
+    const b=document.createElement("button");
+    b.className="cat";
+    b.innerHTML=`
+      <span class="swatch" style="background:${CAT_META[cat].color}"></span>
+      <span class="c-main">
+        <span class="c-t">${cat}${cat===OUYOU?'<span class="tag-ap">応用</span>':''}</span>
+        <span class="c-sub tnum">${qs.length}問 ・ 学習 ${done}/${qs.length}</span>
+        <span class="bar"><i style="width:${pct}%;background:${CAT_META[cat].color}"></i></span>
+      </span>
+      <span class="c-pct tnum">${pct}%</span>
+      <span class="arrow">›</span>`;
+    b.onclick=()=>startSession("cat:"+cat);
+    list.appendChild(b);
+  });
+}
+
+function renderYears(){
+  const wrap=document.getElementById("yearList");
+  wrap.innerHTML="";
+  YEARS.forEach(y=>{
+    const qs=QUESTIONS.filter(q=>q.year===y.key);
+    const done=qs.filter(q=>store.stats[q.id]&&store.stats[q.id].seen>0).length;
+    const b=document.createElement("button");
+    b.className="ychip";
+    b.innerHTML=`<span class="yh"><span class="yr">${y.label}</span><span class="yn tnum">${qs.length}問</span></span>
+      <span class="bar"><i style="width:${qs.length?done/qs.length*100:0}%"></i></span>
+      <span class="yd tnum">学習 ${done}/${qs.length}</span>`;
+    b.onclick=()=>startSession("year:"+y.key);
+    wrap.appendChild(b);
+  });
+}
+
+/* ============ セッション開始 ============ */
+function startSession(mode){
+  let list=[];let label="";
+  if(mode==="random"){list=shuffle([...QUESTIONS]).slice(0,10);label="ランダム";}
+  else if(mode==="review"){
+    if(!store.wrong.length){toast("復習リストは空です。まず問題を解いてみましょう。");return;}
+    list=shuffle(store.wrong.map(id=>QUESTIONS.find(q=>q.id===id)).filter(Boolean));label="弱点復習";}
+  else if(mode==="mogi"){list=shuffle([...QUESTIONS]);label="模試";}
+  else if(mode.startsWith("cat:")){const c=mode.slice(4);list=shuffle(QUESTIONS.filter(q=>q.cat===c));label=CAT_META[c].short;}
+  else if(mode.startsWith("year:")){const y=mode.slice(5);const yr=YEARS.find(v=>v.key===y);list=shuffle(QUESTIONS.filter(q=>q.year===y));label=yr?yr.label:y;}
+  if(!list.length){toast("この分野の問題がありません。");return;}
+  session={list,idx:0,mode:mode==="mogi"?"mogi":mode.startsWith("cat")?"cat":mode,label,answers:[]};
+  document.getElementById("qModeLbl").textContent=label+(session.mode==="mogi"?"（本番判定）":"");
+  go("quiz");
+  document.getElementById("qbarWrap").style.display="block";
+  renderQuestion();
+}
+
+/* ============ 出題 ============ */
+function renderQuestion(){
+  const q=session.list[session.idx];
+  document.getElementById("qCount").textContent=`${session.idx+1} / ${session.list.length}`;
+  document.getElementById("qProg").style.width=(session.idx/session.list.length*100)+"%";
+  const tag=document.getElementById("qTag");
+  tag.innerHTML=`<span style="color:${CAT_META[q.cat].color}">● ${q.cat}</span>${q.cat===OUYOU?'<span class="ap">応用能力</span>':''}${q.year?`<span class="ap" style="color:var(--accent);border-color:var(--accent)">${q.year}</span>`:''}`;
+  document.getElementById("qText").textContent=q.q;
+
+  const wrap=document.getElementById("choices");
+  wrap.innerHTML="";
+  const keys=["A","B","C","D"];
+  q.choices.forEach((c,i)=>{
+    const b=document.createElement("button");
+    b.className="choice";
+    b.innerHTML=`<span class="key">${keys[i]}</span><span>${c}</span><span class="mk"></span>`;
+    b.onclick=()=>answer(i);
+    wrap.appendChild(b);
+  });
+  document.getElementById("expWrap").innerHTML="";
+  document.getElementById("nextWrap").style.display="none";
+  window.scrollTo({top:0,behavior:"instant"});
+}
+
+function answer(sel){
+  const q=session.list[session.idx];
+  const correct=q.correct;
+  const isOK=sel===correct;
+  session.answers.push({id:q.id,cat:q.cat,applied:q.cat===OUYOU,ok:isOK});
+
+  // stats
+  const s=store.stats[q.id]||(store.stats[q.id]={seen:0,correct:0});
+  s.seen++; if(isOK)s.correct++;
+  // wrong queue
+  if(isOK){store.wrong=store.wrong.filter(id=>id!==q.id);}
+  else if(!store.wrong.includes(q.id)){store.wrong.push(q.id);}
+  save();
+
+  const btns=document.querySelectorAll("#choices .choice");
+  btns.forEach((b,i)=>{
+    b.disabled=true;
+    const mk=b.querySelector(".mk");
+    if(i===correct){b.classList.add("correct");mk.textContent="正解";}
+    else if(i===sel){b.classList.add("wrong");mk.textContent="✕";}
+    else{b.classList.add("dim");}
+  });
+
+  const exp=document.getElementById("expWrap");
+  exp.innerHTML=`
+    <div class="exp">
+      <div class="verdict ${isOK?'ok':'ng'}">
+        <span class="b">${isOK?'正解':'不正解'}</span>
+        <span>${isOK?'よくできました':'正解は '+["A","B","C","D"][correct]}</span>
+      </div>
+      <div class="lbl">解説</div>
+      <p>${q.exp}</p>
+    </div>`;
+  const nw=document.getElementById("nextWrap");
+  nw.style.display="block";
+  const last=session.idx===session.list.length-1;
+  document.getElementById("nextBtn").textContent=last?"結果を見る ›":"次の問題 ›";
+  document.getElementById("qProg").style.width=((session.idx+1)/session.list.length*100)+"%";
+}
+
+document.getElementById("nextBtn").onclick=()=>{
+  if(session.idx<session.list.length-1){session.idx++;renderQuestion();}
+  else{renderResult();}
+};
+
+/* ============ 結果 ============ */
+function renderResult(){
+  document.getElementById("qbarWrap").style.display="none";
+  const a=session.answers;
+  const total=a.length, corr=a.filter(x=>x.ok).length;
+  const pct=Math.round(corr/total*100);
+
+  // ring
+  const ring=document.getElementById("ring");
+  const C=2*Math.PI*66;
+  ring.style.strokeDasharray=C;
+  ring.style.strokeDashoffset=C;
+  requestAnimationFrame(()=>{ring.style.transition="stroke-dashoffset 1s ease";ring.style.strokeDashoffset=C*(1-pct/100);});
+  ring.style.stroke = pct>=80?"var(--good)":pct>=60?"var(--accent)":"var(--bad)";
+  document.getElementById("rPct").textContent=pct+"%";
+  document.getElementById("rSub").textContent=`${total}問中 ${corr}問正解`;
+
+  const judgeWrap=document.getElementById("judgeWrap");
+  const critWrap=document.getElementById("critWrap");
+  const breakWrap=document.getElementById("rBreak");
+  judgeWrap.innerHTML="";critWrap.innerHTML="";breakWrap.innerHTML="";
+
+  if(session.mode==="mogi"){
+    document.getElementById("rTitle").textContent="模試 結果";
+    const applied=a.filter(x=>x.applied), appCorr=applied.filter(x=>x.ok).length;
+    const appPct=applied.length?Math.round(appCorr/applied.length*100):0;
+    const passOverall=pct>=60, passApplied=applied.length===0||appPct>=50;
+    const pass=passOverall&&passApplied;
+    judgeWrap.innerHTML=`<div class="judge ${pass?'pass':'fail'}">${pass?'✔ 合格ライン':'✕ 合格基準に未達'}</div>`;
+    critWrap.appendChild(critRow("全体の正答率","合格基準 60% 以上",pct,60,passOverall));
+    critWrap.appendChild(critRow("施工管理法（応用能力）","合格基準 50% 以上",appPct,50,passApplied,applied.length));
+    // 分野別内訳
+    breakWrap.innerHTML='<div class="section-label" style="margin:16px 4px 4px">分野別 正答率</div>';
+    CAT_ORDER.forEach(cat=>{
+      const ca=a.filter(x=>x.cat===cat);if(!ca.length)return;
+      const cp=Math.round(ca.filter(x=>x.ok).length/ca.length*100);
+      const row=document.createElement("div");row.className="row";
+      row.innerHTML=`<span class="nm">${CAT_META[cat].short}</span>
+        <span class="bar"><i style="width:${cp}%;background:${CAT_META[cat].color}"></i></span>
+        <span class="vv tnum">${cp}%</span>`;
+      breakWrap.appendChild(row);
+    });
+    if(pct>store.mogiBest){store.mogiBest=pct;save();}
+  }else{
+    document.getElementById("rTitle").textContent = pct>=80?"素晴らしい！":pct>=60?"いい調子です":"復習しましょう";
+    const wrongN=total-corr;
+    if(wrongN>0) judgeWrap.innerHTML=`<div class="rsub" style="margin-top:10px">間違えた ${wrongN}問を復習リストに追加しました</div>`;
+    else judgeWrap.innerHTML=`<div class="judge pass" style="margin-top:10px">✔ 全問正解</div>`;
+  }
+  go("result");
+  window.scrollTo({top:0,behavior:"instant"});
+}
+function critRow(title,capText,val,thr,pass,denom){
+  const d=document.createElement("div");d.className="crit-row";
+  const col=pass?"var(--good)":"var(--bad)";
+  d.innerHTML=`<div class="h"><span>${title}${denom!==undefined?` <span style="color:var(--ink-3);font-weight:600">(${denom}問)</span>`:''}</span>
+      <span class="st ${pass?'ok':'ng'}">${val}% ${pass?'✔':'✕'}</span></div>
+    <div class="thbar"><i style="width:${val}%;background:${col}"></i><span class="thr" style="left:${thr}%"></span></div>
+    <div class="cap">${capText}（縦線＝基準）</div>`;
+  return d;
+}
+
+/* ============ ナビ ============ */
+document.getElementById("againBtn").onclick=()=>{ if(session)startSession(session.mode==="cat"?"cat:"+session.list[0].cat:session.mode); };
+document.getElementById("homeBtn").onclick=()=>{renderHome();go("home");};
+document.getElementById("backBtn").onclick=()=>{
+  if(document.getElementById("quiz").classList.contains("active")){
+    if(!confirm("学習を中断してホームに戻りますか？")) return;
+    document.getElementById("qbarWrap").style.display="none";
+  }
+  renderHome();go("home");
+};
+document.querySelectorAll(".mode[data-mode]").forEach(b=>b.onclick=()=>startSession(b.dataset.mode));
+
+function go(view){
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+  document.getElementById(view).classList.add("active");
+  const back=document.getElementById("backBtn");
+  const tw=document.getElementById("titleWrap"), ml=document.getElementById("markLogo");
+  if(view==="home"){back.style.display="none";tw.style.display="";ml.style.display="";}
+  else{back.style.display="";tw.style.display="none";ml.style.display="none";}
+}
+
+/* ============ テーマ ============ */
+const themeBtn=document.getElementById("themeBtn");
+themeBtn.onclick=()=>{
+  const cur=document.documentElement.getAttribute("data-theme");
+  const sysDark=matchMedia("(prefers-color-scheme:dark)").matches;
+  const next=(cur? cur==="dark":sysDark)?"light":"dark";
+  document.documentElement.setAttribute("data-theme",next);
+};
+
+/* ============ util ============ */
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+let toastT;
+function toast(msg){
+  let t=document.getElementById("toast");
+  if(!t){t=document.createElement("div");t.id="toast";
+    t.style.cssText="position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:30px;font-size:13px;font-weight:700;z-index:99;box-shadow:var(--shadow);max-width:88%;text-align:center";
+    document.body.appendChild(t);}
+  t.textContent=msg;t.style.opacity="1";
+  clearTimeout(toastT);toastT=setTimeout(()=>t.style.opacity="0",2600);
+  t.style.transition="opacity .3s";
+}
+
+renderHome();
+</script>

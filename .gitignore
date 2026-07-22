@@ -1,0 +1,18 @@
+# macOS
+.DS_Store
+
+# Flutter build artifacts / generated
+flutter/build/
+flutter/.dart_tool/
+flutter/.flutter-plugins-dependencies
+flutter/.idea/
+flutter/ios/Flutter/ephemeral/
+flutter/ios/Pods/
+
+# Node
+node_modules/
+
+# backups / scratch
+data/questions.kankouji1.backup.json
+
+# 公開用ビルドは docs/ に配置（GitHub Pages）。docs/ は追跡する。

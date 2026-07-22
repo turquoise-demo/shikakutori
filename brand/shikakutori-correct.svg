@@ -1,0 +1,62 @@
+<svg viewBox="0 0 380 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="しかくとり 正解でよろこぶ">
+  <defs>
+    <linearGradient id="cbodyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2A7DC4"/><stop offset="1" stop-color="#0F5FA6"/></linearGradient>
+    <linearGradient id="cheadG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2F86CC"/><stop offset="1" stop-color="#0F5FA6"/></linearGradient>
+    <linearGradient id="cbeakG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6AE45"/><stop offset="1" stop-color="#E37F16"/></linearGradient>
+    <linearGradient id="cfaceG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFBF0"/><stop offset="1" stop-color="#F3EAD6"/></linearGradient>
+  </defs>
+
+  <!-- sparkles -->
+  <g fill="#FFC93C">
+    <path d="M92 150 l6 16 l16 6 l-16 6 l-6 16 l-6 -16 l-16 -6 l16 -6 z"/>
+    <path d="M300 210 l5 13 l13 5 l-13 5 l-5 13 l-5 -13 l-13 -5 l13 -5 z"/>
+  </g>
+
+  <ellipse cx="190" cy="414" rx="96" ry="15" fill="#0F5FA6" opacity="0.12"/>
+  <g stroke="#E37F16" stroke-width="7" stroke-linecap="round" fill="none">
+    <path d="M160 388 l-13 20 M160 388 l0 22 M160 388 l13 20"/>
+    <path d="M220 388 l-13 20 M220 388 l0 22 M220 388 l13 20"/>
+  </g>
+
+  <rect x="104" y="252" width="172" height="138" rx="46" fill="url(#cbodyG)"/>
+  <!-- raised wings (banzai) -->
+  <ellipse cx="96" cy="250" rx="22" ry="46" fill="#0C4E8A" transform="rotate(-42 96 250)"/>
+  <ellipse cx="284" cy="250" rx="22" ry="46" fill="#0C4E8A" transform="rotate(42 284 250)"/>
+
+  <g fill="#2F86CC">
+    <path d="M165 84 q-8 -30 8 -34 q16 4 8 34 z"/>
+    <path d="M190 78 q-8 -34 8 -38 q16 4 8 38 z"/>
+    <path d="M215 84 q-8 -30 8 -34 q16 4 8 34 z"/>
+  </g>
+
+  <rect x="68" y="80" width="244" height="214" rx="54" fill="url(#cheadG)"/>
+
+  <!-- headband -->
+  <path d="M60 116 q130 -22 260 0 l0 42 q-130 -22 -260 0 z" fill="#FFFFFF"/>
+  <path d="M60 116 q130 -22 260 0" fill="none" stroke="#D23B3B" stroke-width="4"/>
+  <path d="M60 158 q130 -22 260 0" fill="none" stroke="#D23B3B" stroke-width="4"/>
+  <circle cx="316" cy="138" r="12" fill="#D23B3B"/>
+  <path d="M322 132 q34 -14 44 -2 q-26 2 -40 16 z" fill="#E24747"/>
+  <path d="M322 146 q34 14 42 30 q-28 -6 -42 -18 z" fill="#C22F2F"/>
+  <text x="190" y="137" text-anchor="middle" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-weight="900" font-size="30" fill="#D23B3B" letter-spacing="4">合格</text>
+
+  <rect x="100" y="166" width="180" height="112" rx="38" fill="url(#cfaceG)"/>
+  <ellipse cx="126" cy="240" rx="18" ry="12" fill="#F28C82" opacity="0.7"/>
+  <ellipse cx="254" cy="240" rx="18" ry="12" fill="#F28C82" opacity="0.7"/>
+
+  <!-- happy closed eyes ^ ^ -->
+  <path d="M136 216 Q152 194 168 216" fill="none" stroke="#26333F" stroke-width="7" stroke-linecap="round"/>
+  <path d="M212 216 Q228 194 244 216" fill="none" stroke="#26333F" stroke-width="7" stroke-linecap="round"/>
+
+  <!-- open laughing beak -->
+  <ellipse cx="190" cy="242" rx="15" ry="12" fill="#8A3A1C"/>
+  <path d="M170 226 L210 226 L190 240 Z" fill="url(#cbeakG)" stroke="#D9740F" stroke-width="1.2"/>
+  <path d="M177 256 L203 256 L190 242 Z" fill="#E37F16"/>
+
+  <!-- speech bubble (front) -->
+  <g>
+    <rect x="196" y="20" width="180" height="66" rx="20" fill="#1F9D5A"/>
+    <path d="M244 86 L272 86 L230 116 Z" fill="#1F9D5A"/>
+    <text x="286" y="62" text-anchor="middle" font-family="'Hiragino Sans','Yu Gothic',sans-serif" font-weight="900" font-size="26" fill="#fff">せいかい！</text>
+  </g>
+</svg>
