@@ -10,14 +10,16 @@ const Color kBrandDark = Color(0xFF0B3F74);
 const Color kOk = Color(0xFF1F9D5A);
 const Color kNg = Color(0xFFD23B3B);
 
-/// グループの表示順
+/// 業界グループの表示順
 const List<String> kGroupOrder = [
-  '施工管理',
-  '電気・設備・危険物',
-  '不動産・法律',
-  'IT・情報',
-  'お金・経営',
-  '医療・福祉・くらし',
+  '建設業',
+  '電気・設備・エネルギー',
+  '不動産業',
+  'IT業界',
+  '金融・保険',
+  '経理・経営・士業',
+  '医療・福祉・サービス',
+  '運輸・くらし',
   'その他',
 ];
 
@@ -321,43 +323,23 @@ class _BobbingState extends State<Bobbing> with SingleTickerProviderStateMixin {
   }
 }
 
-/// 出現アニメ（フェード＋スライド）
-class FadeSlideIn extends StatefulWidget {
+/// 出現アニメ（フェード＋スライド）。タイマー不使用でリスト遅延構築でも必ず表示される。
+class FadeSlideIn extends StatelessWidget {
   final Widget child;
   final int delayMs;
   const FadeSlideIn({super.key, required this.child, this.delayMs = 0});
   @override
-  State<FadeSlideIn> createState() => _FadeSlideInState();
-}
-
-class _FadeSlideInState extends State<FadeSlideIn> {
-  bool _go = false;
-  @override
-  void initState() {
-    super.initState();
-    if (widget.delayMs == 0) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) setState(() => _go = true);
-      });
-    } else {
-      Future.delayed(Duration(milliseconds: widget.delayMs), () {
-        if (mounted) setState(() => _go = true);
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return AnimatedOpacity(
-      opacity: _go ? 1 : 0,
-      duration: const Duration(milliseconds: 380),
-      curve: Curves.easeOut,
-      child: AnimatedSlide(
-        offset: _go ? Offset.zero : const Offset(0, 0.09),
-        duration: const Duration(milliseconds: 420),
-        curve: Curves.easeOutCubic,
-        child: widget.child,
+    final total = 420 + delayMs;
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: Duration(milliseconds: total),
+      curve: Interval(delayMs / total, 1, curve: Curves.easeOutCubic),
+      builder: (context, t, c) => Opacity(
+        opacity: t.clamp(0.0, 1.0),
+        child: Transform.translate(offset: Offset(0, 14 * (1 - t)), child: c),
       ),
+      child: child,
     );
   }
 }
