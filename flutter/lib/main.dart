@@ -1,7 +1,24 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart' show rootBundle, HapticFeedback;
 import 'package:shared_preferences/shared_preferences.dart';
+
+/// ===== ブランド色 =====
+const Color kBrand = Color(0xFF0F5FA6);
+const Color kBrandDark = Color(0xFF0B3F74);
+const Color kOk = Color(0xFF1F9D5A);
+const Color kNg = Color(0xFFD23B3B);
+
+/// グループの表示順
+const List<String> kGroupOrder = [
+  '施工管理',
+  '電気・設備・危険物',
+  '不動産・法律',
+  'IT・情報',
+  'お金・経営',
+  '医療・福祉・くらし',
+  'その他',
+];
 
 /// ===== ユーティリティ =====
 Color hexColor(String s) {
@@ -44,9 +61,10 @@ class Exam {
   final String short;
   final String desc;
   final Color color;
+  final String group;
   final List<CatDef> cats;
   final Pass pass;
-  Exam(this.id, this.name, this.short, this.desc, this.color, this.cats, this.pass);
+  Exam(this.id, this.name, this.short, this.desc, this.color, this.group, this.cats, this.pass);
 
   factory Exam.fromJson(Map<String, dynamic> j) => Exam(
         j['id'] as String,
@@ -54,6 +72,7 @@ class Exam {
         (j['short'] ?? j['name']) as String,
         (j['desc'] ?? '') as String,
         hexColor(j['color'] as String? ?? '0xFF0F5FA6'),
+        (j['group'] ?? 'その他') as String,
         (j['cats'] as List).map((e) => CatDef.fromJson(e as Map<String, dynamic>)).toList(),
         Pass.fromJson(j['pass'] as Map<String, dynamic>?),
       );
@@ -193,12 +212,13 @@ class QuizApp extends StatelessWidget {
   const QuizApp({super.key});
 
   ThemeData _theme(Brightness b) {
-    final scheme = ColorScheme.fromSeed(seedColor: const Color(0xFF0F5FA6), brightness: b);
+    final scheme = ColorScheme.fromSeed(seedColor: kBrand, brightness: b);
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
       scaffoldBackgroundColor:
-          b == Brightness.dark ? const Color(0xFF0C141C) : const Color(0xFFEEF1F4),
+          b == Brightness.dark ? const Color(0xFF0C141C) : const Color(0xFFEDF1F6),
+      splashFactory: InkSparkle.splashFactory,
       fontFamily: null,
     );
   }
@@ -229,6 +249,44 @@ List<Question> _shuffled(Iterable<Question> src) {
   return l;
 }
 
+/// 共通: カード
+class SoftCard extends StatelessWidget {
+  final Widget child;
+  final VoidCallback? onTap;
+  final EdgeInsets padding;
+  final Color? tint;
+  const SoftCard({super.key, required this.child, this.onTap, this.padding = const EdgeInsets.all(14), this.tint});
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: dark
+            ? null
+            : [
+                BoxShadow(
+                  color: (tint ?? kBrand).withOpacity(0.07),
+                  blurRadius: 14,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+      ),
+      child: Material(
+        color: cs.surface,
+        borderRadius: BorderRadius.circular(18),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(padding: padding, child: child),
+        ),
+      ),
+    );
+  }
+}
+
 /// ===== 試験選択（トップ） =====
 class ExamSelectScreen extends StatefulWidget {
   const ExamSelectScreen({super.key});
@@ -240,22 +298,29 @@ class _ExamSelectScreenState extends State<ExamSelectScreen> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+
+    // グループ分け
+    final byGroup = <String, List<Exam>>{};
+    for (final ex in gExams) {
+      (byGroup[ex.group] ??= []).add(ex);
+    }
+    final groups = [
+      ...kGroupOrder.where(byGroup.containsKey),
+      ...byGroup.keys.where((g) => !kGroupOrder.contains(g)),
+    ];
+
     return Scaffold(
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 40),
           children: [
-            _hero(cs),
-            const SizedBox(height: 20),
-            Text('試験を選ぶ',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: cs.outline)),
-            const SizedBox(height: 10),
-            ...gExams.map((ex) {
-              final pool = gByExam[ex.id] ?? [];
-              final done = pool.where((q) => gStore.seen(q.id) > 0).length;
-              return _examCard(ex, pool.length, done);
-            }),
-            const SizedBox(height: 18),
+            _hero(),
+            const SizedBox(height: 8),
+            for (final g in groups) ...[
+              _sectionHeader(g, byGroup[g]!.length, cs),
+              for (final ex in byGroup[g]!) _examCard(ex),
+            ],
+            const SizedBox(height: 12),
             Text(
               '※ 全問オリジナル作問です（実際の過去問文は転載していません）。'
               '法規は改正で正答が変わることがあるため、受験前に公式・最新情報をご確認ください。',
@@ -267,15 +332,19 @@ class _ExamSelectScreenState extends State<ExamSelectScreen> {
     );
   }
 
-  Widget _hero(ColorScheme cs) {
+  Widget _hero() {
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 16, 16, 16),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
         gradient: const LinearGradient(
-          begin: Alignment.topLeft, end: Alignment.bottomRight,
-          colors: [Color(0xFF2A7DC4), Color(0xFF0B3F74)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFF2A7DC4), kBrandDark],
         ),
+        boxShadow: [
+          BoxShadow(color: kBrand.withOpacity(0.35), blurRadius: 18, offset: const Offset(0, 8)),
+        ],
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -284,30 +353,39 @@ class _ExamSelectScreenState extends State<ExamSelectScreen> {
             alignment: Alignment.center,
             children: [
               Container(
-                width: 118, height: 118,
+                width: 116,
+                height: 116,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.white.withOpacity(0.13),
                 ),
               ),
-              Image.asset('assets/mascot/shikakutori-badge.png', width: 118),
+              Image.asset('assets/mascot/shikakutori-badge.png', width: 112),
             ],
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _bubble('正解はサッと次へ！\nまちがいだけ復習'),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: const Text('正解はサッと次へ！\nまちがいだけ復習',
+                      style: TextStyle(
+                          color: kBrandDark, fontSize: 12.5, fontWeight: FontWeight.w800, height: 1.35)),
+                ),
                 const SizedBox(height: 10),
                 const Text('しかくとり',
-                    style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w800)),
+                    style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w800)),
                 const SizedBox(height: 3),
                 Text('「資格（しかく）を取る」×「四角い鳥」',
-                    style: TextStyle(color: Colors.white.withOpacity(0.92), fontSize: 12, height: 1.4)),
-                const SizedBox(height: 2),
+                    style: TextStyle(color: Colors.white.withOpacity(0.92), fontSize: 11.5)),
                 Text('できた問題はやらなくてOK。ニガテだけくり返す。',
-                    style: TextStyle(color: Colors.white.withOpacity(0.72), fontSize: 11, height: 1.35)),
+                    style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 10.5, height: 1.4)),
               ],
             ),
           ),
@@ -316,29 +394,45 @@ class _ExamSelectScreenState extends State<ExamSelectScreen> {
     );
   }
 
-  Widget _bubble(String text) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(13),
+  Widget _sectionHeader(String g, int n, ColorScheme cs) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(4, 18, 4, 10),
+      child: Row(
+        children: [
+          Container(
+            width: 8,
+            height: 8,
+            decoration: const BoxDecoration(color: kBrand, shape: BoxShape.circle),
+          ),
+          const SizedBox(width: 8),
+          Text(g, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
+          const SizedBox(width: 7),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 1),
+            decoration: BoxDecoration(
+              color: cs.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text('$n', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: cs.outline)),
+          ),
+        ],
       ),
-      child: Text(text,
-          style: const TextStyle(color: Color(0xFF0B3F74), fontSize: 13, fontWeight: FontWeight.w800, height: 1.3)),
     );
   }
 
-  Widget _examCard(Exam ex, int total, int done) {
+  Widget _examCard(Exam ex) {
     final cs = Theme.of(context).colorScheme;
-    final pct = total == 0 ? 0 : (done / total * 100).round();
-    final ready = total > 0;
+    final pool = gByExam[ex.id] ?? [];
+    final done = pool.where((q) => gStore.seen(q.id) > 0).length;
+    final pct = pool.isEmpty ? 0.0 : done / pool.length;
+    final ready = pool.isNotEmpty;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
-      child: Material(
-        color: cs.surface,
-        borderRadius: BorderRadius.circular(15),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(15),
+      child: Opacity(
+        opacity: ready ? 1 : 0.55,
+        child: SoftCard(
+          tint: ex.color,
           onTap: ready
               ? () async {
                   await Navigator.of(context).push(
@@ -346,36 +440,63 @@ class _ExamSelectScreenState extends State<ExamSelectScreen> {
                   if (mounted) setState(() {});
                 }
               : null,
-          child: Container(
-            padding: const EdgeInsets.all(15),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(color: cs.outlineVariant),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 46, height: 46,
-                  decoration: BoxDecoration(color: ex.color, borderRadius: BorderRadius.circular(12)),
-                  alignment: Alignment.center,
-                  child: Text(ex.short.characters.take(2).toString(),
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15)),
-                ),
-                const SizedBox(width: 13),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(ex.name, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
-                      const SizedBox(height: 2),
-                      Text(ready ? '$total問 ・ 学習 $done/$total（$pct%）' : '準備中',
-                          style: TextStyle(fontSize: 11.5, color: cs.outline)),
-                    ],
+          child: Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(14),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [ex.color, Color.lerp(ex.color, Colors.black, 0.28)!],
                   ),
                 ),
-                Icon(ready ? Icons.chevron_right : Icons.lock_outline, color: cs.outline),
-              ],
-            ),
+                alignment: Alignment.center,
+                child: Text(ex.short.characters.take(2).toString(),
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15)),
+              ),
+              const SizedBox(width: 13),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(ex.name,
+                        style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5)),
+                    const SizedBox(height: 2),
+                    Text(ready ? '${pool.length}問 ・ 学習 $done問' : '準備中',
+                        style: TextStyle(fontSize: 11.5, color: cs.outline)),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              if (ready)
+                SizedBox(
+                  width: 38,
+                  height: 38,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SizedBox(
+                        width: 38,
+                        height: 38,
+                        child: CircularProgressIndicator(
+                          value: pct,
+                          strokeWidth: 4,
+                          strokeCap: StrokeCap.round,
+                          backgroundColor: cs.surfaceContainerHighest,
+                          color: ex.color,
+                        ),
+                      ),
+                      Text('${(pct * 100).round()}',
+                          style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w800, color: cs.outline)),
+                    ],
+                  ),
+                )
+              else
+                Icon(Icons.lock_outline, color: cs.outline, size: 20),
+            ],
           ),
         ),
       ),
@@ -427,21 +548,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: cs.surface,
+        backgroundColor: Colors.transparent,
         title: Text(exam.short, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
       ),
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 40),
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 40),
           children: [
             Container(
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(22),
                 gradient: LinearGradient(
-                  begin: Alignment.topLeft, end: Alignment.bottomRight,
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                   colors: [exam.color, Color.lerp(exam.color, Colors.black, 0.35)!],
                 ),
+                boxShadow: [
+                  BoxShadow(color: exam.color.withOpacity(0.35), blurRadius: 16, offset: const Offset(0, 7)),
+                ],
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -467,21 +592,25 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(width: 6),
-                  Image.asset('assets/mascot/shikakutori-badge.png', width: 66),
+                  Image.asset('assets/mascot/shikakutori-badge.png', width: 64),
                 ],
               ),
             ),
             const SizedBox(height: 20),
             _label('学習モード'),
             Row(children: [
-              Expanded(child: _modeCard('🎲', 'ランダム', '全分野からシャッフル', () {
-                _start(SessionSpec('ランダム', false, () => _shuffled(pool).take(10).toList()));
-              })),
+              Expanded(
+                child: _modeCard(Icons.casino_rounded, kBrand, 'ランダム', '全分野からシャッフル', () {
+                  _start(SessionSpec('ランダム', false, () => _shuffled(pool).take(10).toList()));
+                }),
+              ),
               const SizedBox(width: 10),
-              Expanded(child: _modeCard('🔁', '弱点復習', '間違えた問題だけ', () {
-                _start(SessionSpec('弱点復習', false,
-                    () => _shuffled(pool.where((q) => gStore.wrong.contains(q.id)))));
-              }, badge: wrongInExam == 0 ? null : '$wrongInExam')),
+              Expanded(
+                child: _modeCard(Icons.replay_rounded, kNg, '弱点復習', '間違えた問題だけ', () {
+                  _start(SessionSpec('弱点復習', false,
+                      () => _shuffled(pool.where((q) => gStore.wrong.contains(q.id)))));
+                }, badge: wrongInExam == 0 ? null : '$wrongInExam'),
+              ),
             ]),
             const SizedBox(height: 10),
             _mogiCard(mogiN),
@@ -493,7 +622,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 childAspectRatio: 2.4,
-                mainAxisSpacing: 9, crossAxisSpacing: 9,
+                mainAxisSpacing: 9,
+                crossAxisSpacing: 9,
                 children: years.map((y) {
                   final qs = pool.where((q) => q.year == y).toList();
                   final done = qs.where((q) => gStore.seen(q.id) > 0).length;
@@ -522,88 +652,89 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _heroStat(String v, String l) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(v, style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w800)),
+          Text(v, style: const TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w800)),
           Text(l, style: const TextStyle(color: Colors.white70, fontSize: 11)),
         ],
       );
 
   Widget _label(String t) => Padding(
-        padding: const EdgeInsets.only(bottom: 10, top: 2),
-        child: Text(t, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: Theme.of(context).colorScheme.outline)),
+        padding: const EdgeInsets.only(bottom: 10, top: 2, left: 2),
+        child: Text(t,
+            style: TextStyle(
+                fontSize: 12, fontWeight: FontWeight.w800, color: Theme.of(context).colorScheme.outline)),
       );
 
-  Widget _card({required Widget child, VoidCallback? onTap}) {
+  Widget _modeCard(IconData ico, Color c, String t, String d, VoidCallback onTap, {String? badge}) {
     final cs = Theme.of(context).colorScheme;
-    return Material(
-      color: cs.surface,
-      borderRadius: BorderRadius.circular(14),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: cs.outlineVariant),
-          ),
-          child: child,
-        ),
-      ),
-    );
-  }
-
-  Widget _modeCard(String ico, String t, String d, VoidCallback onTap, {String? badge}) {
-    return _card(
+    return SoftCard(
       onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(children: [
-              Text(ico, style: const TextStyle(fontSize: 20)),
-              const Spacer(),
-              if (badge != null)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(color: const Color(0xFFD23B3B), borderRadius: BorderRadius.circular(20)),
-                  child: Text(badge, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w800)),
-                ),
-            ]),
-            const SizedBox(height: 6),
-            Text(t, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
-            Text(d, style: TextStyle(fontSize: 11.5, color: Theme.of(context).colorScheme.outline)),
-          ],
-        ),
+      tint: c,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(color: c.withOpacity(0.13), borderRadius: BorderRadius.circular(11)),
+              child: Icon(ico, color: c, size: 21),
+            ),
+            const Spacer(),
+            if (badge != null)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(color: kNg, borderRadius: BorderRadius.circular(20)),
+                child: Text(badge,
+                    style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w800)),
+              ),
+          ]),
+          const SizedBox(height: 9),
+          Text(t, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
+          Text(d, style: TextStyle(fontSize: 11.5, color: cs.outline)),
+        ],
       ),
     );
   }
 
   Widget _mogiCard(int n) {
-    final cs = Theme.of(context).colorScheme;
-    return Material(
-      color: exam.color,
-      borderRadius: BorderRadius.circular(14),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(14),
-        onTap: () => _start(SessionSpec('模試', true, () => _shuffled(pool).take(n).toList())),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(children: [
-            const Text('📝', style: TextStyle(fontSize: 20)),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('模試（本番判定・$n問）',
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15)),
-                  Text(exam.passSummary(),
-                      style: TextStyle(color: Colors.white.withOpacity(0.85), fontSize: 11.5)),
-                ],
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [
+          BoxShadow(color: exam.color.withOpacity(0.3), blurRadius: 12, offset: const Offset(0, 5)),
+        ],
+      ),
+      child: Material(
+        color: exam.color,
+        borderRadius: BorderRadius.circular(18),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: () => _start(SessionSpec('模試', true, () => _shuffled(pool).take(n).toList())),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.18), borderRadius: BorderRadius.circular(11)),
+                child: const Icon(Icons.assignment_turned_in_rounded, color: Colors.white, size: 21),
               ),
-            ),
-            Icon(Icons.chevron_right, color: Colors.white.withOpacity(0.8)),
-          ]),
+              const SizedBox(width: 13),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('模試（本番判定・$n問）',
+                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15)),
+                    Text(exam.passSummary(),
+                        style: TextStyle(color: Colors.white.withOpacity(0.85), fontSize: 11.5)),
+                  ],
+                ),
+              ),
+              Icon(Icons.chevron_right, color: Colors.white.withOpacity(0.8)),
+            ]),
+          ),
         ),
       ),
     );
@@ -611,30 +742,31 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _yearChip(String label, int done, int total, VoidCallback onTap) {
     final cs = Theme.of(context).colorScheme;
-    return _card(
+    return SoftCard(
       onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(children: [
-              Text(label, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
-              const Spacer(),
-              Text('$total問', style: TextStyle(fontSize: 11, color: cs.outline, fontWeight: FontWeight.w700)),
-            ]),
-            const SizedBox(height: 6),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(6),
-              child: LinearProgressIndicator(
-                value: total == 0 ? 0 : done / total,
-                minHeight: 6, backgroundColor: cs.surfaceContainerHighest, color: cs.primary),
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(children: [
+            Text(label, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5)),
+            const Spacer(),
+            Text('$total問', style: TextStyle(fontSize: 11, color: cs.outline, fontWeight: FontWeight.w700)),
+          ]),
+          const SizedBox(height: 6),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(6),
+            child: LinearProgressIndicator(
+              value: total == 0 ? 0 : done / total,
+              minHeight: 6,
+              backgroundColor: cs.surfaceContainerHighest,
+              color: exam.color,
             ),
-            const SizedBox(height: 4),
-            Text('学習 $done/$total', style: TextStyle(fontSize: 11, color: cs.outline, fontWeight: FontWeight.w700)),
-          ],
-        ),
+          ),
+          const SizedBox(height: 4),
+          Text('学習 $done/$total', style: TextStyle(fontSize: 11, color: cs.outline, fontWeight: FontWeight.w700)),
+        ],
       ),
     );
   }
@@ -642,44 +774,55 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _catRow(CatDef c, int total, int done, int pct, VoidCallback onTap) {
     final cs = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: _card(
+      padding: const EdgeInsets.only(bottom: 9),
+      child: SoftCard(
         onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(13),
-          child: Row(children: [
-            Container(width: 6, height: 40, decoration: BoxDecoration(color: c.color, borderRadius: BorderRadius.circular(6))),
-            const SizedBox(width: 13),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(children: [
-                    Flexible(child: Text(c.key, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5))),
-                    if (c.applied) ...[
-                      const SizedBox(width: 6),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        decoration: BoxDecoration(border: Border.all(color: const Color(0xFFB9750F)), borderRadius: BorderRadius.circular(5)),
-                        child: const Text('応用', style: TextStyle(fontSize: 9.5, color: Color(0xFFB9750F), fontWeight: FontWeight.w800)),
-                      ),
-                    ],
-                  ]),
-                  Text('$total問 ・ 学習 $done/$total', style: TextStyle(fontSize: 11.5, color: cs.outline)),
-                  const SizedBox(height: 6),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(6),
-                    child: LinearProgressIndicator(
-                      value: total == 0 ? 0 : done / total,
-                      minHeight: 6, backgroundColor: cs.surfaceContainerHighest, color: c.color),
+        tint: c.color,
+        padding: const EdgeInsets.all(13),
+        child: Row(children: [
+          Container(
+              width: 6,
+              height: 42,
+              decoration: BoxDecoration(color: c.color, borderRadius: BorderRadius.circular(6))),
+          const SizedBox(width: 13),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(children: [
+                  Flexible(
+                      child: Text(c.key,
+                          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14))),
+                  if (c.applied) ...[
+                    const SizedBox(width: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: const Color(0xFFB9750F)),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: const Text('応用',
+                          style: TextStyle(
+                              fontSize: 9.5, color: Color(0xFFB9750F), fontWeight: FontWeight.w800)),
+                    ),
+                  ],
+                ]),
+                Text('$total問 ・ 学習 $done/$total', style: TextStyle(fontSize: 11.5, color: cs.outline)),
+                const SizedBox(height: 6),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: LinearProgressIndicator(
+                    value: total == 0 ? 0 : done / total,
+                    minHeight: 6,
+                    backgroundColor: cs.surfaceContainerHighest,
+                    color: c.color,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const SizedBox(width: 10),
-            Text('$pct%', style: TextStyle(fontWeight: FontWeight.w800, color: cs.outline)),
-          ]),
-        ),
+          ),
+          const SizedBox(width: 10),
+          Text('$pct%', style: TextStyle(fontWeight: FontWeight.w800, color: cs.outline)),
+        ]),
       ),
     );
   }
@@ -707,11 +850,16 @@ class _QuizScreenState extends State<QuizScreen> {
     final ok = sel == q.correct;
     gStore.record(q, ok);
     answers.add(_Ans(q.cat, q.isApplied, ok));
+    if (ok) {
+      HapticFeedback.mediumImpact();
+    } else {
+      HapticFeedback.heavyImpact();
+    }
     setState(() => selected = sel);
     if (ok) {
       // 正解は解説なしで自動的に次の問題へ
       final at = idx;
-      Future.delayed(const Duration(milliseconds: 850), () {
+      Future.delayed(const Duration(milliseconds: 900), () {
         if (mounted && selected != null && idx == at) _next();
       });
     }
@@ -734,157 +882,266 @@ class _QuizScreenState extends State<QuizScreen> {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final revealed = selected != null;
+    final correctNow = revealed && selected == q.correct;
     final keys = ['A', 'B', 'C', 'D'];
     final catColor = widget.exam.catMap[q.cat]?.color ?? cs.primary;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.spec.title}   ${idx + 1} / ${widget.questions.length}'),
-        titleTextStyle: TextStyle(color: cs.onSurface, fontSize: 15, fontWeight: FontWeight.w700),
-        backgroundColor: cs.surface,
+        backgroundColor: Colors.transparent,
+        title: Row(
+          children: [
+            Text(widget.spec.title,
+                style: TextStyle(color: cs.onSurface, fontSize: 15, fontWeight: FontWeight.w800)),
+            const SizedBox(width: 10),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 2),
+              decoration: BoxDecoration(
+                color: cs.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text('${idx + 1} / ${widget.questions.length}',
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: cs.outline)),
+            ),
+          ],
+        ),
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(4),
-          child: LinearProgressIndicator(
-            value: (idx + (revealed ? 1 : 0)) / widget.questions.length,
-            minHeight: 4, backgroundColor: cs.surfaceContainerHighest, color: cs.primary,
+          preferredSize: const Size.fromHeight(6),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: LinearProgressIndicator(
+                value: (idx + (revealed ? 1 : 0)) / widget.questions.length,
+                minHeight: 5,
+                backgroundColor: cs.surfaceContainerHighest,
+                color: widget.exam.color,
+              ),
+            ),
           ),
         ),
       ),
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(16),
+        child: Stack(
           children: [
-            Wrap(spacing: 7, children: [
-              Text('● ${q.cat}', style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w800, color: catColor)),
-              if (q.year != null)
-                Text(q.year!, style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w800, color: cs.primary)),
-            ]),
-            const SizedBox(height: 10),
-            Text(q.q, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700, height: 1.6)),
-            const SizedBox(height: 16),
-            ...List.generate(q.choices.length, (i) {
-              Color? bg;
-              Color border = cs.outlineVariant;
-              if (revealed) {
-                if (i == q.correct) {
-                  bg = const Color(0xFF1F9D5A).withOpacity(0.15);
-                  border = const Color(0xFF1F9D5A);
-                } else if (i == selected) {
-                  bg = const Color(0xFFD23B3B).withOpacity(0.15);
-                  border = const Color(0xFFD23B3B);
-                }
-              }
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 9),
-                child: Material(
-                  color: bg ?? cs.surface,
-                  borderRadius: BorderRadius.circular(13),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(13),
-                    onTap: revealed ? null : () => _answer(i),
-                    child: Container(
-                      padding: const EdgeInsets.all(13),
+            ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                SoftCard(
+                  tint: catColor,
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Wrap(spacing: 7, children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: catColor.withOpacity(0.12),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(q.cat,
+                              style: TextStyle(
+                                  fontSize: 10.5, fontWeight: FontWeight.w800, color: catColor)),
+                        ),
+                        if (q.year != null)
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: cs.surfaceContainerHighest,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(q.year!,
+                                style: TextStyle(
+                                    fontSize: 10.5, fontWeight: FontWeight.w800, color: cs.outline)),
+                          ),
+                      ]),
+                      const SizedBox(height: 10),
+                      Text(q.q,
+                          style: const TextStyle(fontSize: 16.5, fontWeight: FontWeight.w700, height: 1.65)),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 14),
+                ...List.generate(q.choices.length, (i) {
+                  Color bg = cs.surface;
+                  Color border = cs.outlineVariant;
+                  Widget? trailing;
+                  if (revealed) {
+                    if (i == q.correct) {
+                      bg = kOk.withOpacity(0.13);
+                      border = kOk;
+                      trailing = const Icon(Icons.check_circle_rounded, color: kOk, size: 22);
+                    } else if (i == selected) {
+                      bg = kNg.withOpacity(0.12);
+                      border = kNg;
+                      trailing = const Icon(Icons.cancel_rounded, color: kNg, size: 22);
+                    }
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 9),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(13),
+                        color: bg,
+                        borderRadius: BorderRadius.circular(16),
                         border: Border.all(color: border, width: 1.5),
                       ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 24, height: 24,
-                            decoration: BoxDecoration(
-                              color: revealed && i == q.correct
-                                  ? const Color(0xFF1F9D5A)
-                                  : (revealed && i == selected ? const Color(0xFFD23B3B) : cs.surfaceContainerHighest),
-                              borderRadius: BorderRadius.circular(7),
+                      child: Material(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(16),
+                        clipBehavior: Clip.antiAlias,
+                        child: InkWell(
+                          onTap: revealed ? null : () => _answer(i),
+                          child: Padding(
+                            padding: const EdgeInsets.all(13),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 26,
+                                  height: 26,
+                                  decoration: BoxDecoration(
+                                    color: revealed && i == q.correct
+                                        ? kOk
+                                        : (revealed && i == selected ? kNg : cs.surfaceContainerHighest),
+                                    borderRadius: BorderRadius.circular(9),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Text(keys[i],
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w800,
+                                          fontSize: 13,
+                                          color: (revealed && (i == q.correct || i == selected))
+                                              ? Colors.white
+                                              : cs.onSurfaceVariant)),
+                                ),
+                                const SizedBox(width: 11),
+                                Expanded(
+                                    child: Padding(
+                                  padding: const EdgeInsets.only(top: 2),
+                                  child: Text(q.choices[i],
+                                      style: const TextStyle(fontSize: 14.5, height: 1.5)),
+                                )),
+                                if (trailing != null) ...[const SizedBox(width: 6), trailing],
+                              ],
                             ),
-                            alignment: Alignment.center,
-                            child: Text(keys[i], style: TextStyle(
-                                fontWeight: FontWeight.w800, fontSize: 13,
-                                color: (revealed && (i == q.correct || i == selected)) ? Colors.white : cs.onSurfaceVariant)),
                           ),
-                          const SizedBox(width: 11),
-                          Expanded(child: Text(q.choices[i], style: const TextStyle(fontSize: 14.5, height: 1.5))),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              );
-            }),
-            // 正解: 解説なし・短い演出で自動的に次へ
-            if (revealed && selected == q.correct) ...[
-              const SizedBox(height: 14),
-              Row(
-                children: [
-                  Image.asset('assets/mascot/shikakutori-correct.png', width: 84),
-                  const SizedBox(width: 6),
-                  const Expanded(
-                    child: Text('せいかい！ 次の問題へ…',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Color(0xFF1F9D5A))),
-                  ),
-                ],
-              ),
-            ],
-            // 不正解: ここでしっかり解説＋正解を確認
-            if (revealed && selected != q.correct) ...[
-              const SizedBox(height: 6),
-              Container(
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: cs.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: const Color(0xFFD23B3B).withOpacity(0.5)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFD23B3B),
-                          borderRadius: BorderRadius.circular(20)),
-                        child: const Text('不正解',
-                            style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w800)),
-                      ),
-                      const SizedBox(width: 9),
-                      Text('正解は ${keys[q.correct]}',
-                          style: const TextStyle(fontWeight: FontWeight.w800, color: Color(0xFFD23B3B))),
-                    ]),
-                    const SizedBox(height: 10),
-                    Row(
+                  );
+                }),
+                // 不正解: ここでしっかり解説＋正解を確認
+                if (revealed && selected != q.correct) ...[
+                  const SizedBox(height: 4),
+                  SoftCard(
+                    tint: kNg,
+                    padding: const EdgeInsets.all(15),
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Image.asset('assets/mascot/shikakutori-wrong.png', width: 96),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('解説', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: cs.outline)),
-                              const SizedBox(height: 3),
-                              Text(q.exp, style: const TextStyle(fontSize: 13.5, height: 1.7)),
-                            ],
+                        Row(children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                            decoration: BoxDecoration(
+                                color: kNg, borderRadius: BorderRadius.circular(20)),
+                            child: const Text('不正解',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 12, fontWeight: FontWeight.w800)),
                           ),
+                          const SizedBox(width: 9),
+                          Text('正解は ${keys[q.correct]}',
+                              style: const TextStyle(fontWeight: FontWeight.w800, color: kNg)),
+                        ]),
+                        const SizedBox(height: 10),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Image.asset('assets/mascot/shikakutori-wrong.png', width: 92),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('解説',
+                                      style: TextStyle(
+                                          fontSize: 11, fontWeight: FontWeight.w800, color: cs.outline)),
+                                  const SizedBox(height: 3),
+                                  Text(q.exp, style: const TextStyle(fontSize: 13.5, height: 1.7)),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      onPressed: _next,
+                      style: FilledButton.styleFrom(
+                        padding: const EdgeInsets.all(15),
+                        backgroundColor: widget.exam.color,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      ),
+                      child: Text(idx == widget.questions.length - 1 ? '結果を見る' : '次の問題',
+                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 90),
+              ],
+            ),
+            // 正解オーバーレイ: マスコットがポンと出て自動で次へ
+            if (correctNow)
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: Align(
+                    alignment: const Alignment(0, 0.55),
+                    child: TweenAnimationBuilder<double>(
+                      tween: Tween(begin: 0.6, end: 1.0),
+                      duration: const Duration(milliseconds: 420),
+                      curve: Curves.elasticOut,
+                      builder: (context, v, child) => Transform.scale(scale: v, child: child),
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(18, 12, 22, 12),
+                        decoration: BoxDecoration(
+                          color: cs.surface,
+                          borderRadius: BorderRadius.circular(24),
+                          border: Border.all(color: kOk.withOpacity(0.4), width: 1.5),
+                          boxShadow: [
+                            BoxShadow(
+                                color: kOk.withOpacity(0.25),
+                                blurRadius: 22,
+                                offset: const Offset(0, 8)),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Image.asset('assets/mascot/shikakutori-correct.png', width: 88),
+                            const SizedBox(width: 8),
+                            const Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('せいかい！',
+                                    style: TextStyle(
+                                        fontSize: 19, fontWeight: FontWeight.w800, color: kOk)),
+                                Text('次の問題へ…',
+                                    style: TextStyle(fontSize: 12, color: kOk)),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-              const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: _next,
-                  style: FilledButton.styleFrom(padding: const EdgeInsets.all(15)),
-                  child: Text(idx == widget.questions.length - 1 ? '結果を見る' : '次の問題',
-                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
-                ),
-              ),
-            ],
           ],
         ),
       ),
@@ -920,7 +1177,6 @@ class ResultScreen extends StatelessWidget {
     final pct = total == 0 ? 0 : (correct / total * 100).round();
 
     final passOverall = pct >= exam.pass.overall;
-    // 区分別の最低ライン
     final critFails = <bool>[];
     exam.pass.perCatMin.forEach((cat, min) {
       final present = answers.where((a) => a.cat == cat).isNotEmpty;
@@ -930,61 +1186,99 @@ class ResultScreen extends StatelessWidget {
 
     if (spec.isMogi) gStore.setBest(exam.id, pct);
 
-    final ringColor = pct >= 80 ? const Color(0xFF1F9D5A) : (pct >= exam.pass.overall ? cs.primary : const Color(0xFFD23B3B));
+    final good = pct >= exam.pass.overall;
+    final ringColor = pct >= 80 ? kOk : (good ? exam.color : kNg);
 
     return Scaffold(
-      appBar: AppBar(backgroundColor: cs.surface, title: Text(spec.isMogi ? '模試 結果' : '結果')),
+      appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text(spec.isMogi ? '模試 結果' : '結果',
+              style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16))),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            Container(
+            SoftCard(
+              tint: ringColor,
               padding: const EdgeInsets.all(22),
-              decoration: BoxDecoration(
-                color: cs.surface, borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: cs.outlineVariant)),
               child: Column(
                 children: [
-                  SizedBox(
-                    width: 140, height: 140,
-                    child: Stack(alignment: Alignment.center, children: [
-                      SizedBox(
-                        width: 140, height: 140,
-                        child: CircularProgressIndicator(
-                          value: pct / 100, strokeWidth: 12,
-                          backgroundColor: cs.surfaceContainerHighest, color: ringColor,
-                        ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        good
+                            ? 'assets/mascot/shikakutori-correct.png'
+                            : 'assets/mascot/shikakutori-wrong.png',
+                        width: 100,
                       ),
-                      Column(mainAxisSize: MainAxisSize.min, children: [
-                        Text('$pct%', style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w800)),
-                        Text('正答率', style: TextStyle(fontSize: 11, color: cs.outline)),
-                      ]),
-                    ]),
+                      const SizedBox(width: 14),
+                      SizedBox(
+                        width: 130,
+                        height: 130,
+                        child: Stack(alignment: Alignment.center, children: [
+                          TweenAnimationBuilder<double>(
+                            tween: Tween(begin: 0, end: pct / 100),
+                            duration: const Duration(milliseconds: 900),
+                            curve: Curves.easeOutCubic,
+                            builder: (context, v, _) => SizedBox(
+                              width: 130,
+                              height: 130,
+                              child: CircularProgressIndicator(
+                                value: v,
+                                strokeWidth: 12,
+                                strokeCap: StrokeCap.round,
+                                backgroundColor: cs.surfaceContainerHighest,
+                                color: ringColor,
+                              ),
+                            ),
+                          ),
+                          Column(mainAxisSize: MainAxisSize.min, children: [
+                            Text('$pct%',
+                                style:
+                                    const TextStyle(fontSize: 30, fontWeight: FontWeight.w800)),
+                            Text('正答率', style: TextStyle(fontSize: 11, color: cs.outline)),
+                          ]),
+                        ]),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 12),
                   Text('$total問中 $correct問正解', style: TextStyle(color: cs.outline)),
+                  Text(
+                    good ? 'ナイス！この調子！' : 'ニガテは「弱点復習」でつぶそう！',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 13.5,
+                        color: good ? kOk : kNg),
+                  ),
                   if (spec.isMogi) ...[
                     const SizedBox(height: 12),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
                       decoration: BoxDecoration(
-                        color: (pass ? const Color(0xFF1F9D5A) : const Color(0xFFD23B3B)).withOpacity(0.15),
+                        color: (pass ? kOk : kNg).withOpacity(0.13),
                         borderRadius: BorderRadius.circular(30),
-                        border: Border.all(color: pass ? const Color(0xFF1F9D5A) : const Color(0xFFD23B3B)),
+                        border: Border.all(color: pass ? kOk : kNg),
                       ),
                       child: Text(pass ? '✔ 合格ライン' : '✕ 合格基準に未達',
-                          style: TextStyle(fontWeight: FontWeight.w800,
-                              color: pass ? const Color(0xFF1F9D5A) : const Color(0xFFD23B3B))),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w800, color: pass ? kOk : kNg)),
                     ),
                     const SizedBox(height: 14),
-                    _crit(context, '全体の正答率', '合格基準 ${exam.pass.overall}% 以上', pct, exam.pass.overall, passOverall, null, cs),
-                    ...exam.pass.perCatMin.entries.where((e) => answers.any((a) => a.cat == e.key)).map((e) {
+                    _crit(context, '全体の正答率', '合格基準 ${exam.pass.overall}% 以上', pct,
+                        exam.pass.overall, passOverall, null, cs),
+                    ...exam.pass.perCatMin.entries
+                        .where((e) => answers.any((a) => a.cat == e.key))
+                        .map((e) {
                       final cp = _pctFor((a) => a.cat == e.key);
                       final n = answers.where((a) => a.cat == e.key).length;
                       final short = exam.catMap[e.key]?.short ?? e.key;
                       return Padding(
                         padding: const EdgeInsets.only(top: 10),
-                        child: _crit(context, short, '合格基準 ${e.value}% 以上', cp, e.value, cp >= e.value, n, cs),
+                        child: _crit(context, short, '合格基準 ${e.value}% 以上', cp, e.value,
+                            cp >= e.value, n, cs),
                       );
                     }),
                     const SizedBox(height: 14),
@@ -1002,8 +1296,13 @@ class ResultScreen extends StatelessWidget {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (_) => QuizScreen(exam: exam, spec: spec, questions: list)));
                 },
-                style: FilledButton.styleFrom(padding: const EdgeInsets.all(15)),
-                child: const Text('もう一度', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                style: FilledButton.styleFrom(
+                  padding: const EdgeInsets.all(15),
+                  backgroundColor: exam.color,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                ),
+                child: const Text('もう一度',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
               ),
             ),
             const SizedBox(height: 10),
@@ -1011,8 +1310,12 @@ class ResultScreen extends StatelessWidget {
               width: double.infinity,
               child: OutlinedButton(
                 onPressed: () => Navigator.of(context).pop(),
-                style: OutlinedButton.styleFrom(padding: const EdgeInsets.all(15)),
-                child: const Text('ホームへ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.all(15),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                ),
+                child: const Text('ホームへ',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
               ),
             ),
           ],
@@ -1025,7 +1328,8 @@ class ResultScreen extends StatelessWidget {
     final rows = <Widget>[
       Align(
         alignment: Alignment.centerLeft,
-        child: Text('分野別 正答率', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: cs.outline)),
+        child: Text('分野別 正答率',
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: cs.outline)),
       ),
       const SizedBox(height: 8),
     ];
@@ -1036,45 +1340,56 @@ class ResultScreen extends StatelessWidget {
       rows.add(Padding(
         padding: const EdgeInsets.only(bottom: 6),
         child: Row(children: [
-          SizedBox(width: 78, child: Text(c.short, style: TextStyle(fontSize: 12.5, color: cs.outline))),
+          SizedBox(width: 84, child: Text(c.short, style: TextStyle(fontSize: 12.5, color: cs.outline))),
           Expanded(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(6),
               child: LinearProgressIndicator(
-                value: cp / 100, minHeight: 8,
-                backgroundColor: cs.surfaceContainerHighest, color: c.color),
+                  value: cp / 100,
+                  minHeight: 8,
+                  backgroundColor: cs.surfaceContainerHighest,
+                  color: c.color),
             ),
           ),
           const SizedBox(width: 10),
-          SizedBox(width: 40, child: Text('$cp%', textAlign: TextAlign.right, style: const TextStyle(fontWeight: FontWeight.w800))),
+          SizedBox(
+              width: 40,
+              child: Text('$cp%',
+                  textAlign: TextAlign.right, style: const TextStyle(fontWeight: FontWeight.w800))),
         ]),
       ));
     }
     return rows;
   }
 
-  Widget _crit(BuildContext context, String title, String cap, int val, int thr, bool ok, int? denom, ColorScheme cs) {
-    final color = ok ? const Color(0xFF1F9D5A) : const Color(0xFFD23B3B);
+  Widget _crit(BuildContext context, String title, String cap, int val, int thr, bool ok,
+      int? denom, ColorScheme cs) {
+    final color = ok ? kOk : kNg;
     return Container(
       padding: const EdgeInsets.all(13),
       decoration: BoxDecoration(
-        color: cs.surfaceContainerHighest, borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: cs.outlineVariant)),
+          color: cs.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: cs.outlineVariant)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(children: [
-            Expanded(child: Text('$title${denom != null ? '（$denom問）' : ''}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700))),
-            Text('$val% ${ok ? '✔' : '✕'}', style: TextStyle(fontWeight: FontWeight.w800, color: color)),
+            Expanded(
+                child: Text('$title${denom != null ? '（$denom問）' : ''}',
+                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700))),
+            Text('$val% ${ok ? '✔' : '✕'}',
+                style: TextStyle(fontWeight: FontWeight.w800, color: color)),
           ]),
           const SizedBox(height: 7),
           Stack(children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(6),
-              child: LinearProgressIndicator(value: val / 100, minHeight: 9, backgroundColor: cs.surface, color: color),
+              child: LinearProgressIndicator(
+                  value: val / 100, minHeight: 9, backgroundColor: cs.surface, color: color),
             ),
             Positioned(
-              left: (thr / 100) * (MediaQuery.of(context).size.width - 32 - 26 - 26),
+              left: (thr / 100) * (MediaQuery.of(context).size.width - 32 - 44 - 26),
               child: Container(width: 2, height: 9, color: cs.onSurface.withOpacity(0.55)),
             ),
           ]),
