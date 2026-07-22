@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle, HapticFeedback;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -287,6 +288,125 @@ class SoftCard extends StatelessWidget {
   }
 }
 
+/// ふわふわ浮遊アニメ
+class Bobbing extends StatefulWidget {
+  final Widget child;
+  final double amplitude;
+  final Duration duration;
+  const Bobbing(
+      {super.key, required this.child, this.amplitude = 5, this.duration = const Duration(milliseconds: 1900)});
+  @override
+  State<Bobbing> createState() => _BobbingState();
+}
+
+class _BobbingState extends State<Bobbing> with SingleTickerProviderStateMixin {
+  late final AnimationController _c =
+      AnimationController(vsync: this, duration: widget.duration)..repeat(reverse: true);
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _c,
+      builder: (context, child) => Transform.translate(
+        offset: Offset(0, -widget.amplitude * Curves.easeInOut.transform(_c.value)),
+        child: child,
+      ),
+      child: widget.child,
+    );
+  }
+}
+
+/// 出現アニメ（フェード＋スライド）
+class FadeSlideIn extends StatefulWidget {
+  final Widget child;
+  final int delayMs;
+  const FadeSlideIn({super.key, required this.child, this.delayMs = 0});
+  @override
+  State<FadeSlideIn> createState() => _FadeSlideInState();
+}
+
+class _FadeSlideInState extends State<FadeSlideIn> {
+  bool _go = false;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.delayMs == 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) setState(() => _go = true);
+      });
+    } else {
+      Future.delayed(Duration(milliseconds: widget.delayMs), () {
+        if (mounted) setState(() => _go = true);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      opacity: _go ? 1 : 0,
+      duration: const Duration(milliseconds: 380),
+      curve: Curves.easeOut,
+      child: AnimatedSlide(
+        offset: _go ? Offset.zero : const Offset(0, 0.09),
+        duration: const Duration(milliseconds: 420),
+        curve: Curves.easeOutCubic,
+        child: widget.child,
+      ),
+    );
+  }
+}
+
+/// 星が弾けるエフェクト（1回再生）
+class StarBurst extends StatelessWidget {
+  final double size;
+  final Color color;
+  const StarBurst({super.key, this.size = 180, this.color = const Color(0xFFFFC93C)});
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: SizedBox(
+        width: size,
+        height: size,
+        child: TweenAnimationBuilder<double>(
+          tween: Tween(begin: 0, end: 1),
+          duration: const Duration(milliseconds: 750),
+          curve: Curves.easeOutCubic,
+          builder: (context, t, _) {
+            return Stack(
+              clipBehavior: Clip.none,
+              children: List.generate(10, (i) {
+                final ang = i * math.pi * 2 / 10 - math.pi / 2;
+                final r = size / 2 * t;
+                return Positioned(
+                  left: size / 2 + r * math.cos(ang) - 9,
+                  top: size / 2 + r * math.sin(ang) - 9,
+                  child: Opacity(
+                    opacity: (1 - t).clamp(0.0, 1.0),
+                    child: Transform.rotate(
+                      angle: t * 2.5 + i,
+                      child: Icon(
+                        i.isEven ? Icons.star_rounded : Icons.circle,
+                        size: i.isEven ? 18 + 5 * (1 - t) : 8,
+                        color: i % 3 == 0 ? color : (i % 3 == 1 ? kOk : kBrand),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
 /// ===== 試験選択（トップ） =====
 class ExamSelectScreen extends StatefulWidget {
   const ExamSelectScreen({super.key});
@@ -309,16 +429,18 @@ class _ExamSelectScreenState extends State<ExamSelectScreen> {
       ...byGroup.keys.where((g) => !kGroupOrder.contains(g)),
     ];
 
+    int ai = 0;
     return Scaffold(
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 40),
           children: [
-            _hero(),
+            FadeSlideIn(child: _hero()),
             const SizedBox(height: 8),
             for (final g in groups) ...[
-              _sectionHeader(g, byGroup[g]!.length, cs),
-              for (final ex in byGroup[g]!) _examCard(ex),
+              FadeSlideIn(delayMs: (ai * 28).clamp(0, 380), child: _sectionHeader(g, byGroup[g]!.length, cs)),
+              for (final ex in byGroup[g]!)
+                FadeSlideIn(delayMs: ((ai++) * 28).clamp(0, 380), child: _examCard(ex)),
             ],
             const SizedBox(height: 12),
             Text(
@@ -360,7 +482,7 @@ class _ExamSelectScreenState extends State<ExamSelectScreen> {
                   color: Colors.white.withOpacity(0.13),
                 ),
               ),
-              Image.asset('assets/mascot/shikakutori-badge.png', width: 112),
+              Bobbing(child: Image.asset('assets/mascot/shikakutori-badge.png', width: 112)),
             ],
           ),
           const SizedBox(width: 8),
@@ -592,7 +714,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(width: 6),
-                  Image.asset('assets/mascot/shikakutori-badge.png', width: 64),
+                  Bobbing(amplitude: 4, child: Image.asset('assets/mascot/shikakutori-badge.png', width: 64)),
                 ],
               ),
             ),
@@ -841,6 +963,7 @@ class QuizScreen extends StatefulWidget {
 class _QuizScreenState extends State<QuizScreen> {
   int idx = 0;
   int? selected;
+  int streak = 0;
   final List<_Ans> answers = [];
 
   Question get q => widget.questions[idx];
@@ -850,6 +973,7 @@ class _QuizScreenState extends State<QuizScreen> {
     final ok = sel == q.correct;
     gStore.record(q, ok);
     answers.add(_Ans(q.cat, q.isApplied, ok));
+    streak = ok ? streak + 1 : 0;
     if (ok) {
       HapticFeedback.mediumImpact();
     } else {
@@ -924,7 +1048,19 @@ class _QuizScreenState extends State<QuizScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            ListView(
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 260),
+              switchInCurve: Curves.easeOutCubic,
+              switchOutCurve: Curves.easeIn,
+              transitionBuilder: (child, anim) => FadeTransition(
+                opacity: anim,
+                child: SlideTransition(
+                  position: Tween<Offset>(begin: const Offset(0.05, 0), end: Offset.zero).animate(anim),
+                  child: child,
+                ),
+              ),
+              child: ListView(
+              key: ValueKey(idx),
               padding: const EdgeInsets.all(16),
               children: [
                 SoftCard(
@@ -1095,49 +1231,89 @@ class _QuizScreenState extends State<QuizScreen> {
                 const SizedBox(height: 90),
               ],
             ),
+            ),
             // 正解オーバーレイ: マスコットがポンと出て自動で次へ
             if (correctNow)
               Positioned.fill(
                 child: IgnorePointer(
                   child: Align(
                     alignment: const Alignment(0, 0.55),
-                    child: TweenAnimationBuilder<double>(
-                      tween: Tween(begin: 0.6, end: 1.0),
-                      duration: const Duration(milliseconds: 420),
-                      curve: Curves.elasticOut,
-                      builder: (context, v, child) => Transform.scale(scale: v, child: child),
-                      child: Container(
-                        padding: const EdgeInsets.fromLTRB(18, 12, 22, 12),
-                        decoration: BoxDecoration(
-                          color: cs.surface,
-                          borderRadius: BorderRadius.circular(24),
-                          border: Border.all(color: kOk.withOpacity(0.4), width: 1.5),
-                          boxShadow: [
-                            BoxShadow(
-                                color: kOk.withOpacity(0.25),
-                                blurRadius: 22,
-                                offset: const Offset(0, 8)),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Image.asset('assets/mascot/shikakutori-correct.png', width: 88),
-                            const SizedBox(width: 8),
-                            const Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('せいかい！',
-                                    style: TextStyle(
-                                        fontSize: 19, fontWeight: FontWeight.w800, color: kOk)),
-                                Text('次の問題へ…',
-                                    style: TextStyle(fontSize: 12, color: kOk)),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      clipBehavior: Clip.none,
+                      children: [
+                        const StarBurst(size: 230),
+                        TweenAnimationBuilder<double>(
+                          tween: Tween(begin: 0.6, end: 1.0),
+                          duration: const Duration(milliseconds: 420),
+                          curve: Curves.elasticOut,
+                          builder: (context, v, child) => Transform.scale(scale: v, child: child),
+                          child: Container(
+                            padding: const EdgeInsets.fromLTRB(18, 12, 22, 12),
+                            decoration: BoxDecoration(
+                              color: cs.surface,
+                              borderRadius: BorderRadius.circular(24),
+                              border: Border.all(color: kOk.withOpacity(0.4), width: 1.5),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: kOk.withOpacity(0.25),
+                                    blurRadius: 22,
+                                    offset: const Offset(0, 8)),
                               ],
                             ),
-                          ],
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Image.asset('assets/mascot/shikakutori-correct.png', width: 88),
+                                const SizedBox(width: 8),
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text('せいかい！',
+                                        style: TextStyle(
+                                            fontSize: 19, fontWeight: FontWeight.w800, color: kOk)),
+                                    const Text('次の問題へ…',
+                                        style: TextStyle(fontSize: 12, color: kOk)),
+                                    if (streak >= 2) ...[
+                                      const SizedBox(height: 6),
+                                      TweenAnimationBuilder<double>(
+                                        tween: Tween(begin: 0.4, end: 1.0),
+                                        duration: const Duration(milliseconds: 500),
+                                        curve: Curves.elasticOut,
+                                        builder: (context, v, child) =>
+                                            Transform.scale(scale: v, child: child),
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 9, vertical: 3),
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFFFFF3D6),
+                                            borderRadius: BorderRadius.circular(20),
+                                            border: Border.all(color: const Color(0xFFE8A93C)),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const Icon(Icons.local_fire_department_rounded,
+                                                  size: 15, color: Color(0xFFE07B12)),
+                                              const SizedBox(width: 3),
+                                              Text('$streak問れんぞく！',
+                                                  style: const TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w800,
+                                                      color: Color(0xFFB56A08))),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
                 ),
@@ -1207,17 +1383,27 @@ class ResultScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        good
-                            ? 'assets/mascot/shikakutori-correct.png'
-                            : 'assets/mascot/shikakutori-wrong.png',
-                        width: 100,
+                      FadeSlideIn(
+                        delayMs: 250,
+                        child: Bobbing(
+                          amplitude: 4,
+                          child: Image.asset(
+                            good
+                                ? 'assets/mascot/shikakutori-correct.png'
+                                : 'assets/mascot/shikakutori-wrong.png',
+                            width: 100,
+                          ),
+                        ),
                       ),
                       const SizedBox(width: 14),
                       SizedBox(
                         width: 130,
                         height: 130,
-                        child: Stack(alignment: Alignment.center, children: [
+                        child: Stack(
+                            alignment: Alignment.center,
+                            clipBehavior: Clip.none,
+                            children: [
+                          if (good) const StarBurst(size: 210),
                           TweenAnimationBuilder<double>(
                             tween: Tween(begin: 0, end: pct / 100),
                             duration: const Duration(milliseconds: 900),
@@ -1235,9 +1421,14 @@ class ResultScreen extends StatelessWidget {
                             ),
                           ),
                           Column(mainAxisSize: MainAxisSize.min, children: [
-                            Text('$pct%',
-                                style:
-                                    const TextStyle(fontSize: 30, fontWeight: FontWeight.w800)),
+                            TweenAnimationBuilder<double>(
+                              tween: Tween(begin: 0, end: pct.toDouble()),
+                              duration: const Duration(milliseconds: 900),
+                              curve: Curves.easeOutCubic,
+                              builder: (context, v, _) => Text('${v.round()}%',
+                                  style: const TextStyle(
+                                      fontSize: 30, fontWeight: FontWeight.w800)),
+                            ),
                             Text('正答率', style: TextStyle(fontSize: 11, color: cs.outline)),
                           ]),
                         ]),
