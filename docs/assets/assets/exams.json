@@ -34,7 +34,8 @@
         "perCatMin": {
           "施工管理法（応用能力）": 50
         }
-      }
+      },
+      "group": "建設業"
     },
     {
       "id": "kankouji2",
@@ -70,7 +71,8 @@
         "perCatMin": {
           "施工管理法（応用能力）": 50
         }
-      }
+      },
+      "group": "建設業"
     },
     {
       "id": "doboku1",
@@ -106,7 +108,8 @@
         "perCatMin": {
           "施工管理法（応用能力）": 50
         }
-      }
+      },
+      "group": "建設業"
     },
     {
       "id": "doboku2",
@@ -142,7 +145,8 @@
         "perCatMin": {
           "施工管理法（応用能力）": 50
         }
-      }
+      },
+      "group": "建設業"
     },
     {
       "id": "kenchiku1",
@@ -178,7 +182,8 @@
         "perCatMin": {
           "施工管理法（応用能力）": 50
         }
-      }
+      },
+      "group": "建設業"
     },
     {
       "id": "kenchiku2",
@@ -214,7 +219,8 @@
         "perCatMin": {
           "施工管理法（応用能力）": 50
         }
-      }
+      },
+      "group": "建設業"
     },
     {
       "id": "denkikoji1",
@@ -250,7 +256,8 @@
         "perCatMin": {
           "施工管理法（応用能力）": 50
         }
-      }
+      },
+      "group": "建設業"
     },
     {
       "id": "denkikoji2",
@@ -286,7 +293,8 @@
         "perCatMin": {
           "施工管理法（応用能力）": 50
         }
-      }
+      },
+      "group": "建設業"
     },
     {
       "id": "denki2",
@@ -318,7 +326,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "group": "電気・設備・エネルギー"
     },
     {
       "id": "kikenbutsu_otsu4",
@@ -350,7 +359,8 @@
           "危険物の性質・火災予防・消火": 60,
           "危険物に関する法令": 60
         }
-      }
+      },
+      "group": "電気・設備・エネルギー"
     },
     {
       "id": "takken",
@@ -382,7 +392,8 @@
       ],
       "pass": {
         "overall": 70
-      }
+      },
+      "group": "不動産業"
     },
     {
       "id": "itpassport",
@@ -414,7 +425,8 @@
           "マネジメント系": 30,
           "テクノロジ系": 30
         }
-      }
+      },
+      "group": "IT業界"
     },
     {
       "id": "kihonjoho",
@@ -441,7 +453,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "group": "IT業界"
     },
     {
       "id": "fp3",
@@ -483,7 +496,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "group": "金融・保険"
     },
     {
       "id": "denki1",
@@ -515,7 +529,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "group": "電気・設備・エネルギー"
     },
     {
       "id": "eisei1",
@@ -547,7 +562,8 @@
           "労働衛生": 40,
           "労働生理": 40
         }
-      }
+      },
+      "group": "経理・経営・士業"
     },
     {
       "id": "boiler2",
@@ -585,7 +601,8 @@
           "燃料及び燃焼": 40,
           "関係法令": 40
         }
-      }
+      },
+      "group": "電気・設備・エネルギー"
     },
     {
       "id": "gyousei",
@@ -625,7 +642,8 @@
         "perCatMin": {
           "一般知識等": 40
         }
-      }
+      },
+      "group": "経理・経営・士業"
     },
     {
       "id": "sharoushi",
@@ -662,7 +680,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "group": "経理・経営・士業"
     },
     {
       "id": "tourokuhanbai",
@@ -706,6 +725,1507 @@
           "薬事関係法規・制度": 35,
           "医薬品の適正使用・安全対策": 35
         }
+      },
+      "group": "医療・福祉"
+    },
+    {
+      "id": "boki3",
+      "name": "日商簿記3級",
+      "short": "簿記3級",
+      "desc": "経理の登竜門。仕訳から決算までの商業簿記。合格70%。",
+      "color": "0xFF8E24AA",
+      "group": "経理・経営・士業",
+      "cats": [
+        {
+          "key": "仕訳",
+          "short": "仕訳",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "帳簿・伝票",
+          "short": "帳簿・伝票",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "決算・財務諸表",
+          "short": "決算",
+          "color": "0xFFB9750F"
+        }
+      ],
+      "pass": {
+        "overall": 70
+      }
+    },
+    {
+      "id": "boki2",
+      "name": "日商簿記2級",
+      "short": "簿記2級",
+      "desc": "商業簿記＋工業簿記。実務で評価される定番。合格70%。",
+      "color": "0xFF6A1B9A",
+      "group": "経理・経営・士業",
+      "cats": [
+        {
+          "key": "商業簿記",
+          "short": "商業簿記",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "工業簿記",
+          "short": "工業簿記",
+          "color": "0xFFB9750F"
+        }
+      ],
+      "pass": {
+        "overall": 70
+      }
+    },
+    {
+      "id": "fp2",
+      "name": "FP技能士2級",
+      "short": "FP2級",
+      "desc": "FP3級の上位。実務レベルのお金の知識。学科相当。",
+      "color": "0xFF2E7D32",
+      "group": "金融・保険",
+      "cats": [
+        {
+          "key": "ライフプランニングと資金計画",
+          "short": "ライフ",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "リスク管理",
+          "short": "リスク",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "金融資産運用",
+          "short": "金融資産",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "タックスプランニング",
+          "short": "タックス",
+          "color": "0xFF8256C8"
+        },
+        {
+          "key": "不動産",
+          "short": "不動産",
+          "color": "0xFF0097A7"
+        },
+        {
+          "key": "相続・事業承継",
+          "short": "相続",
+          "color": "0xFFC2185B"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "ouyoujoho",
+      "name": "応用情報技術者",
+      "short": "応用情報",
+      "desc": "基本情報の上位。ワンランク上のIT国家試験。",
+      "color": "0xFF1565C0",
+      "group": "IT業界",
+      "cats": [
+        {
+          "key": "テクノロジ系",
+          "short": "テクノロジ",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "マネジメント系",
+          "short": "マネジメント",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "ストラテジ系",
+          "short": "ストラテジ",
+          "color": "0xFFB9750F"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "sg",
+      "name": "情報セキュリティマネジメント",
+      "short": "セキュマネ",
+      "desc": "組織の情報セキュリティを守る国家試験。",
+      "color": "0xFF455A64",
+      "group": "IT業界",
+      "cats": [
+        {
+          "key": "情報セキュリティ管理",
+          "short": "セキュ管理",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "セキュリティ技術と対策",
+          "short": "技術・対策",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "関連法規・その他",
+          "short": "法規ほか",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "denken3",
+      "name": "第三種電気主任技術者（電験三種）",
+      "short": "電験三種",
+      "desc": "電気設備の保安の最高峰入門。各科目60%で合格。",
+      "color": "0xFFF9A825",
+      "group": "電気・設備・エネルギー",
+      "cats": [
+        {
+          "key": "理論",
+          "short": "理論",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "電力",
+          "short": "電力",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "機械",
+          "short": "機械",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "法規",
+          "short": "法規",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60,
+        "perCatMin": {
+          "理論": 60,
+          "電力": 60,
+          "機械": 60,
+          "法規": 60
+        }
+      }
+    },
+    {
+      "id": "shindanshi",
+      "name": "中小企業診断士（一次）",
+      "short": "診断士",
+      "desc": "経営コンサルの国家資格。一次試験7科目。",
+      "color": "0xFF4E342E",
+      "group": "経理・経営・士業",
+      "cats": [
+        {
+          "key": "経済学・経済政策",
+          "short": "経済学",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "財務・会計",
+          "short": "財務会計",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "企業経営理論",
+          "short": "経営理論",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "運営管理",
+          "short": "運営管理",
+          "color": "0xFF8256C8"
+        },
+        {
+          "key": "経営法務",
+          "short": "経営法務",
+          "color": "0xFF0097A7"
+        },
+        {
+          "key": "経営情報システム",
+          "short": "情報SYS",
+          "color": "0xFFC2185B"
+        },
+        {
+          "key": "中小企業経営・政策",
+          "short": "中小政策",
+          "color": "0xFF5D4037"
+        }
+      ],
+      "pass": {
+        "overall": 60,
+        "perCatMin": {
+          "経済学・経済政策": 40,
+          "財務・会計": 40,
+          "企業経営理論": 40,
+          "運営管理": 40,
+          "経営法務": 40,
+          "経営情報システム": 40,
+          "中小企業経営・政策": 40
+        }
+      }
+    },
+    {
+      "id": "kaigo",
+      "name": "介護福祉士",
+      "short": "介護福祉士",
+      "desc": "介護の国家資格。人間と社会・介護・こころとからだ。",
+      "color": "0xFFD81B60",
+      "group": "医療・福祉",
+      "cats": [
+        {
+          "key": "人間と社会",
+          "short": "人間と社会",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "介護",
+          "short": "介護",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "こころとからだのしくみ",
+          "short": "こころからだ",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "医療的ケア",
+          "short": "医療的ケア",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "hoikushi",
+      "name": "保育士",
+      "short": "保育士",
+      "desc": "子どもの育ちを支える国家資格。筆記の主要科目を収録。",
+      "color": "0xFFFB8C00",
+      "group": "医療・福祉",
+      "cats": [
+        {
+          "key": "保育原理",
+          "short": "保育原理",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "教育原理・社会的養護",
+          "short": "教育・養護",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "子ども家庭福祉・社会福祉",
+          "short": "福祉",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "保育の心理学",
+          "short": "心理学",
+          "color": "0xFF8256C8"
+        },
+        {
+          "key": "子どもの保健・食と栄養",
+          "short": "保健・栄養",
+          "color": "0xFF0097A7"
+        },
+        {
+          "key": "保育実習理論",
+          "short": "実習理論",
+          "color": "0xFFC2185B"
+        }
+      ],
+      "pass": {
+        "overall": 60,
+        "perCatMin": {
+          "保育原理": 60,
+          "教育原理・社会的養護": 60,
+          "子ども家庭福祉・社会福祉": 60,
+          "保育の心理学": 60,
+          "子どもの保健・食と栄養": 60,
+          "保育実習理論": 60
+        }
+      }
+    },
+    {
+      "id": "menkyo",
+      "name": "普通自動車免許（学科）",
+      "short": "運転免許",
+      "desc": "みんなが通る道。学科試験の論点を4択で。合格90%。",
+      "color": "0xFF00ACC1",
+      "group": "サービス・運輸・くらし",
+      "cats": [
+        {
+          "key": "交通法規",
+          "short": "交通法規",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "標識・標示",
+          "short": "標識",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "運転の方法・マナー",
+          "short": "運転方法",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "危険予測・応急救護",
+          "short": "危険予測",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 90
+      }
+    },
+    {
+      "id": "shihoshoshi",
+      "name": "司法書士",
+      "short": "司法書士",
+      "desc": "登記・法律事務の最難関国家資格。択一式の主要科目を収録。",
+      "color": "0xFF283593",
+      "group": "経理・経営・士業",
+      "cats": [
+        {
+          "key": "民法",
+          "short": "民法",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "不動産登記法",
+          "short": "不登法",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "商法・商業登記法",
+          "short": "商法・商登法",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "民事訴訟・執行・保全",
+          "short": "民訴系",
+          "color": "0xFF8256C8"
+        },
+        {
+          "key": "供託法・司法書士法",
+          "short": "供託・書士法",
+          "color": "0xFF0097A7"
+        },
+        {
+          "key": "憲法・刑法",
+          "short": "憲法・刑法",
+          "color": "0xFFC2185B"
+        }
+      ],
+      "pass": {
+        "overall": 75
+      }
+    },
+    {
+      "id": "zeirishi",
+      "name": "税理士（会計・税法基礎）",
+      "short": "税理士",
+      "desc": "税務の専門家。簿記論・財表・主要税法の基礎知識を4択で。",
+      "color": "0xFF00695C",
+      "group": "経理・経営・士業",
+      "cats": [
+        {
+          "key": "簿記論",
+          "short": "簿記論",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "財務諸表論",
+          "short": "財表",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "法人税法",
+          "short": "法人税",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "所得税法",
+          "short": "所得税",
+          "color": "0xFF8256C8"
+        },
+        {
+          "key": "消費税法・その他",
+          "short": "消費税ほか",
+          "color": "0xFF0097A7"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "chizai3",
+      "name": "知的財産管理技能検定3級",
+      "short": "知財3級",
+      "desc": "特許・商標・著作権など知財の入門国家検定。",
+      "color": "0xFF6D4C41",
+      "group": "経理・経営・士業",
+      "cats": [
+        {
+          "key": "特許・実用新案",
+          "short": "特許",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "意匠・商標",
+          "short": "意匠・商標",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "著作権",
+          "short": "著作権",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "条約・その他法規",
+          "short": "その他法規",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 70
+      }
+    },
+    {
+      "id": "koumuin_sogo",
+      "name": "国家公務員 総合職（大卒）",
+      "short": "国家総合職",
+      "desc": "キャリア官僚への道。基礎能力試験の教養分野を収録。",
+      "color": "0xFF37474F",
+      "group": "公務員",
+      "cats": [
+        {
+          "key": "数的処理",
+          "short": "数的処理",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "文章理解",
+          "short": "文章理解",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "自然・人文・社会科学",
+          "short": "一般知識",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "時事・情報",
+          "short": "時事",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "koumuin_ippan",
+      "name": "国家公務員 一般職（高卒）",
+      "short": "国家一般職",
+      "desc": "高卒程度の国家公務員試験。基礎能力試験を収録。",
+      "color": "0xFF455A64",
+      "group": "公務員",
+      "cats": [
+        {
+          "key": "数的処理",
+          "short": "数的処理",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "文章理解",
+          "short": "文章理解",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "自然・人文・社会科学",
+          "short": "一般知識",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "時事・情報",
+          "short": "時事",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "kokuzei",
+      "name": "国税専門官",
+      "short": "国税専門官",
+      "desc": "税務のスペシャリスト公務員。教養＋専門の基礎を収録。",
+      "color": "0xFF4E342E",
+      "group": "公務員",
+      "cats": [
+        {
+          "key": "数的処理・文章理解",
+          "short": "教養",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "自然・人文・社会科学",
+          "short": "一般知識",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "会計学",
+          "short": "会計学",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "税法・法律",
+          "short": "税法・法律",
+          "color": "0xFF8256C8"
+        },
+        {
+          "key": "経済学",
+          "short": "経済学",
+          "color": "0xFF0097A7"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "keimukan",
+      "name": "刑務官",
+      "short": "刑務官",
+      "desc": "刑事施設で働く公務員。基礎能力試験を収録。",
+      "color": "0xFF546E7A",
+      "group": "公務員",
+      "cats": [
+        {
+          "key": "数的処理",
+          "short": "数的処理",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "文章理解",
+          "short": "文章理解",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "自然・人文・社会科学",
+          "short": "一般知識",
+          "color": "0xFFB9750F"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "saibansho",
+      "name": "裁判所職員 一般職（大卒）",
+      "short": "裁判所職員",
+      "desc": "裁判所で働く公務員。教養＋法律基礎を収録。",
+      "color": "0xFF5C6BC0",
+      "group": "公務員",
+      "cats": [
+        {
+          "key": "数的処理",
+          "short": "数的処理",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "文章理解",
+          "short": "文章理解",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "自然・人文・社会科学",
+          "short": "一般知識",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "憲法・民法・刑法",
+          "short": "法律",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "chintai",
+      "name": "賃貸不動産経営管理士",
+      "short": "賃貸管理士",
+      "desc": "賃貸住宅管理の国家資格。",
+      "color": "0xFF00838F",
+      "group": "不動産業",
+      "cats": [
+        {
+          "key": "賃貸借関係",
+          "short": "賃貸借",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "管理受託・サブリース",
+          "short": "管理受託",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "建物・設備",
+          "short": "建物・設備",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "法令・実務",
+          "short": "法令・実務",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 70
+      }
+    },
+    {
+      "id": "kanrigyomu",
+      "name": "管理業務主任者",
+      "short": "管理業務",
+      "desc": "マンション管理会社の必置資格。",
+      "color": "0xFF0277BD",
+      "group": "不動産業",
+      "cats": [
+        {
+          "key": "民法・区分所有法",
+          "short": "民法・区分法",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "標準管理規約",
+          "short": "管理規約",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "管理実務・会計",
+          "short": "実務・会計",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "建物・設備",
+          "short": "建物・設備",
+          "color": "0xFF8256C8"
+        },
+        {
+          "key": "マンション管理適正化法",
+          "short": "適正化法",
+          "color": "0xFF0097A7"
+        }
+      ],
+      "pass": {
+        "overall": 70
+      }
+    },
+    {
+      "id": "mankan",
+      "name": "マンション管理士",
+      "short": "マン管",
+      "desc": "マンション管理のコンサルタント国家資格。",
+      "color": "0xFF01579B",
+      "group": "不動産業",
+      "cats": [
+        {
+          "key": "民法・区分所有法",
+          "short": "民法・区分法",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "標準管理規約",
+          "short": "管理規約",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "管理実務・会計",
+          "short": "実務・会計",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "建物・設備",
+          "short": "建物・設備",
+          "color": "0xFF8256C8"
+        },
+        {
+          "key": "マンション管理適正化法",
+          "short": "適正化法",
+          "color": "0xFF0097A7"
+        }
+      ],
+      "pass": {
+        "overall": 70
+      }
+    },
+    {
+      "id": "kenchikushi1",
+      "name": "一級建築士（学科）",
+      "short": "一級建築士",
+      "desc": "建築設計の最高峰国家資格。学科5科目を収録。",
+      "color": "0xFF00897B",
+      "group": "建設業",
+      "cats": [
+        {
+          "key": "計画",
+          "short": "計画",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "環境・設備",
+          "short": "環境・設備",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "法規",
+          "short": "法規",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "構造",
+          "short": "構造",
+          "color": "0xFF8256C8"
+        },
+        {
+          "key": "施工",
+          "short": "施工",
+          "color": "0xFF0097A7"
+        }
+      ],
+      "pass": {
+        "overall": 70,
+        "perCatMin": {
+          "計画": 50,
+          "環境・設備": 50,
+          "法規": 50,
+          "構造": 50,
+          "施工": 50
+        }
+      }
+    },
+    {
+      "id": "kenchikushi2",
+      "name": "二級建築士（学科）",
+      "short": "二級建築士",
+      "desc": "住宅規模の設計・監理ができる国家資格。",
+      "color": "0xFF26A69A",
+      "group": "建設業",
+      "cats": [
+        {
+          "key": "計画",
+          "short": "計画",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "環境・設備",
+          "short": "環境・設備",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "法規",
+          "short": "法規",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "構造",
+          "short": "構造",
+          "color": "0xFF8256C8"
+        },
+        {
+          "key": "施工",
+          "short": "施工",
+          "color": "0xFF0097A7"
+        }
+      ],
+      "pass": {
+        "overall": 60,
+        "perCatMin": {
+          "計画": 50,
+          "環境・設備": 50,
+          "法規": 50,
+          "構造": 50,
+          "施工": 50
+        }
+      }
+    },
+    {
+      "id": "sokuryoshiho",
+      "name": "測量士補",
+      "short": "測量士補",
+      "desc": "測量の国家資格。計算問題も出題。",
+      "color": "0xFF7CB342",
+      "group": "建設業",
+      "cats": [
+        {
+          "key": "測量法規",
+          "short": "法規",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "基準点測量",
+          "short": "基準点",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "地形・写真測量",
+          "short": "地形・写真",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "応用測量",
+          "short": "応用測量",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 65
+      }
+    },
+    {
+      "id": "kyusui",
+      "name": "給水装置工事主任技術者",
+      "short": "給水装置",
+      "desc": "水道工事の国家資格。管工事と相性良し。",
+      "color": "0xFF039BE5",
+      "group": "建設業",
+      "cats": [
+        {
+          "key": "公衆衛生・水道概論",
+          "short": "水道概論",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "給水装置の構造・材料",
+          "short": "構造・材料",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "給水装置工事法",
+          "short": "工事法",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "法規・事務",
+          "short": "法規・事務",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "gijutsushiho",
+      "name": "技術士補（第一次試験）",
+      "short": "技術士補",
+      "desc": "技術者の登竜門。基礎・適性科目を収録。",
+      "color": "0xFF8D6E63",
+      "group": "建設業",
+      "cats": [
+        {
+          "key": "基礎科目",
+          "short": "基礎科目",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "適性科目",
+          "short": "適性科目",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "専門科目（共通工学）",
+          "short": "専門共通",
+          "color": "0xFFB9750F"
+        }
+      ],
+      "pass": {
+        "overall": 50,
+        "perCatMin": {
+          "基礎科目": 50,
+          "適性科目": 50,
+          "専門科目（共通工学）": 50
+        }
+      }
+    },
+    {
+      "id": "kogai",
+      "name": "公害防止管理者（大気1種）",
+      "short": "公害防止",
+      "desc": "工場の公害防止の国家資格。大気関係を収録。",
+      "color": "0xFF689F38",
+      "group": "電気・設備・エネルギー",
+      "cats": [
+        {
+          "key": "公害総論",
+          "short": "公害総論",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "大気概論",
+          "short": "大気概論",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "大気特論",
+          "short": "大気特論",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "ばいじん・粉じん・測定",
+          "short": "測定技術",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "koji_tannin",
+      "name": "電気通信の工事担任者",
+      "short": "工事担任者",
+      "desc": "電話・ネット回線工事の国家資格。",
+      "color": "0xFFFB8C00",
+      "group": "電気・設備・エネルギー",
+      "cats": [
+        {
+          "key": "電気通信技術の基礎",
+          "short": "基礎",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "端末設備の接続技術",
+          "short": "接続技術",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "法規",
+          "short": "法規",
+          "color": "0xFFB9750F"
+        }
+      ],
+      "pass": {
+        "overall": 60,
+        "perCatMin": {
+          "電気通信技術の基礎": 60,
+          "端末設備の接続技術": 60,
+          "法規": 60
+        }
+      }
+    },
+    {
+      "id": "birukan",
+      "name": "建築物環境衛生管理技術者（ビル管）",
+      "short": "ビル管",
+      "desc": "ビルの環境衛生管理の国家資格。",
+      "color": "0xFF00ACC1",
+      "group": "電気・設備・エネルギー",
+      "cats": [
+        {
+          "key": "建築物衛生行政概論",
+          "short": "行政概論",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "空気環境の調整",
+          "short": "空気環境",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "給水・排水の管理",
+          "short": "給排水",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "清掃・ねずみ昆虫防除",
+          "short": "清掃・防除",
+          "color": "0xFF8256C8"
+        },
+        {
+          "key": "建築物の構造・設備",
+          "short": "構造・設備",
+          "color": "0xFF0097A7"
+        }
+      ],
+      "pass": {
+        "overall": 65,
+        "perCatMin": {
+          "建築物衛生行政概論": 40,
+          "空気環境の調整": 40,
+          "給水・排水の管理": 40,
+          "清掃・ねずみ昆虫防除": 40,
+          "建築物の構造・設備": 40
+        }
+      }
+    },
+    {
+      "id": "kangoshi",
+      "name": "看護師国家試験",
+      "short": "看護師",
+      "desc": "看護のプロフェッショナル国家資格。",
+      "color": "0xFFE91E63",
+      "group": "医療・福祉",
+      "cats": [
+        {
+          "key": "人体の構造と機能・疾病",
+          "short": "人体・疾病",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "基礎看護学",
+          "short": "基礎看護",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "成人・老年看護学",
+          "short": "成人・老年",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "小児・母性看護学",
+          "short": "小児・母性",
+          "color": "0xFF8256C8"
+        },
+        {
+          "key": "精神・在宅・統合分野",
+          "short": "精神・在宅",
+          "color": "0xFF0097A7"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "shakaifukushi",
+      "name": "社会福祉士",
+      "short": "社会福祉士",
+      "desc": "福祉の相談援助の国家資格。",
+      "color": "0xFFAB47BC",
+      "group": "医療・福祉",
+      "cats": [
+        {
+          "key": "人・社会の理解",
+          "short": "人・社会",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "福祉制度・法規",
+          "short": "制度・法規",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "相談援助",
+          "short": "相談援助",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "保健医療・権利擁護",
+          "short": "保健・権利",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "kanrieiyoshi",
+      "name": "管理栄養士",
+      "short": "管理栄養士",
+      "desc": "栄養指導・給食管理の国家資格。",
+      "color": "0xFFEF6C00",
+      "group": "医療・福祉",
+      "cats": [
+        {
+          "key": "社会・環境と健康",
+          "short": "社会・健康",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "人体の構造・疾病",
+          "short": "人体・疾病",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "食べ物と健康",
+          "short": "食べ物",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "栄養教育・臨床栄養",
+          "short": "栄養・臨床",
+          "color": "0xFF8256C8"
+        },
+        {
+          "key": "給食経営・公衆栄養",
+          "short": "給食・公衆",
+          "color": "0xFF0097A7"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "koninshinrishi",
+      "name": "公認心理師",
+      "short": "公認心理師",
+      "desc": "心理支援の国家資格。",
+      "color": "0xFF7E57C2",
+      "group": "医療・福祉",
+      "cats": [
+        {
+          "key": "心理学の基礎",
+          "short": "基礎心理",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "心理アセスメント・支援",
+          "short": "支援",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "精神疾患・医学知識",
+          "short": "精神・医学",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "制度・法規・職責",
+          "short": "制度・法規",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "rigaku",
+      "name": "理学療法士",
+      "short": "理学療法士",
+      "desc": "リハビリの専門国家資格。",
+      "color": "0xFF26C6DA",
+      "group": "医療・福祉",
+      "cats": [
+        {
+          "key": "解剖・生理・運動学",
+          "short": "基礎医学",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "病理・臨床医学",
+          "short": "臨床医学",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "理学療法評価",
+          "short": "評価",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "理学療法治療学",
+          "short": "治療学",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "yakuzaishi",
+      "name": "薬剤師国家試験",
+      "short": "薬剤師",
+      "desc": "薬の専門家。国試の主要領域を4択で。",
+      "color": "0xFF43A047",
+      "group": "医療・福祉",
+      "cats": [
+        {
+          "key": "物理・化学・生物",
+          "short": "物化生",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "衛生",
+          "short": "衛生",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "薬理",
+          "short": "薬理",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "薬剤",
+          "short": "薬剤",
+          "color": "0xFF8256C8"
+        },
+        {
+          "key": "病態・薬物治療",
+          "short": "病態・治療",
+          "color": "0xFF0097A7"
+        },
+        {
+          "key": "法規・制度・実務",
+          "short": "法規・実務",
+          "color": "0xFFC2185B"
+        }
+      ],
+      "pass": {
+        "overall": 65
+      }
+    },
+    {
+      "id": "sec_shien",
+      "name": "情報処理安全確保支援士",
+      "short": "登録セキスペ",
+      "desc": "サイバーセキュリティの上位国家資格。",
+      "color": "0xFF37474F",
+      "group": "IT業界",
+      "cats": [
+        {
+          "key": "情報セキュリティ技術",
+          "short": "セキュ技術",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "セキュリティ管理・監査",
+          "short": "管理・監査",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "ネットワーク・開発",
+          "short": "NW・開発",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "関連法規",
+          "short": "法規",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "network_sp",
+      "name": "ネットワークスペシャリスト",
+      "short": "ネスペ",
+      "desc": "ネットワーク設計・構築の高度IT国家資格。",
+      "color": "0xFF1976D2",
+      "group": "IT業界",
+      "cats": [
+        {
+          "key": "ネットワーク技術",
+          "short": "NW技術",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "設計・構築",
+          "short": "設計・構築",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "運用・セキュリティ",
+          "short": "運用・セキュ",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "関連知識",
+          "short": "関連知識",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "pm_shiken",
+      "name": "プロジェクトマネージャ",
+      "short": "プロマネ",
+      "desc": "プロジェクト管理の高度IT国家資格。",
+      "color": "0xFF5E35B1",
+      "group": "IT業界",
+      "cats": [
+        {
+          "key": "プロジェクト計画",
+          "short": "計画",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "実行・進捗・変更管理",
+          "short": "実行・管理",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "品質・リスク・調達",
+          "short": "品質・リスク",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "戦略・関連法規",
+          "short": "戦略・法規",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "db_sp",
+      "name": "データベーススペシャリスト",
+      "short": "デスペ",
+      "desc": "DB設計の高度IT国家資格。",
+      "color": "0xFF00838F",
+      "group": "IT業界",
+      "cats": [
+        {
+          "key": "データベース設計",
+          "short": "DB設計",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "SQL",
+          "short": "SQL",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "運用・性能・障害対応",
+          "short": "運用・性能",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "関連技術",
+          "short": "関連技術",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "biyoshi",
+      "name": "美容師国家試験（筆記）",
+      "short": "美容師",
+      "desc": "美容のプロ国家資格。筆記試験対応。",
+      "color": "0xFFEC407A",
+      "group": "サービス・運輸・くらし",
+      "cats": [
+        {
+          "key": "関係法規・衛生管理",
+          "short": "法規・衛生",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "美容保健（皮膚科学等）",
+          "short": "保健",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "美容の物理・化学",
+          "short": "物理・化学",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "美容理論",
+          "short": "美容理論",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60
+      }
+    },
+    {
+      "id": "ryoko_kokunai",
+      "name": "国内旅行業務取扱管理者",
+      "short": "国内旅行",
+      "desc": "旅行業界の国家資格。3科目それぞれ60%で合格。",
+      "color": "0xFF00897B",
+      "group": "サービス・運輸・くらし",
+      "cats": [
+        {
+          "key": "旅行業法",
+          "short": "旅行業法",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "約款",
+          "short": "約款",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "国内旅行実務",
+          "short": "国内実務",
+          "color": "0xFFB9750F"
+        }
+      ],
+      "pass": {
+        "overall": 60,
+        "perCatMin": {
+          "旅行業法": 60,
+          "約款": 60,
+          "国内旅行実務": 60
+        }
+      }
+    },
+    {
+      "id": "unkokanri",
+      "name": "運行管理者（貨物）",
+      "short": "運行管理者",
+      "desc": "トラック運送の安全を守る国家資格。",
+      "color": "0xFF6D4C41",
+      "group": "サービス・運輸・くらし",
+      "cats": [
+        {
+          "key": "貨物自動車運送事業法",
+          "short": "事業法",
+          "color": "0xFF0F5FA6"
+        },
+        {
+          "key": "道路運送車両法",
+          "short": "車両法",
+          "color": "0xFF1F9D5A"
+        },
+        {
+          "key": "道路交通法",
+          "short": "道交法",
+          "color": "0xFFB9750F"
+        },
+        {
+          "key": "労基法・実務",
+          "short": "労基・実務",
+          "color": "0xFF8256C8"
+        }
+      ],
+      "pass": {
+        "overall": 60
       }
     }
   ]
