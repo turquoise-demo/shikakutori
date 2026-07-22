@@ -298,13 +298,13 @@ class _ExamSelectScreenState extends State<ExamSelectScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _bubble('いっしょに合格、めざそう！'),
-                const SizedBox(height: 12),
+                _bubble('正解はサッと次へ！\nまちがいだけ復習'),
+                const SizedBox(height: 10),
                 const Text('しかくとり',
                     style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w800)),
-                const SizedBox(height: 2),
-                Text('国家資格 一問一答',
-                    style: TextStyle(color: Colors.white.withOpacity(0.82), fontSize: 12.5)),
+                const SizedBox(height: 3),
+                Text('できた問題はやらなくてOK。ニガテだけ、くり返す。',
+                    style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 12, height: 1.4)),
               ],
             ),
           ),
