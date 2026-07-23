@@ -138,11 +138,19 @@ class Store {
   static const _kStats = 'stats';
   static const _kWrong = 'wrong';
   static const _kBest = 'mogiBestMap';
+  static const _kOnboard = 'onboardDone';
+  static const _kGoal = 'dailyGoal';
+  static const _kDailyDate = 'dailyDate';
+  static const _kDailyCount = 'dailyCount';
 
   final SharedPreferences prefs;
   Map<String, List<int>> stats = {}; // id -> [seen, correct]
   List<String> wrong = [];
   Map<String, int> mogiBest = {}; // examId -> pct
+  bool onboardDone = false;
+  int dailyGoal = 0;
+  String _dailyDate = '';
+  int _dailyCount = 0;
 
   Store(this.prefs) {
     final s = prefs.getString(_kStats);
@@ -155,12 +163,29 @@ class Store {
     if (b != null) {
       mogiBest = (jsonDecode(b) as Map<String, dynamic>).map((k, v) => MapEntry(k, v as int));
     }
+    onboardDone = prefs.getBool(_kOnboard) ?? false;
+    dailyGoal = prefs.getInt(_kGoal) ?? 0;
+    _dailyDate = prefs.getString(_kDailyDate) ?? '';
+    _dailyCount = prefs.getInt(_kDailyCount) ?? 0;
   }
 
   Future<void> _save() async {
     await prefs.setString(_kStats, jsonEncode(stats));
     await prefs.setStringList(_kWrong, wrong);
     await prefs.setString(_kBest, jsonEncode(mogiBest));
+    await prefs.setString(_kDailyDate, _dailyDate);
+    await prefs.setInt(_kDailyCount, _dailyCount);
+  }
+
+  static String _today() => DateTime.now().toIso8601String().substring(0, 10);
+
+  int get todayCount => _dailyDate == _today() ? _dailyCount : 0;
+
+  Future<void> finishOnboarding(int goal) async {
+    onboardDone = true;
+    dailyGoal = goal;
+    await prefs.setBool(_kOnboard, true);
+    await prefs.setInt(_kGoal, goal);
   }
 
   void record(Question q, bool ok) {
@@ -173,6 +198,12 @@ class Store {
     } else if (!wrong.contains(q.id)) {
       wrong.add(q.id);
     }
+    final t = _today();
+    if (_dailyDate != t) {
+      _dailyDate = t;
+      _dailyCount = 0;
+    }
+    _dailyCount++;
     _save();
   }
 
@@ -235,8 +266,268 @@ class QuizApp extends StatelessWidget {
       theme: _theme(Brightness.light),
       darkTheme: _theme(Brightness.dark),
       themeMode: ThemeMode.system,
-      home: const ExamSelectScreen(),
+      home: gStore.onboardDone ? const ExamSelectScreen() : const OnboardingScreen(),
     );
+  }
+}
+
+/// ===== オンボーディング（初回起動） =====
+class OnboardingScreen extends StatefulWidget {
+  const OnboardingScreen({super.key});
+  @override
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
+}
+
+class _OnboardingScreenState extends State<OnboardingScreen> {
+  static const int totalSteps = 6;
+  int step = 0;
+  int? goal;
+
+  bool get _canNext => step != 4 || goal != null;
+
+  void _next() {
+    HapticFeedback.lightImpact();
+    if (step < totalSteps - 1) {
+      setState(() => step++);
+    } else {
+      gStore.finishOnboarding(goal ?? 10);
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const ExamSelectScreen()));
+    }
+  }
+
+  void _back() {
+    if (step > 0) setState(() => step--);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 10, 16, 4),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 40,
+                    child: step > 0
+                        ? IconButton(
+                            onPressed: _back,
+                            icon: Icon(Icons.arrow_back_rounded, color: cs.outline))
+                        : null,
+                  ),
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(6),
+                      child: TweenAnimationBuilder<double>(
+                        tween: Tween(begin: 0, end: (step + 1) / totalSteps),
+                        duration: const Duration(milliseconds: 350),
+                        curve: Curves.easeOutCubic,
+                        builder: (context, v, _) => LinearProgressIndicator(
+                          value: v,
+                          minHeight: 10,
+                          backgroundColor: cs.surfaceContainerHighest,
+                          color: kOk,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                switchInCurve: Curves.easeOutCubic,
+                transitionBuilder: (child, anim) => FadeTransition(
+                  opacity: anim,
+                  child: SlideTransition(
+                    position: Tween<Offset>(begin: const Offset(0.06, 0), end: Offset.zero)
+                        .animate(anim),
+                    child: child,
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  key: ValueKey(step),
+                  padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
+                  child: _stepView(cs),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+              child: SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: _canNext ? _next : null,
+                  style: FilledButton.styleFrom(
+                    padding: const EdgeInsets.all(16),
+                    backgroundColor: kBrand,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  ),
+                  child: Text(step == totalSteps - 1 ? 'はじめる！' : '次へ',
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _bubble(String text, {double fontSize = 17}) {
+    final cs = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+      decoration: BoxDecoration(
+        color: cs.surface,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: cs.outlineVariant, width: 1.5),
+      ),
+      child: Text(text,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.w800, height: 1.5)),
+    );
+  }
+
+  Widget _tall(String bubbleText, {String mascot = 'assets/mascot/shikakutori-badge.png'}) {
+    return Column(
+      children: [
+        const SizedBox(height: 60),
+        _bubble(bubbleText),
+        const SizedBox(height: 26),
+        Bobbing(child: Image.asset(mascot, width: 190)),
+      ],
+    );
+  }
+
+  Widget _feature(IconData ico, Color c, String title, String desc) {
+    final cs = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 18),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+                color: c.withOpacity(0.13), borderRadius: BorderRadius.circular(13)),
+            child: Icon(ico, color: c, size: 24),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: const TextStyle(fontSize: 15.5, fontWeight: FontWeight.w800)),
+                const SizedBox(height: 2),
+                Text(desc, style: TextStyle(fontSize: 12.5, color: cs.outline, height: 1.5)),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _smallHeader(String bubbleText) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Bobbing(amplitude: 3, child: Image.asset('assets/mascot/shikakutori-badge.png', width: 84)),
+        const SizedBox(width: 10),
+        Expanded(child: _bubble(bubbleText, fontSize: 15)),
+      ],
+    );
+  }
+
+  Widget _goalOption(int n, String label) {
+    final cs = Theme.of(context).colorScheme;
+    final sel = goal == n;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        decoration: BoxDecoration(
+          color: sel ? kBrand.withOpacity(0.1) : cs.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: sel ? kBrand : cs.outlineVariant, width: sel ? 2 : 1.5),
+        ),
+        child: Material(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: () {
+              HapticFeedback.selectionClick();
+              setState(() => goal = n);
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Row(
+                children: [
+                  Text('$n問 / 日',
+                      style: TextStyle(
+                          fontSize: 15.5,
+                          fontWeight: FontWeight.w800,
+                          color: sel ? kBrand : null)),
+                  const Spacer(),
+                  Text(label, style: TextStyle(fontSize: 13.5, color: cs.outline)),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _stepView(ColorScheme cs) {
+    switch (step) {
+      case 0:
+        return _tall('こんにちは！しかくとりだよ！\nきみの合格を、ぜんりょくで応援するね');
+      case 1:
+        return _tall('資格の勉強って、\nつづけるのがむずかしいよね…',
+            mascot: 'assets/mascot/shikakutori-wrong.png');
+      case 2:
+        return _tall('でも大丈夫！しかくとりは\n「ムダなし勉強法」なんだ！',
+            mascot: 'assets/mascot/shikakutori-correct.png');
+      case 3:
+        final totalQ = gByExam.values.fold<int>(0, (a, l) => a + l.length);
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _smallHeader('しかくとりは、こんなアプリ！'),
+            const SizedBox(height: 28),
+            _feature(Icons.check_circle_rounded, kOk, '正解した問題は、もうやらない',
+                '解けた問題は解説を出さずにサッと次へ。もう知っていることに時間を使わないから、最短で合格に近づける。'),
+            _feature(Icons.replay_rounded, kNg, 'まちがいだけ、くり返す',
+                'まちがえた問題はその場でしっかり解説。さらに「弱点復習」に自動でたまるから、ニガテだけを効率よくつぶせて合格率が上がる。'),
+            _feature(Icons.assignment_turned_in_rounded, kBrand, '模試で本番の合否判定',
+                '${gExams.length}種類の資格・${totalQ}問以上を収録。本番と同じ合格基準で、今の実力をいつでもチェックできる。'),
+          ],
+        );
+      case 4:
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _smallHeader('毎日の目標はどれがいい？'),
+            const SizedBox(height: 24),
+            _goalOption(5, 'カジュアル'),
+            _goalOption(10, 'ふつう'),
+            _goalOption(20, '真剣'),
+            _goalOption(30, 'マニアック'),
+          ],
+        );
+      default:
+        return _tall('まちがえた問題「だけ」を復習すれば、\n合格までの時間はグッと短くなる。\nさあ、はじめよう！',
+            mascot: 'assets/mascot/shikakutori-correct.png');
+    }
   }
 }
 
@@ -491,6 +782,38 @@ class _ExamSelectScreenState extends State<ExamSelectScreen> {
                     style: TextStyle(color: Colors.white.withOpacity(0.92), fontSize: 11.5)),
                 Text('できた問題はやらなくてOK。ニガテだけくり返す。',
                     style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 10.5, height: 1.4)),
+                if (gStore.dailyGoal > 0) ...[
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.16),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          gStore.todayCount >= gStore.dailyGoal
+                              ? Icons.local_fire_department_rounded
+                              : Icons.flag_rounded,
+                          size: 14,
+                          color: gStore.todayCount >= gStore.dailyGoal
+                              ? const Color(0xFFFFC93C)
+                              : Colors.white,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          gStore.todayCount >= gStore.dailyGoal
+                              ? 'きょうの目標たっせい！ ${gStore.todayCount}問'
+                              : 'きょう ${gStore.todayCount} / ${gStore.dailyGoal}問',
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 11, fontWeight: FontWeight.w800),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
@@ -711,7 +1034,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: _modeCard(Icons.replay_rounded, kNg, '弱点復習', '間違えた問題だけ', () {
+                child: _modeCard(Icons.replay_rounded, kNg, '弱点復習', 'まちがいだけが合格への近道', () {
                   _start(SessionSpec('弱点復習', false,
                       () => _shuffled(pool.where((q) => gStore.wrong.contains(q.id)))));
                 }, badge: wrongInExam == 0 ? null : '$wrongInExam'),
@@ -1420,13 +1743,25 @@ class ResultScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text('$total問中 $correct問正解', style: TextStyle(color: cs.outline)),
+                  const SizedBox(height: 4),
                   Text(
-                    good ? 'ナイス！この調子！' : 'ニガテは「弱点復習」でつぶそう！',
+                    total - correct == 0
+                        ? '全問クリア！この問題たちはもう卒業！'
+                        : (good ? 'ナイス！この調子！' : 'あと少し！'),
                     style: TextStyle(
                         fontWeight: FontWeight.w800,
                         fontSize: 13.5,
                         color: good ? kOk : kNg),
                   ),
+                  if (total - correct > 0)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 3),
+                      child: Text(
+                        '正解した$correct問はもうやらなくてOK。\nまちがえた${total - correct}問だけ「弱点復習」でつぶせば、合格がグッと近づく！',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 12, color: cs.outline, height: 1.6),
+                      ),
+                    ),
                   if (spec.isMogi) ...[
                     const SizedBox(height: 12),
                     Container(
