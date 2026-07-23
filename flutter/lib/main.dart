@@ -66,9 +66,10 @@ class Exam {
   final String desc;
   final Color color;
   final String group;
+  final String passRate;
   final List<CatDef> cats;
   final Pass pass;
-  Exam(this.id, this.name, this.short, this.desc, this.color, this.group, this.cats, this.pass);
+  Exam(this.id, this.name, this.short, this.desc, this.color, this.group, this.passRate, this.cats, this.pass);
 
   factory Exam.fromJson(Map<String, dynamic> j) => Exam(
         j['id'] as String,
@@ -77,12 +78,25 @@ class Exam {
         (j['desc'] ?? '') as String,
         hexColor(j['color'] as String? ?? '0xFF0F5FA6'),
         (j['group'] ?? 'その他') as String,
+        (j['passRate'] ?? '') as String,
         (j['cats'] as List).map((e) => CatDef.fromJson(e as Map<String, dynamic>)).toList(),
         Pass.fromJson(j['pass'] as Map<String, dynamic>?),
       );
 
   Map<String, CatDef> get catMap => {for (final c in cats) c.key: c};
   Set<String> get appliedCats => cats.where((c) => c.applied).map((c) => c.key).toSet();
+
+  /// 合格率から難易度ランク（低いほど難関）
+  (String, Color, String) get rank {
+    final m = RegExp(r'(\d+)').firstMatch(passRate);
+    if (m == null) return ('—', const Color(0xFF9E9E9E), '');
+    final r = int.parse(m.group(1)!);
+    if (r < 10) return ('S', const Color(0xFF8E24AA), '超難関');
+    if (r < 20) return ('A', const Color(0xFFD23B3B), '難関');
+    if (r < 40) return ('B', const Color(0xFFEF6C00), 'やや難');
+    if (r < 60) return ('C', const Color(0xFF1F9D5A), '標準');
+    return ('D', const Color(0xFF0F5FA6), '入門');
+  }
 
   String passSummary() {
     if (pass.perCatMin.isEmpty) return '合格基準 全体${pass.overall}%';
@@ -880,6 +894,28 @@ class _ExamSelectScreenState extends State<ExamSelectScreen> {
     );
   }
 
+  Widget _rankBadge(Exam ex) {
+    final (letter, color, label) = ex.rank;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.13),
+        borderRadius: BorderRadius.circular(7),
+        border: Border.all(color: color.withOpacity(0.5), width: 1),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(letter, style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w900, color: color)),
+          if (label.isNotEmpty) ...[
+            const SizedBox(width: 3),
+            Text(label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: color)),
+          ],
+        ],
+      ),
+    );
+  }
+
   Widget _examCard(Exam ex) {
     final cs = Theme.of(context).colorScheme;
     final pool = gByExam[ex.id] ?? [];
@@ -924,9 +960,19 @@ class _ExamSelectScreenState extends State<ExamSelectScreen> {
                   children: [
                     Text(ex.name,
                         style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5)),
-                    const SizedBox(height: 2),
-                    Text(ready ? '${pool.length}問 ・ 学習 $done問' : '準備中',
-                        style: TextStyle(fontSize: 11.5, color: cs.outline)),
+                    const SizedBox(height: 4),
+                    Row(children: [
+                      _rankBadge(ex),
+                      const SizedBox(width: 7),
+                      Flexible(
+                        child: Text(
+                            ready
+                                ? '合格率 ${ex.passRate.isEmpty ? "—" : ex.passRate} ・ ${pool.length}問'
+                                : '準備中',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 11.5, color: cs.outline)),
+                      ),
+                    ]),
                   ],
                 ),
               ),
@@ -1040,6 +1086,35 @@ class _HomeScreenState extends State<HomeScreen> {
                         const SizedBox(height: 4),
                         Text(exam.desc,
                             style: const TextStyle(color: Colors.white70, fontSize: 12, height: 1.5)),
+                        const SizedBox(height: 8),
+                        Builder(builder: (_) {
+                          final (letter, _, label) = exam.rank;
+                          return Wrap(spacing: 6, runSpacing: 6, children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Text('難易度 $letter${label.isEmpty ? '' : '（$label）'}',
+                                  style: TextStyle(
+                                      color: exam.color,
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w800)),
+                            ),
+                            if (exam.passRate.isNotEmpty)
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.18),
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: Text('合格率の目安 ${exam.passRate}',
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w800)),
+                              ),
+                          ]);
+                        }),
                         const SizedBox(height: 12),
                         Row(children: [
                           _heroStat(acc, '累計 正答率'),

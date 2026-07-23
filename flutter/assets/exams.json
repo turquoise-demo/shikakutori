@@ -35,7 +35,8 @@
           "施工管理法（応用能力）": 50
         }
       },
-      "group": "建設業"
+      "group": "建設業",
+      "passRate": "約49%"
     },
     {
       "id": "kankouji2",
@@ -72,7 +73,8 @@
           "施工管理法（応用能力）": 50
         }
       },
-      "group": "建設業"
+      "group": "建設業",
+      "passRate": "約60%"
     },
     {
       "id": "doboku1",
@@ -109,7 +111,8 @@
           "施工管理法（応用能力）": 50
         }
       },
-      "group": "建設業"
+      "group": "建設業",
+      "passRate": "約50%"
     },
     {
       "id": "doboku2",
@@ -146,7 +149,8 @@
           "施工管理法（応用能力）": 50
         }
       },
-      "group": "建設業"
+      "group": "建設業",
+      "passRate": "約68%"
     },
     {
       "id": "kenchiku1",
@@ -183,7 +187,8 @@
           "施工管理法（応用能力）": 50
         }
       },
-      "group": "建設業"
+      "group": "建設業",
+      "passRate": "約42%"
     },
     {
       "id": "kenchiku2",
@@ -220,7 +225,8 @@
           "施工管理法（応用能力）": 50
         }
       },
-      "group": "建設業"
+      "group": "建設業",
+      "passRate": "約48%"
     },
     {
       "id": "denkikoji1",
@@ -257,7 +263,8 @@
           "施工管理法（応用能力）": 50
         }
       },
-      "group": "建設業"
+      "group": "建設業",
+      "passRate": "約48%"
     },
     {
       "id": "denkikoji2",
@@ -294,7 +301,8 @@
           "施工管理法（応用能力）": 50
         }
       },
-      "group": "建設業"
+      "group": "建設業",
+      "passRate": "約56%"
     },
     {
       "id": "denki2",
@@ -327,7 +335,8 @@
       "pass": {
         "overall": 60
       },
-      "group": "電気・設備・エネルギー"
+      "group": "電気・設備・エネルギー",
+      "passRate": "約60%"
     },
     {
       "id": "kikenbutsu_otsu4",
@@ -360,7 +369,8 @@
           "危険物に関する法令": 60
         }
       },
-      "group": "電気・設備・エネルギー"
+      "group": "電気・設備・エネルギー",
+      "passRate": "約38%"
     },
     {
       "id": "takken",
@@ -393,7 +403,8 @@
       "pass": {
         "overall": 70
       },
-      "group": "不動産業"
+      "group": "不動産業",
+      "passRate": "約17%"
     },
     {
       "id": "itpassport",
@@ -426,7 +437,8 @@
           "テクノロジ系": 30
         }
       },
-      "group": "IT業界"
+      "group": "IT業界",
+      "passRate": "約50%"
     },
     {
       "id": "kihonjoho",
@@ -454,7 +466,8 @@
       "pass": {
         "overall": 60
       },
-      "group": "IT業界"
+      "group": "IT業界",
+      "passRate": "約40%"
     },
     {
       "id": "fp3",
@@ -497,7 +510,8 @@
       "pass": {
         "overall": 60
       },
-      "group": "金融・保険"
+      "group": "金融・保険",
+      "passRate": "約80%"
     },
     {
       "id": "denki1",
@@ -530,7 +544,8 @@
       "pass": {
         "overall": 60
       },
-      "group": "電気・設備・エネルギー"
+      "group": "電気・設備・エネルギー",
+      "passRate": "約55%"
     },
     {
       "id": "eisei1",
@@ -563,7 +578,8 @@
           "労働生理": 40
         }
       },
-      "group": "経理・経営・士業"
+      "group": "経理・経営・士業",
+      "passRate": "約45%"
     },
     {
       "id": "boiler2",
@@ -602,7 +618,8 @@
           "関係法令": 40
         }
       },
-      "group": "電気・設備・エネルギー"
+      "group": "電気・設備・エネルギー",
+      "passRate": "約55%"
     },
     {
       "id": "gyousei",
@@ -643,7 +660,8 @@
           "一般知識等": 40
         }
       },
-      "group": "経理・経営・士業"
+      "group": "経理・経営・士業",
+      "passRate": "約12%"
     },
     {
       "id": "sharoushi",
@@ -681,7 +699,8 @@
       "pass": {
         "overall": 60
       },
-      "group": "経理・経営・士業"
+      "group": "経理・経営・士業",
+      "passRate": "約6%"
     },
     {
       "id": "tourokuhanbai",
@@ -726,7 +745,8 @@
           "医薬品の適正使用・安全対策": 35
         }
       },
-      "group": "医療・福祉"
+      "group": "医療・福祉",
+      "passRate": "約45%"
     },
     {
       "id": "boki3",
@@ -754,7 +774,8 @@
       ],
       "pass": {
         "overall": 70
-      }
+      },
+      "passRate": "約45%"
     },
     {
       "id": "boki2",
@@ -777,7 +798,8 @@
       ],
       "pass": {
         "overall": 70
-      }
+      },
+      "passRate": "約25%"
     },
     {
       "id": "fp2",
@@ -820,7 +842,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約45%"
     },
     {
       "id": "ouyoujoho",
@@ -848,7 +871,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約23%"
     },
     {
       "id": "sg",
@@ -876,7 +900,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約50%"
     },
     {
       "id": "denken3",
@@ -915,7 +940,8 @@
           "機械": 60,
           "法規": 60
         }
-      }
+      },
+      "passRate": "約16%"
     },
     {
       "id": "shindanshi",
@@ -972,7 +998,8 @@
           "経営情報システム": 40,
           "中小企業経営・政策": 40
         }
-      }
+      },
+      "passRate": "約30%"
     },
     {
       "id": "kaigo",
@@ -1005,7 +1032,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約84%"
     },
     {
       "id": "hoikushi",
@@ -1056,7 +1084,8 @@
           "子どもの保健・食と栄養": 60,
           "保育実習理論": 60
         }
-      }
+      },
+      "passRate": "約23%"
     },
     {
       "id": "menkyo",
@@ -1089,7 +1118,8 @@
       ],
       "pass": {
         "overall": 90
-      }
+      },
+      "passRate": "約74%"
     },
     {
       "id": "shihoshoshi",
@@ -1132,7 +1162,8 @@
       ],
       "pass": {
         "overall": 75
-      }
+      },
+      "passRate": "約5%"
     },
     {
       "id": "zeirishi",
@@ -1170,7 +1201,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約18%"
     },
     {
       "id": "chizai3",
@@ -1203,7 +1235,8 @@
       ],
       "pass": {
         "overall": 70
-      }
+      },
+      "passRate": "約65%"
     },
     {
       "id": "koumuin_sogo",
@@ -1236,7 +1269,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約8%"
     },
     {
       "id": "koumuin_ippan",
@@ -1269,7 +1303,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約35%"
     },
     {
       "id": "kokuzei",
@@ -1307,7 +1342,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約30%"
     },
     {
       "id": "keimukan",
@@ -1335,7 +1371,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約25%"
     },
     {
       "id": "saibansho",
@@ -1368,7 +1405,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約25%"
     },
     {
       "id": "chintai",
@@ -1401,7 +1439,8 @@
       ],
       "pass": {
         "overall": 70
-      }
+      },
+      "passRate": "約30%"
     },
     {
       "id": "kanrigyomu",
@@ -1439,7 +1478,8 @@
       ],
       "pass": {
         "overall": 70
-      }
+      },
+      "passRate": "約22%"
     },
     {
       "id": "mankan",
@@ -1477,7 +1517,8 @@
       ],
       "pass": {
         "overall": 70
-      }
+      },
+      "passRate": "約10%"
     },
     {
       "id": "kenchikushi1",
@@ -1522,7 +1563,8 @@
           "構造": 50,
           "施工": 50
         }
-      }
+      },
+      "passRate": "約23%"
     },
     {
       "id": "kenchikushi2",
@@ -1567,7 +1609,8 @@
           "構造": 50,
           "施工": 50
         }
-      }
+      },
+      "passRate": "約40%"
     },
     {
       "id": "sokuryoshiho",
@@ -1600,7 +1643,8 @@
       ],
       "pass": {
         "overall": 65
-      }
+      },
+      "passRate": "約36%"
     },
     {
       "id": "kyusui",
@@ -1633,7 +1677,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約38%"
     },
     {
       "id": "gijutsushiho",
@@ -1666,7 +1711,8 @@
           "適性科目": 50,
           "専門科目（共通工学）": 50
         }
-      }
+      },
+      "passRate": "約45%"
     },
     {
       "id": "kogai",
@@ -1699,7 +1745,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約24%"
     },
     {
       "id": "koji_tannin",
@@ -1732,7 +1779,8 @@
           "端末設備の接続技術": 60,
           "法規": 60
         }
-      }
+      },
+      "passRate": "約38%"
     },
     {
       "id": "birukan",
@@ -1777,7 +1825,8 @@
           "清掃・ねずみ昆虫防除": 40,
           "建築物の構造・設備": 40
         }
-      }
+      },
+      "passRate": "約20%"
     },
     {
       "id": "kangoshi",
@@ -1815,7 +1864,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約90%"
     },
     {
       "id": "shakaifukushi",
@@ -1848,7 +1898,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約30%"
     },
     {
       "id": "kanrieiyoshi",
@@ -1886,7 +1937,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約56%"
     },
     {
       "id": "koninshinrishi",
@@ -1919,7 +1971,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約60%"
     },
     {
       "id": "rigaku",
@@ -1952,7 +2005,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約89%"
     },
     {
       "id": "yakuzaishi",
@@ -1995,7 +2049,8 @@
       ],
       "pass": {
         "overall": 65
-      }
+      },
+      "passRate": "約68%"
     },
     {
       "id": "sec_shien",
@@ -2028,7 +2083,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約20%"
     },
     {
       "id": "network_sp",
@@ -2061,7 +2117,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約15%"
     },
     {
       "id": "pm_shiken",
@@ -2094,7 +2151,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約14%"
     },
     {
       "id": "db_sp",
@@ -2127,7 +2185,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約18%"
     },
     {
       "id": "biyoshi",
@@ -2160,7 +2219,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約85%"
     },
     {
       "id": "ryoko_kokunai",
@@ -2193,7 +2253,8 @@
           "約款": 60,
           "国内旅行実務": 60
         }
-      }
+      },
+      "passRate": "約38%"
     },
     {
       "id": "unkokanri",
@@ -2226,7 +2287,8 @@
       ],
       "pass": {
         "overall": 60
-      }
+      },
+      "passRate": "約33%"
     }
   ]
 }
