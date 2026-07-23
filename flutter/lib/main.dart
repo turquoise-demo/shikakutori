@@ -12,9 +12,9 @@ const Color kNg = Color(0xFFD23B3B);
 
 /// 無料おためしの問題数
 const int kFreeLimit = 15;
-/// プレミアム価格（表示用）
-const String kPremiumMonthly = '¥980 / 月';
-const String kPremiumYearly = '¥5,800 / 年';
+/// 全部入り（買い切り・全試験を永続解放）の価格
+const int kAllAccessPrice = 2980;
+const String kAllAccessLabel = '¥2,980';
 
 /// 業界グループの表示順
 const List<String> kGroupOrder = [
@@ -585,7 +585,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             _feature(Icons.replay_rounded, kNg, 'まちがい・あやふやは、くり返す',
                 'まちがえた問題はその場でしっかり解説。「弱点復習」に自動でたまるので、ニガテやあやふやな所だけを重点的につぶせて合格率が上がる。'),
             _feature(Icons.explore_rounded, kBrand, '全試験を試して、取りやすい資格を発見',
-                'プレミアムなら${gExams.length}種類ぜんぶ試せる。実際に解いてみて、自分に合う・受かりやすい資格を見つけられる。'),
+                '全部入り（買い切り）なら${gExams.length}種類ぜんぶ試せる。実際に解いてみて、自分に合う・受かりやすい資格を見つけられる。'),
           ],
         );
       case 4:
@@ -859,7 +859,7 @@ class PaywallScreen extends StatelessWidget {
     await gStore.setPremium(true);
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('（デモ）プレミアムを開始しました')),
+        const SnackBar(content: Text('（デモ）全部入りを購入しました')),
       );
       Navigator.of(context).pop(true);
     }
@@ -944,7 +944,7 @@ class PaywallScreen extends StatelessWidget {
               Expanded(child: Divider(color: cs.outlineVariant)),
             ]),
             const SizedBox(height: 14),
-            // プレミアム
+            // 全部入り（買い切り）
             Container(
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
@@ -961,18 +961,43 @@ class PaywallScreen extends StatelessWidget {
                   Row(children: [
                     const Icon(Icons.workspace_premium_rounded, color: Color(0xFFFFC93C), size: 22),
                     const SizedBox(width: 8),
-                    const Text('しかくとりプレミアム',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Colors.white)),
+                    const Expanded(
+                      child: Text('全部入り（買い切り）',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Colors.white)),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                          color: const Color(0xFFFFC93C), borderRadius: BorderRadius.circular(20)),
+                      child: const Text('いちばんお得',
+                          style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w900, color: kBrandDark)),
+                    ),
                   ]),
-                  const SizedBox(height: 4),
-                  Text('${gExams.length}試験ぜんぶ解き放題。いろいろ試して、自分に取りやすい資格を見つけられる。',
-                      style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.85), height: 1.4)),
+                  const SizedBox(height: 6),
+                  Text('${gExams.length}試験ぜんぶが「ずっと」解き放題。サブスクじゃないから一度きりの支払い。いろいろ試して、自分に取りやすい資格を見つけられる。',
+                      style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.9), height: 1.5)),
                   const SizedBox(height: 12),
                   Row(children: [
-                    Expanded(child: _premBtn(context, '月額', kPremiumMonthly, false)),
-                    const SizedBox(width: 10),
-                    Expanded(child: _premBtn(context, '年額（お得）', kPremiumYearly, true)),
+                    Text(kAllAccessLabel,
+                        style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: Colors.white)),
+                    const SizedBox(width: 8),
+                    Text('買い切り・追加費用なし',
+                        style: TextStyle(fontSize: 11, color: Colors.white.withOpacity(0.85))),
                   ]),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      onPressed: () => _buyPremium(context),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: const Color(0xFFFFC93C),
+                        padding: const EdgeInsets.all(14),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      ),
+                      child: const Text('$kAllAccessLabel で全部入りを購入',
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: kBrandDark)),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -1117,7 +1142,7 @@ class _ExamSelectScreenState extends State<ExamSelectScreen> {
                     Text(_authLabel, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
                     Text(
                         gStore.premium
-                            ? 'プレミアム会員・全試験解放'
+                            ? '全部入り購入済み・全試験解放'
                             : '解放済み ${gStore.unlocked.length} 試験',
                         style: TextStyle(fontSize: 12, color: cs.outline)),
                   ],
@@ -1149,7 +1174,7 @@ class _ExamSelectScreenState extends State<ExamSelectScreen> {
                     if (mounted) setState(() {});
                   },
                   icon: const Icon(Icons.workspace_premium_rounded, color: Color(0xFFE8A93C)),
-                  label: const Text('プレミアム・全試験を解放'),
+                  label: const Text('全部入り（買い切り）で全試験解放'),
                   style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.all(14),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))),
@@ -1724,7 +1749,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   const Text('全問を解放して合格をめざそう',
                       style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF8A5200))),
-                  Text('無料は$kFreeLimit問＋模試1回まで。買い切り ${exam.priceLabel} または プレミアム',
+                  Text('無料は$kFreeLimit問＋模試1回まで。買い切り ${exam.priceLabel} または 全部入り¥2,980',
                       style: const TextStyle(fontSize: 11, color: Color(0xFFB56A08))),
                 ],
               ),
