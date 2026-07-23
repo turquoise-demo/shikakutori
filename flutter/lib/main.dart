@@ -703,18 +703,17 @@ class _ExamSelectScreenState extends State<ExamSelectScreen> {
       ...byGroup.keys.where((g) => !kGroupOrder.contains(g)),
     ];
 
-    int ai = 0;
     return Scaffold(
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 40),
+          cacheExtent: 1200,
           children: [
-            FadeSlideIn(child: _hero()),
+            _hero(),
             const SizedBox(height: 8),
             for (final g in groups) ...[
-              FadeSlideIn(delayMs: (ai * 28).clamp(0, 380), child: _sectionHeader(g, byGroup[g]!.length, cs)),
-              for (final ex in byGroup[g]!)
-                FadeSlideIn(delayMs: ((ai++) * 28).clamp(0, 380), child: _examCard(ex)),
+              _sectionHeader(g, byGroup[g]!.length, cs),
+              for (final ex in byGroup[g]!) _examCard(ex),
             ],
             const SizedBox(height: 12),
             Text(
@@ -730,19 +729,44 @@ class _ExamSelectScreenState extends State<ExamSelectScreen> {
 
   Widget _hero() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(14, 16, 16, 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFF2A7DC4), kBrandDark],
+          colors: [Color(0xFF3A8BD4), kBrandDark],
         ),
         boxShadow: [
-          BoxShadow(color: kBrand.withOpacity(0.35), blurRadius: 18, offset: const Offset(0, 8)),
+          BoxShadow(color: kBrand.withOpacity(0.38), blurRadius: 22, offset: const Offset(0, 10)),
         ],
       ),
-      child: Row(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Stack(
+          children: [
+            Positioned(
+              right: -34,
+              top: -34,
+              child: Container(
+                width: 150,
+                height: 150,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle, color: Colors.white.withOpacity(0.08)),
+              ),
+            ),
+            Positioned(
+              right: 40,
+              bottom: -50,
+              child: Container(
+                width: 110,
+                height: 110,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle, color: Colors.white.withOpacity(0.06)),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(14, 16, 16, 16),
+              child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Stack(
@@ -778,7 +802,7 @@ class _ExamSelectScreenState extends State<ExamSelectScreen> {
                 const Text('しかくとり',
                     style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w800)),
                 const SizedBox(height: 3),
-                Text('「資格（しかく）を取る」×「四角い鳥」',
+                Text('「資格を取る」×「四角い鳥」',
                     style: TextStyle(color: Colors.white.withOpacity(0.92), fontSize: 11.5)),
                 Text('できた問題はやらなくてOK。ニガテだけくり返す。',
                     style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 10.5, height: 1.4)),
@@ -819,30 +843,38 @@ class _ExamSelectScreenState extends State<ExamSelectScreen> {
           ),
         ],
       ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   Widget _sectionHeader(String g, int n, ColorScheme cs) {
+    // グループの代表色（先頭の試験色）
+    final gc = (gExams.firstWhere((e) => e.group == g, orElse: () => gExams.first)).color;
+    final qn = gExams.where((e) => e.group == g).fold<int>(0, (a, e) => a + (gByExam[e.id]?.length ?? 0));
     return Padding(
-      padding: const EdgeInsets.fromLTRB(4, 18, 4, 10),
+      padding: const EdgeInsets.fromLTRB(2, 22, 2, 11),
       child: Row(
         children: [
           Container(
-            width: 8,
-            height: 8,
-            decoration: const BoxDecoration(color: kBrand, shape: BoxShape.circle),
-          ),
-          const SizedBox(width: 8),
-          Text(g, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800)),
-          const SizedBox(width: 7),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 1),
+            width: 5,
+            height: 22,
             decoration: BoxDecoration(
-              color: cs.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(3),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [gc, Color.lerp(gc, Colors.black, 0.3)!],
+              ),
             ),
-            child: Text('$n', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: cs.outline)),
           ),
+          const SizedBox(width: 10),
+          Text(g, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, letterSpacing: 0.2)),
+          const Spacer(),
+          Text('$n資格 ・ $qn問',
+              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: cs.outline)),
         ],
       ),
     );
