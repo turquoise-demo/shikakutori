@@ -10,6 +10,12 @@ const Color kBrandDark = Color(0xFF0B3F74);
 const Color kOk = Color(0xFF1F9D5A);
 const Color kNg = Color(0xFFD23B3B);
 
+/// 無料おためしの問題数
+const int kFreeLimit = 15;
+/// プレミアム価格（表示用）
+const String kPremiumMonthly = '¥980 / 月';
+const String kPremiumYearly = '¥5,800 / 年';
+
 /// 業界グループの表示順
 const List<String> kGroupOrder = [
   '建設業',
@@ -98,6 +104,24 @@ class Exam {
     return ('D', const Color(0xFF0F5FA6), '入門');
   }
 
+  /// 買い切り価格（難易度が低い＝大衆的な資格ほど安め）
+  int get price {
+    switch (rank.$1) {
+      case 'S':
+        return 1500;
+      case 'A':
+        return 1200;
+      case 'B':
+        return 980;
+      case 'C':
+        return 730;
+      default:
+        return 490;
+    }
+  }
+
+  String get priceLabel => '¥${price.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+$)'), (m) => '${m[1]},')}';
+
   String passSummary() {
     if (pass.perCatMin.isEmpty) return '合格基準 全体${pass.overall}%';
     if (pass.perCatMin.length == 1) {
@@ -156,6 +180,10 @@ class Store {
   static const _kGoal = 'dailyGoal';
   static const _kDailyDate = 'dailyDate';
   static const _kDailyCount = 'dailyCount';
+  static const _kUnlocked = 'unlockedExams';
+  static const _kPremium = 'premium';
+  static const _kMogiUsed = 'mogiUsedFree';
+  static const _kAuth = 'authProvider';
 
   final SharedPreferences prefs;
   Map<String, List<int>> stats = {}; // id -> [seen, correct]
@@ -165,6 +193,10 @@ class Store {
   int dailyGoal = 0;
   String _dailyDate = '';
   int _dailyCount = 0;
+  Set<String> unlocked = {}; // 買い切り済みの試験ID
+  bool premium = false;
+  Set<String> mogiUsedFree = {}; // 無料模試を使った試験ID
+  String authProvider = ''; // '' = ゲスト, 'apple'/'google'/'line'/'email'
 
   Store(this.prefs) {
     final s = prefs.getString(_kStats);
@@ -181,6 +213,34 @@ class Store {
     dailyGoal = prefs.getInt(_kGoal) ?? 0;
     _dailyDate = prefs.getString(_kDailyDate) ?? '';
     _dailyCount = prefs.getInt(_kDailyCount) ?? 0;
+    unlocked = (prefs.getStringList(_kUnlocked) ?? []).toSet();
+    premium = prefs.getBool(_kPremium) ?? false;
+    mogiUsedFree = (prefs.getStringList(_kMogiUsed) ?? []).toSet();
+    authProvider = prefs.getString(_kAuth) ?? '';
+  }
+
+  bool isUnlocked(String examId) => premium || unlocked.contains(examId);
+
+  Future<void> unlockExam(String examId) async {
+    unlocked.add(examId);
+    await prefs.setStringList(_kUnlocked, unlocked.toList());
+  }
+
+  Future<void> setPremium(bool v) async {
+    premium = v;
+    await prefs.setBool(_kPremium, v);
+  }
+
+  bool mogiUsed(String examId) => mogiUsedFree.contains(examId);
+
+  Future<void> useMogi(String examId) async {
+    mogiUsedFree.add(examId);
+    await prefs.setStringList(_kMogiUsed, mogiUsedFree.toList());
+  }
+
+  Future<void> setAuth(String provider) async {
+    authProvider = provider;
+    await prefs.setString(_kAuth, provider);
   }
 
   Future<void> _save() async {
@@ -304,9 +364,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     if (step < totalSteps - 1) {
       setState(() => step++);
     } else {
-      gStore.finishOnboarding(goal ?? 10);
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const ExamSelectScreen()));
+      final nav = Navigator.of(context);
+      gStore.finishOnboarding(goal ?? 10).then((_) {
+        nav.pushReplacement(MaterialPageRoute(builder: (_) => const ExamSelectScreen()));
+        nav.push(MaterialPageRoute(builder: (_) => const LoginScreen(canSkip: true)));
+      });
     }
   }
 
@@ -518,12 +580,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           children: [
             _smallHeader('しかくとりは、こんなアプリ！'),
             const SizedBox(height: 28),
-            _feature(Icons.check_circle_rounded, kOk, '正解した問題は、もうやらない',
-                '解けた問題は解説を出さずにサッと次へ。もう知っていることに時間を使わないから、最短で合格に近づける。'),
-            _feature(Icons.replay_rounded, kNg, 'まちがいだけ、くり返す',
-                'まちがえた問題はその場でしっかり解説。さらに「弱点復習」に自動でたまるから、ニガテだけを効率よくつぶせて合格率が上がる。'),
-            _feature(Icons.assignment_turned_in_rounded, kBrand, '模試で本番の合否判定',
-                '${gExams.length}種類の資格・${totalQ}問以上を収録。本番と同じ合格基準で、今の実力をいつでもチェックできる。'),
+            _feature(Icons.check_circle_rounded, kOk, '自分で解けた問題は、もうやらない',
+                '自分の頭で考えて正解できた問題は、解説なしでサッと次へ。本当に理解している所に時間を使わないから、最短で合格に近づける。'),
+            _feature(Icons.replay_rounded, kNg, 'まちがい・あやふやは、くり返す',
+                'まちがえた問題はその場でしっかり解説。「弱点復習」に自動でたまるので、ニガテやあやふやな所だけを重点的につぶせて合格率が上がる。'),
+            _feature(Icons.explore_rounded, kBrand, '全試験を試して、取りやすい資格を発見',
+                'プレミアムなら${gExams.length}種類ぜんぶ試せる。実際に解いてみて、自分に合う・受かりやすい資格を見つけられる。'),
           ],
         );
       case 4:
@@ -695,6 +757,283 @@ class StarBurst extends StatelessWidget {
   }
 }
 
+/// ===== ログイン／アカウント作成（Duolingo風） =====
+class LoginScreen extends StatelessWidget {
+  final bool canSkip;
+  const LoginScreen({super.key, this.canSkip = true});
+
+  Future<void> _login(BuildContext context, String provider, String label) async {
+    // TODO: 本番は Firebase Auth（Apple/Google/メール）＋ LINE Login を接続。
+    // 現状はデモとしてローカルに記録するのみ。
+    await gStore.setAuth(provider);
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('（デモ）$labelでログインしました')),
+      );
+      Navigator.of(context).pop(true);
+    }
+  }
+
+  Widget _pBtn(BuildContext c, IconData ico, Color bg, Color fg, String text, String prov, String label) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 11),
+      child: SizedBox(
+        width: double.infinity,
+        child: FilledButton.icon(
+          onPressed: () => _login(c, prov, label),
+          icon: Icon(ico, size: 20, color: fg),
+          label: Text(text, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: fg)),
+          style: FilledButton.styleFrom(
+            backgroundColor: bg,
+            padding: const EdgeInsets.all(15),
+            side: bg == Colors.white ? BorderSide(color: Theme.of(c).colorScheme.outlineVariant, width: 1.5) : null,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 12, 24, 20),
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.centerRight,
+                child: canSkip
+                    ? TextButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: const Text('あとで',
+                            style: TextStyle(fontWeight: FontWeight.w800, color: Colors.grey)),
+                      )
+                    : const SizedBox(height: 40),
+              ),
+              const Spacer(),
+              Bobbing(child: Image.asset('assets/mascot/shikakutori-badge.png', width: 130)),
+              const SizedBox(height: 16),
+              const Text('プロフィールを作成しよう',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+              const SizedBox(height: 6),
+              Text('登録すると進捗を保存でき、機種変更しても続きから学べるよ。',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12.5, color: Theme.of(context).colorScheme.outline, height: 1.5)),
+              const SizedBox(height: 24),
+              _pBtn(context, Icons.apple, Colors.black, Colors.white, 'Appleで続ける', 'apple', 'Apple'),
+              _pBtn(context, Icons.g_mobiledata_rounded, Colors.white, Colors.black87, 'Googleで続ける', 'google', 'Google'),
+              _pBtn(context, Icons.chat_bubble_rounded, const Color(0xFF06C755), Colors.white, 'LINEで続ける', 'line', 'LINE'),
+              _pBtn(context, Icons.mail_rounded, kBrand, Colors.white, 'メールで続ける', 'email', 'メール'),
+              const SizedBox(height: 4),
+              Text('登録で利用規約・プライバシーポリシーに同意したものとみなされます。',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 10, color: Theme.of(context).colorScheme.outline)),
+              const Spacer(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// ===== ペイウォール（Duolingo風） =====
+class PaywallScreen extends StatelessWidget {
+  final Exam exam; // 対象試験（買い切り訴求用）
+  const PaywallScreen({super.key, required this.exam});
+
+  Future<void> _buyExam(BuildContext context) async {
+    // TODO: 本番は RevenueCat / in_app_purchase で購入処理＋レシート検証。
+    await gStore.unlockExam(exam.id);
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('（デモ）${exam.short}を解放しました')),
+      );
+      Navigator.of(context).pop(true);
+    }
+  }
+
+  Future<void> _buyPremium(BuildContext context) async {
+    await gStore.setPremium(true);
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('（デモ）プレミアムを開始しました')),
+      );
+      Navigator.of(context).pop(true);
+    }
+  }
+
+  Widget _benefit(String t) => Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Row(children: [
+          const Icon(Icons.check_circle_rounded, color: kOk, size: 20),
+          const SizedBox(width: 9),
+          Expanded(child: Text(t, style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600))),
+        ]),
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Scaffold(
+      appBar: AppBar(backgroundColor: Colors.transparent),
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+          children: [
+            Center(child: Bobbing(child: Image.asset('assets/mascot/shikakutori-correct.png', width: 130))),
+            const SizedBox(height: 8),
+            const Text('全問を解放して合格をつかもう',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+            const SizedBox(height: 6),
+            Text('無料は各試験$kFreeLimit問＋模試1回まで。ロックを解除して全問＋模試を解き放題に。',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 12.5, color: cs.outline, height: 1.5)),
+            const SizedBox(height: 20),
+            // この試験を買い切り
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: exam.color, width: 2),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(children: [
+                    Expanded(
+                      child: Text('${exam.name} を全問解放',
+                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                    ),
+                    Text(exam.priceLabel,
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: exam.color)),
+                  ]),
+                  const SizedBox(height: 4),
+                  Text('買い切り（一度きりの支払い）・${(gByExam[exam.id]?.length ?? 0)}問＋模試',
+                      style: TextStyle(fontSize: 11.5, color: cs.outline)),
+                  const SizedBox(height: 12),
+                  _benefit('この試験の全問が解き放題'),
+                  _benefit('模試（本番判定）が無制限'),
+                  const SizedBox(height: 6),
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      onPressed: () => _buyExam(context),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: exam.color,
+                        padding: const EdgeInsets.all(15),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      ),
+                      child: Text('${exam.priceLabel}で解放',
+                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 14),
+            Row(children: [
+              Expanded(child: Divider(color: cs.outlineVariant)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Text('または', style: TextStyle(fontSize: 12, color: cs.outline)),
+              ),
+              Expanded(child: Divider(color: cs.outlineVariant)),
+            ]),
+            const SizedBox(height: 14),
+            // プレミアム
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(18),
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Color(0xFF2A7DC4), kBrandDark],
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(children: [
+                    const Icon(Icons.workspace_premium_rounded, color: Color(0xFFFFC93C), size: 22),
+                    const SizedBox(width: 8),
+                    const Text('しかくとりプレミアム',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: Colors.white)),
+                  ]),
+                  const SizedBox(height: 4),
+                  Text('${gExams.length}試験ぜんぶ解き放題。いろいろ試して、自分に取りやすい資格を見つけられる。',
+                      style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.85), height: 1.4)),
+                  const SizedBox(height: 12),
+                  Row(children: [
+                    Expanded(child: _premBtn(context, '月額', kPremiumMonthly, false)),
+                    const SizedBox(width: 10),
+                    Expanded(child: _premBtn(context, '年額（お得）', kPremiumYearly, true)),
+                  ]),
+                ],
+              ),
+            ),
+            const SizedBox(height: 14),
+            Center(
+              child: TextButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('購入情報の復元（本番でApp内課金と連携）')),
+                  );
+                },
+                child: Text('購入を復元', style: TextStyle(color: cs.outline, fontWeight: FontWeight.w700)),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _premBtn(BuildContext context, String label, String price, bool highlight) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(highlight ? 1 : 0.14),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Column(
+        children: [
+          Text(label,
+              style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w800,
+                  color: highlight ? kBrandDark : Colors.white)),
+          const SizedBox(height: 2),
+          Text(price,
+              style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w900,
+                  color: highlight ? kBrandDark : Colors.white)),
+          const SizedBox(height: 8),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton(
+              onPressed: () => _buyPremium(context),
+              style: FilledButton.styleFrom(
+                backgroundColor: highlight ? const Color(0xFFFFC93C) : Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              child: Text('開始',
+                  style: TextStyle(
+                      fontSize: 13, fontWeight: FontWeight.w800, color: kBrandDark)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// ===== 試験選択（トップ） =====
 class ExamSelectScreen extends StatefulWidget {
   const ExamSelectScreen({super.key});
@@ -741,6 +1080,98 @@ class _ExamSelectScreenState extends State<ExamSelectScreen> {
     );
   }
 
+  String get _authLabel {
+    switch (gStore.authProvider) {
+      case 'apple':
+        return 'Appleでログイン中';
+      case 'google':
+        return 'Googleでログイン中';
+      case 'line':
+        return 'LINEでログイン中';
+      case 'email':
+        return 'メールでログイン中';
+      default:
+        return 'ゲスト（未ログイン）';
+    }
+  }
+
+  Future<void> _showProfile() async {
+    final cs = Theme.of(context).colorScheme;
+    await showModalBottomSheet(
+      context: context,
+      showDragHandle: true,
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(children: [
+                Icon(gStore.premium ? Icons.workspace_premium_rounded : Icons.account_circle_rounded,
+                    color: gStore.premium ? const Color(0xFFE8A93C) : kBrand, size: 34),
+                const SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(_authLabel, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
+                    Text(
+                        gStore.premium
+                            ? 'プレミアム会員・全試験解放'
+                            : '解放済み ${gStore.unlocked.length} 試験',
+                        style: TextStyle(fontSize: 12, color: cs.outline)),
+                  ],
+                ),
+              ]),
+              const SizedBox(height: 18),
+              if (gStore.authProvider.isEmpty)
+                FilledButton.icon(
+                  onPressed: () async {
+                    Navigator.pop(ctx);
+                    await Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (_) => const LoginScreen(canSkip: true)));
+                    if (mounted) setState(() {});
+                  },
+                  icon: const Icon(Icons.login_rounded),
+                  label: const Text('ログイン / 登録'),
+                  style: FilledButton.styleFrom(
+                      backgroundColor: kBrand,
+                      padding: const EdgeInsets.all(14),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))),
+                ),
+              if (!gStore.premium) ...[
+                const SizedBox(height: 10),
+                OutlinedButton.icon(
+                  onPressed: () async {
+                    Navigator.pop(ctx);
+                    await Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => PaywallScreen(exam: gExams.first)));
+                    if (mounted) setState(() {});
+                  },
+                  icon: const Icon(Icons.workspace_premium_rounded, color: Color(0xFFE8A93C)),
+                  label: const Text('プレミアム・全試験を解放'),
+                  style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.all(14),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))),
+                ),
+              ],
+              const SizedBox(height: 10),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('購入情報の復元（本番でApp内課金と連携）')),
+                  );
+                },
+                child: const Text('購入を復元'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _hero() {
     return Container(
       decoration: BoxDecoration(
@@ -776,6 +1207,17 @@ class _ExamSelectScreenState extends State<ExamSelectScreen> {
                 height: 110,
                 decoration: BoxDecoration(
                     shape: BoxShape.circle, color: Colors.white.withOpacity(0.06)),
+              ),
+            ),
+            Positioned(
+              right: 4,
+              top: 4,
+              child: IconButton(
+                onPressed: _showProfile,
+                icon: Icon(
+                    gStore.premium ? Icons.workspace_premium_rounded : Icons.account_circle_rounded,
+                    color: gStore.premium ? const Color(0xFFFFC93C) : Colors.white),
+                tooltip: 'プロフィール',
               ),
             ),
             Padding(
@@ -1022,10 +1464,21 @@ class _HomeScreenState extends State<HomeScreen> {
   Exam get exam => widget.exam;
   List<Question> get pool => gByExam[exam.id] ?? [];
 
+  bool get locked => !gStore.isUnlocked(exam.id);
+  // 無料ユーザーは最初の kFreeLimit 問だけ練習できる
+  List<Question> get freePool => locked ? pool.take(kFreeLimit).toList() : pool;
+
   List<String> get years {
     final ys = pool.map((q) => q.year).whereType<String>().toSet().toList();
     ys.sort((a, b) => b.compareTo(a));
     return ys;
+  }
+
+  Future<void> _openPaywall() async {
+    final ok = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(builder: (_) => PaywallScreen(exam: exam)),
+    );
+    if (mounted && ok == true) setState(() {});
   }
 
   Future<void> _start(SessionSpec spec) async {
@@ -1131,19 +1584,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
+            if (locked) ...[
+              const SizedBox(height: 14),
+              _unlockBanner(),
+            ],
             const SizedBox(height: 20),
-            _label('学習モード'),
+            _label(locked ? '学習モード（無料おためし）' : '学習モード'),
             Row(children: [
               Expanded(
-                child: _modeCard(Icons.casino_rounded, kBrand, 'ランダム', '全分野からシャッフル', () {
-                  _start(SessionSpec('ランダム', false, () => _shuffled(pool).take(10).toList()));
+                child: _modeCard(Icons.casino_rounded, kBrand, 'ランダム',
+                    locked ? '無料$kFreeLimit問からシャッフル' : '全分野からシャッフル', () {
+                  _start(SessionSpec('ランダム', false, () => _shuffled(freePool).take(10).toList()));
                 }),
               ),
               const SizedBox(width: 10),
               Expanded(
                 child: _modeCard(Icons.replay_rounded, kNg, '弱点復習', 'まちがいだけが合格への近道', () {
                   _start(SessionSpec('弱点復習', false,
-                      () => _shuffled(pool.where((q) => gStore.wrong.contains(q.id)))));
+                      () => _shuffled(freePool.where((q) => gStore.wrong.contains(q.id)))));
                 }, badge: wrongInExam == 0 ? null : '$wrongInExam'),
               ),
             ]),
@@ -1162,8 +1620,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: years.map((y) {
                   final qs = pool.where((q) => q.year == y).toList();
                   final done = qs.where((q) => gStore.seen(q.id) > 0).length;
-                  return _yearChip(yearLabel(y), done, qs.length, () {
-                    _start(SessionSpec(yearLabel(y), false, () => _shuffled(qs)));
+                  return _yearChip(yearLabel(y), done, qs.length, locked, () {
+                    if (locked) {
+                      _openPaywall();
+                    } else {
+                      _start(SessionSpec(yearLabel(y), false, () => _shuffled(qs)));
+                    }
                   });
                 }).toList(),
               ),
@@ -1174,8 +1636,12 @@ class _HomeScreenState extends State<HomeScreen> {
               final qs = pool.where((q) => q.cat == c.key).toList();
               final done = qs.where((q) => gStore.seen(q.id) > 0).length;
               final pct = qs.isEmpty ? 0 : (done / qs.length * 100).round();
-              return _catRow(c, qs.length, done, pct, () {
-                _start(SessionSpec(c.short, false, () => _shuffled(qs)));
+              return _catRow(c, qs.length, done, pct, locked, () {
+                if (locked) {
+                  _openPaywall();
+                } else {
+                  _start(SessionSpec(c.short, false, () => _shuffled(qs)));
+                }
               });
             }),
           ],
@@ -1231,7 +1697,47 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void _startMock(int n) {
+    if (locked && gStore.mogiUsed(exam.id)) {
+      _openPaywall();
+      return;
+    }
+    if (locked) gStore.useMogi(exam.id);
+    _start(SessionSpec('模試', true, () => _shuffled(pool).take(n).toList()));
+  }
+
+  Widget _unlockBanner() {
+    return Material(
+      color: const Color(0xFFFFF3D6),
+      borderRadius: BorderRadius.circular(16),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: _openPaywall,
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Row(children: [
+            const Icon(Icons.lock_open_rounded, color: Color(0xFFB56A08), size: 22),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('全問を解放して合格をめざそう',
+                      style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFF8A5200))),
+                  Text('無料は$kFreeLimit問＋模試1回まで。買い切り ${exam.priceLabel} または プレミアム',
+                      style: const TextStyle(fontSize: 11, color: Color(0xFFB56A08))),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right, color: Color(0xFFB56A08)),
+          ]),
+        ),
+      ),
+    );
+  }
+
   Widget _mogiCard(int n) {
+    final mogiLocked = locked && gStore.mogiUsed(exam.id);
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
@@ -1244,7 +1750,7 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.circular(18),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
-          onTap: () => _start(SessionSpec('模試', true, () => _shuffled(pool).take(n).toList())),
+          onTap: () => _startMock(n),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Row(children: [
@@ -1262,12 +1768,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Text('模試（本番判定・$n問）',
                         style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15)),
-                    Text(exam.passSummary(),
+                    Text(mogiLocked ? '無料の1回は使用済み・タップで解放' : (locked ? '無料で1回おためし' : exam.passSummary()),
                         style: TextStyle(color: Colors.white.withOpacity(0.85), fontSize: 11.5)),
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right, color: Colors.white.withOpacity(0.8)),
+              Icon(mogiLocked ? Icons.lock_rounded : Icons.chevron_right,
+                  color: Colors.white.withOpacity(0.8)),
             ]),
           ),
         ),
@@ -1275,7 +1782,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _yearChip(String label, int done, int total, VoidCallback onTap) {
+  Widget _yearChip(String label, int done, int total, bool lock, VoidCallback onTap) {
     final cs = Theme.of(context).colorScheme;
     return SoftCard(
       onTap: onTap,
@@ -1287,7 +1794,10 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(children: [
             Text(label, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5)),
             const Spacer(),
-            Text('$total問', style: TextStyle(fontSize: 11, color: cs.outline, fontWeight: FontWeight.w700)),
+            if (lock)
+              Icon(Icons.lock_rounded, size: 13, color: cs.outline)
+            else
+              Text('$total問', style: TextStyle(fontSize: 11, color: cs.outline, fontWeight: FontWeight.w700)),
           ]),
           const SizedBox(height: 6),
           ClipRRect(
@@ -1306,7 +1816,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _catRow(CatDef c, int total, int done, int pct, VoidCallback onTap) {
+  Widget _catRow(CatDef c, int total, int done, int pct, bool lock, VoidCallback onTap) {
     final cs = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.only(bottom: 9),
@@ -1356,7 +1866,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(width: 10),
-          Text('$pct%', style: TextStyle(fontWeight: FontWeight.w800, color: cs.outline)),
+          if (lock)
+            Icon(Icons.lock_rounded, size: 18, color: cs.outline)
+          else
+            Text('$pct%', style: TextStyle(fontWeight: FontWeight.w800, color: cs.outline)),
         ]),
       ),
     );
